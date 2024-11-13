@@ -1,0 +1,56 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Tach",
+  "logo": {
+    "dark": "/assets/logo.png",
+    "light": "/assets/logo.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#9397ff",
+    "light": "#9397ff",
+    "dark": "#9397ff",
+    "anchors": {
+      "from": "#9397ff",
+      "to": "#9397ff"
+    }
+  },
+  "topbarCtaButton": {
+    "type": "github",
+    "url": "https://github.com/chebykinn/langconfig"
+  },
+  "anchors": [
+    {
+      "name": "Github",
+      "icon": "github",
+      "url": "https://github.com/chebykinn/langconfig"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.gg/Z7VPSCCn4g"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "getting-started/introduction",
+        "getting-started/getting-started"
+      ]
+    },
+    {
+      "group": "Usage",
+      "pages": [
+        "usage/faq"
+      ]
+    },
+    {
+      "group": "Contributing",
+      "pages": ["contributing/setting-up-project"]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/chebykinn/langconfig"
+  }
+}
