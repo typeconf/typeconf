@@ -1,15 +1,19 @@
 import { Command } from "commander";
+import { compile } from "./compile/compile.js";
 
-//add the following line
 const program = new Command();
 
 program
-  .version("1.0.0")
-  .description("An example CLI for managing a directory")
-  .option("-l, --ls  [value]", "List directory contents")
-  .option("-m, --mkdir <value>", "Create a directory")
-  .option("-t, --touch <value>", "Create a file")
-  .parse(process.argv);
+  .version("0.1.0")
+  .description("A CLI tool for compiling and managing configuration packages")
+
+program
+  .command("compile <pkg> <outputDir>", { isDefault: false })
+  .description("Compile the configuration package") 
+  .action(async (pkg: string, outputDir: string) => {
+     await compile(pkg, outputDir);
+  })
+
+program.parse(process.argv);
 
 const options = program.opts();
-

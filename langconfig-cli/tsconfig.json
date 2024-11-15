@@ -4,10 +4,10 @@
     "outDir": "dist",
     "strict": true,
     "target": "es2022",
-    "module": "nodenext",
+    "module": "NodeNext",
     "sourceMap": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   }

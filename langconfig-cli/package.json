@@ -2,6 +2,7 @@
   "name": "langconfig-cli",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,6 +18,8 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@typespec/compiler": "^0.59.1",
+    "@typespec-tools/emitter-typescript": "0.3.0",
     "commander": "^12.1.0"
   }
 }
