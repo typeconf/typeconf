@@ -1,0 +1,15 @@
+{
+  "name": "myapp-config",
+  "version": "1.0.0",
+  "description": "Example of a config package for a myapp",
+  "scripts": {
+    "generate": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@typespec/compiler": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
