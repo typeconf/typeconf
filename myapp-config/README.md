@@ -1,1 +1,0 @@
-Example of a config package for a myapp.

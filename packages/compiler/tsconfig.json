@@ -10,5 +10,8 @@
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": [
+      "examples"
+  ]
 }

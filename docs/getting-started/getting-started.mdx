@@ -2,4 +2,45 @@
 title: Getting Started
 ---
 
-# test
+# Installation
+
+npm install
+
+# Setup
+
+## Setup configuration repo or directory
+
+## Create new config
+
+```typescript
+model DebuggingConfig {
+  enableLogging: boolean;
+  maxRetries: int32;
+  timeout: duration;
+}
+
+model PetServiceConfig {
+  showBreed: boolean;
+  petTypes: string[];
+  debugging: DebuggingConfig;
+}
+```
+
+## Set config values
+
+```typescript
+let debuggingConfig: DebuggingConfig = {
+  enableLogging: true,
+  maxRetries: 10,
+  timeout: "500ms",
+};
+let config: PetServiceConfig = {
+  showBreed: true,
+  petTypes: ["dog", "cat"],
+  debugging: debuggingConfig,
+};
+
+export default config;
+```
+
+## Use config in your code

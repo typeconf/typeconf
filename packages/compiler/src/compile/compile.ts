@@ -2,9 +2,15 @@ import { compile as typespecCompile, NodeHost, CompilerHost, Program, logDiagnos
 import path from "path";
 import { fileURLToPath } from "url";
 
+const EMITTER = "../emitter/";
+
 export async function compile(pkg: string, outputDir: string): Promise<void> {
   console.log(`Compiling ${pkg}...`);
 
+  let options: Record<string, any> = {};
+  options[EMITTER] = {
+      "emitter-output-dir": `${outputDir}/types`,
+  };
   const program = await typespecCompile({
     ...NodeHost,
     logSink: {
@@ -14,7 +20,8 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
     }
   }, pkg, {
     emit: [getEmitterPath()],
-    outputDir: outputDir
+    outputDir: outputDir,
+    options: options,
   });
 
   logProgramResult(NodeHost, program);
@@ -24,7 +31,7 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
 }
 
 function getEmitterPath() {
-  const emitterPath = fileURLToPath(import.meta.resolve("@typespec-tools/emitter-typescript"));
+  const emitterPath = fileURLToPath(import.meta.resolve(EMITTER));
   return path.join(path.dirname(emitterPath), "..");
 }
 
