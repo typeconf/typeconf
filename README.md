@@ -1,4 +1,4 @@
-# LangConfig
+# Typeconf
 
 <div align="center">
     <img src="docs/assets/logo-background.png" alt="logo" width="30%"  style="border-radius: 50%; padding-bottom: 20px"/>
@@ -6,12 +6,12 @@
 
 A Typescript tool that adds types to configs.
 
-[Discord](https://discord.gg/Z7VPSCCn4g)
+[Discord](https://discord.gg/F5d4TjsS8B)
 
 ## Installation
 
 ```
-npm install -g langconfig
+npm install -g typeconf
 ```
 
 ## Setup
@@ -21,34 +21,34 @@ npm install -g langconfig
 First you need to create a repository for all your configs:
 
 ```
-langconfig init-configs <configs-dir>
+typeconf init <configs-dir>
 ```
 
-Then you can add your config:
-```
-langconfig new config <config-name>
-```
+With this command we'll generate the boilerplate for you. Before editing files you
+can run:
 
-Now you can write your schema and generate types:
 ```
-langconfig generate <configs-dir>
+typeconf generate --watch <configs-dir>
 ```
+for convenience.
 
-And after setting the configs values you can generate the JSON file like that:
+Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
+
+You can always regenerate files with this config:
 ```
-langconfig generate <configs-dir>
+typeconf generate <configs-dir>
 ```
 
 ### Read configs in your code
 
 To start using your config you can just add it to your project, either by specifying path to the configs in the same repository or using GitHub url:
 ```
-langconfig add config <config-path>
+typeconf add config <config-path>
 ```
 
 After any update in the config, or to fetch in again you can run the command to regenerate it:
 ```
-langconfig generate
+typeconf generate
 ```
 
 ## Contributing

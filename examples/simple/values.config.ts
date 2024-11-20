@@ -1,4 +1,4 @@
-import { DebuggingConfig, PetServiceConfig } from "./types/output"
+import { DebuggingConfig, PetServiceConfig } from "./types/output.js"
 
 let dbg: DebuggingConfig = {
     enableLogging: true,

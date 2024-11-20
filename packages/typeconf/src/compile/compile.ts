@@ -1,8 +1,10 @@
 import { compile as typespecCompile, NodeHost, CompilerHost, Program, logDiagnostics } from "@typespec/compiler";
 import path from "path";
 import { fileURLToPath } from "url";
+//import * as config_emitter from '../../packge'
 
-const EMITTER = "../emitter/";
+//const EMITTER = "@typespec-tools/emitter-typescript";
+const EMITTER = "@typeconf/config-emitter";
 
 export async function compile(pkg: string, outputDir: string): Promise<void> {
   console.log(`Compiling ${pkg}...`);

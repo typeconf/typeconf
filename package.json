@@ -1,11 +1,11 @@
 {
-    "name": "langconfig-monorepo",
+    "name": "typeconf-monorepo",
     "workspaces": [
         "packages/*"
     ],
     "private": true,
     "scripts": {
-        "compiler": "yarn workspace langconfig-cli start"
+        "typeconf": "yarn workspace @typeconf/typeconf start"
     }
 }
 

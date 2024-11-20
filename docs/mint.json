@@ -17,18 +17,18 @@
   },
   "topbarCtaButton": {
     "type": "github",
-    "url": "https://github.com/chebykinn/langconfig"
+    "url": "https://github.com/typeconf/typeconf"
   },
   "anchors": [
     {
       "name": "Github",
       "icon": "github",
-      "url": "https://github.com/chebykinn/langconfig"
+      "url": "https://github.com/typeconf/typeconf"
     },
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://discord.gg/Z7VPSCCn4g"
+      "url": "https://discord.gg/F5d4TjsS8B"
     }
   ],
   "navigation": [
@@ -51,6 +51,6 @@
     }
   ],
   "footerSocials": {
-    "github": "https://github.com/chebykinn/langconfig"
+    "github": "https://github.com/typeconf/typeconf"
   }
 }

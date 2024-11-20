@@ -1,5 +1,5 @@
 {
-  "name": "langconfig-cli",
+  "name": "@typeconf/typeconf",
   "version": "0.0.1",
   "main": "index.js",
   "type": "module",
@@ -18,8 +18,10 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@typespec/compiler": "^0.59.1",
+    "@typeconf/config-emitter": "*",
     "@typespec-tools/emitter-typescript": "0.3.0",
-    "commander": "^12.1.0"
+    "@typespec/compiler": "^0.59.1",
+    "commander": "^12.1.0",
+    "prompts": "^2.4.2"
   }
 }
