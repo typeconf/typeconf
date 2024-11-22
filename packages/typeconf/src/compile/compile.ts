@@ -12,6 +12,7 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
   let options: Record<string, any> = {};
   options[EMITTER] = {
       "emitter-output-dir": `${outputDir}/types`,
+      "output-file": "all.ts",
   };
   const program = await typespecCompile({
     ...NodeHost,

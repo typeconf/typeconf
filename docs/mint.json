@@ -52,5 +52,8 @@
   ],
   "footerSocials": {
     "github": "https://github.com/typeconf/typeconf"
+  },
+  "feedback": {
+    "thumbsRating": true
   }
 }

@@ -14,8 +14,7 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@types/prompts": "^2.4.9",
     "typescript": "^5.6.3"
-  },
-  "dependencies": {
   }
 }
