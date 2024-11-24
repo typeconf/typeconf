@@ -5,9 +5,9 @@ export async function $onEmit(context: EmitContext) {
   if (context.program.compilerOptions.noEmit) {
     return;
   }
-  await emitFile(context.program, {
-    path: resolvePath(context.emitterOutputDir, "output.txt"),
-    content: "Hello world\n",
-  });
+  //await emitFile(context.program, {
+  //  path: resolvePath(context.emitterOutputDir, "output.txt"),
+  //  content: "Hello world\n",
+  //});
   await typescriptEmit(context);
 }

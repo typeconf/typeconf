@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "dist/src/index.js",
   "type": "module",
+  "bin": {
+    "typeconf": "dist/src/index.js"
+  },
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,13 +18,16 @@
   "devDependencies": {
     "@types/commander": "^2.12.0",
     "@types/node": "^22.9.0",
+    "@types/prompts": "^2.4.9",
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@typeconf/config-emitter": "*",
+    "@typeconf/config-emitter": "file:../config-emitter",
+    "@typeconf/typeconf-sdk": "/home/ivan/root/data/dev/typeconf/packages/typeconf-sdk",
     "@typespec-tools/emitter-typescript": "0.3.0",
     "@typespec/compiler": "^0.59.1",
     "commander": "^12.1.0",
+    "jiti": "^2.4.0",
     "prompts": "^2.4.2"
   }
 }
