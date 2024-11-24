@@ -1,4 +1,10 @@
-import { compile as typespecCompile, NodeHost, CompilerHost, Program, logDiagnostics } from "@typespec/compiler";
+import {
+  compile as typespecCompile,
+  NodeHost,
+  CompilerHost,
+  Program,
+  logDiagnostics,
+} from "@typespec/compiler";
 import path from "path";
 import { fileURLToPath } from "url";
 //import * as config_emitter from '../../packge'
@@ -11,21 +17,25 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
 
   let options: Record<string, any> = {};
   options[EMITTER] = {
-      "emitter-output-dir": `${outputDir}/types`,
-      "output-file": "all.ts",
+    "emitter-output-dir": `${outputDir}/types`,
+    "output-file": "all.ts",
   };
-  const program = await typespecCompile({
-    ...NodeHost,
-    logSink: {
+  const program = await typespecCompile(
+    {
+      ...NodeHost,
+      logSink: {
         log: (log) => {
-            console.log(log);
-        }
-    }
-  }, pkg, {
-    emit: [getEmitterPath()],
-    outputDir: outputDir,
-    options: options,
-  });
+          console.log(log);
+        },
+      },
+    },
+    pkg,
+    {
+      emit: [getEmitterPath()],
+      outputDir: outputDir,
+      options: options,
+    },
+  );
 
   logProgramResult(NodeHost, program);
   if (program.hasError()) {
@@ -44,7 +54,9 @@ function logProgramResult(
   { showTimestamp }: { showTimestamp?: boolean } = {},
 ) {
   const log = (message?: any, ...optionalParams: any[]) => {
-    const timestamp = showTimestamp ? `[${new Date().toLocaleTimeString()}] ` : "";
+    const timestamp = showTimestamp
+      ? `[${new Date().toLocaleTimeString()}] `
+      : "";
     // eslint-disable-next-line no-console
     console.log(`${timestamp}${message}`, ...optionalParams);
   };

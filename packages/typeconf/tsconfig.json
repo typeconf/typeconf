@@ -11,11 +11,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "exclude": [
-      "node_modules"
-  ],
-  "include": [
-      "**/*.ts",
-      "./package.json"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts", "./package.json"]
 }

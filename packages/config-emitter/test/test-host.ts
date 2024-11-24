@@ -24,7 +24,7 @@ export async function createConfigEmitterTestRunner() {
 }
 
 export async function emitWithDiagnostics(
-  code: string
+  code: string,
 ): Promise<[Record<string, string>, readonly Diagnostic[]]> {
   const runner = await createConfigEmitterTestRunner();
   await runner.compileAndDiagnose(code, {
@@ -35,7 +35,9 @@ export async function emitWithDiagnostics(
 
   const result: Record<string, string> = {};
   for (const file of files) {
-    result[file] = (await runner.program.host.readFile(resolvePath(emitterOutputDir, file))).text;
+    result[file] = (
+      await runner.program.host.readFile(resolvePath(emitterOutputDir, file))
+    ).text;
   }
   return [result, runner.program.diagnostics];
 }

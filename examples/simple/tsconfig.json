@@ -11,6 +11,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": [
-  ]
+  "exclude": []
 }

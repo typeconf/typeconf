@@ -1,6 +1,15 @@
 {
   "name": "@typeconf/config-emitter",
   "version": "0.1.0",
+  "description": "Typeconf internal config emitter",
+  "homepage": "https://typeconf.dev",
+  "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
+  "author": "Ivan Chebykin",
+  "license": "Apache-2.0",
+  "keywords": [
+      "typeconf",
+      "config-emitter"
+  ],
   "type": "module",
   "main": "dist/src/index.js",
   "exports": {

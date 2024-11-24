@@ -1,11 +1,8 @@
 {
-    "name": "typeconf-monorepo",
-    "workspaces": [
-        "packages/*"
-    ],
-    "private": true,
-    "scripts": {
-        "typeconf": "yarn workspace @typeconf/typeconf start"
-    }
+  "name": "typeconf-monorepo",
+  "packageManager": "pnpm@9.5.0",
+  "private": true,
+  "devDependencies": {
+    "prettier": "3.3.3"
+  }
 }
-
