@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
     "outDir": "dist",
     "strict": true,
     "target": "es2022",
@@ -9,7 +8,13 @@
     "esModuleInterop": true,
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "paths": {
+        "@root/*": ["./*"]
+    }
   },
-  "exclude": []
+  "include": [
+      "**/*.ts"
+  ]
 }

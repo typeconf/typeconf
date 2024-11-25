@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export type TypeconfConfig = {
+export type Config = {
   configs: Array<string>;
 };
 

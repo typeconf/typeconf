@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Tach",
+  "name": "Typeconf",
   "logo": {
     "dark": "/assets/logo.png",
     "light": "/assets/logo-background.png"

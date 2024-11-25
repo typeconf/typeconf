@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { createJiti } from "jiti";
-import { TypeconfConfig } from "@typeconf/sdk";
+import { Config } from "@typeconf/sdk";
 
 export async function updateConfig(): Promise<void> {
   // TODO: for remote configs npm pack --pack-destination and copy
@@ -9,7 +9,7 @@ export async function updateConfig(): Promise<void> {
   const filepath = path.join(process.cwd(), "typeconf.config.ts");
   const conf = (await jiti.import(filepath, {
     default: true,
-  })) as TypeconfConfig;
+  })) as Config;
 
   const baseDir = process.cwd();
   fs.mkdirSync(path.join(baseDir, "typeconf-gen"), { recursive: true });

@@ -5,19 +5,28 @@ import {
   Program,
   logDiagnostics,
 } from "@typespec/compiler";
+import { spawn } from "child_process";
+import { promises as fsAsync } from 'fs';
+import {console} from "inspector";
 import path from "path";
 import { fileURLToPath } from "url";
-//import * as config_emitter from '../../packge'
 
-//const EMITTER = "@typespec-tools/emitter-typescript";
 const EMITTER = "@typeconf/config-emitter";
 
-export async function compile(pkg: string, outputDir: string): Promise<void> {
-  console.log(`Compiling ${pkg}...`);
+interface SpawnError {
+  errno: number;
+  code: "ENOENT";
+  sysCall: string;
+  path: string;
+  spawnArgs: string[];
+}
+
+export async function compile(configDir: string): Promise<void> {
+  console.log(`Compiling ${configDir}...`);
 
   let options: Record<string, any> = {};
   options[EMITTER] = {
-    "emitter-output-dir": `${outputDir}/types`,
+    "emitter-output-dir": `${configDir}/types`,
     "output-file": "all.ts",
   };
   const program = await typespecCompile(
@@ -29,10 +38,10 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
         },
       },
     },
-    pkg,
+    path.join(configDir, "src"),
     {
       emit: [getEmitterPath()],
-      outputDir: outputDir,
+      outputDir: configDir,
       options: options,
     },
   );
@@ -41,6 +50,8 @@ export async function compile(pkg: string, outputDir: string): Promise<void> {
   if (program.hasError()) {
     process.exit(1);
   }
+
+  await buildConfigFile(configDir);
 }
 
 function getEmitterPath() {
@@ -69,4 +80,34 @@ function logProgramResult(
   }
   // eslint-disable-next-line no-console
   console.log(); // Insert a newline
+}
+
+async function buildConfigFile(configDir: string): Promise<void> {
+  await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
+
+  const targetPath = path.join("out", `${path.basename(configDir)}.json`);
+  const child = spawn("npm", ["run", "start", targetPath], {
+    shell: process.platform === "win32",
+    stdio: "inherit",
+    cwd: configDir,
+    env: process.env,
+  });
+
+  return new Promise(() => {
+    child.on("error", (error: SpawnError) => {
+      if (error.code === "ENOENT") {
+        console.log(
+          "Cannot find `npm` executable. Make sure to have npm installed in your path.",
+        );
+      } else {
+        console.log(error.toString());
+      }
+      process.exit(error.errno);
+    });
+    child.on("exit", (exitCode) => {
+      if (exitCode != 0) {
+        process.exit(exitCode);
+      }
+    });
+  });
 }

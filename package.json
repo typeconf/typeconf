@@ -2,6 +2,12 @@
   "name": "typeconf-monorepo",
   "packageManager": "pnpm@9.5.0",
   "private": true,
+  "scripts": {
+      "build": "pnpm -r --workspace-concurrency=Infinity --aggregate-output --reporter=append-only build",
+      "lint": "eslint . --max-warnings=0",
+      "lint:fix": "eslint . --fix",
+      "typeconf": "pnpm --filter @typeconf/typeconf run start"
+  },
   "devDependencies": {
     "prettier": "3.3.3"
   }

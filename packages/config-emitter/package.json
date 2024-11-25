@@ -12,6 +12,12 @@
   ],
   "type": "module",
   "main": "dist/src/index.js",
+  "files": [
+      "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
@@ -21,6 +27,11 @@
       "types": "./dist/src/testing/index.d.ts",
       "default": "./dist/src/testing/index.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typeconf/typeconf.git",
+    "directory": "packages/config-emitter"
   },
   "dependencies": {
     "@typespec/compiler": "^0.59.1",
@@ -42,5 +53,8 @@
     "lint:fix": "eslint . --report-unused-disable-directives --fix",
     "format": "prettier .  --write",
     "format:check": "prettier --check ."
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

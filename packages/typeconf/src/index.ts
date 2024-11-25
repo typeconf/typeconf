@@ -25,25 +25,15 @@ program
   });
 
 program
-  .command("compile <pkg>", { isDefault: false })
+  .command("compile <configDir>", { isDefault: false })
   .option(
     "--watch",
     "Run in background and automatically recompile on changes",
     false,
   )
-  .option(
-    "--output-dir <outputDir>",
-    "Specify the output directory for compilation",
-    "",
-  )
   .description("Compile the configuration package")
-  .action(async (pkg: string) => {
-    const options = program.opts();
-    let outputDir = options.outputDir;
-    if (outputDir == null || outputDir == "") {
-      outputDir = pkg;
-    }
-    await compile(pkg, outputDir);
+  .action(async (configDir: string) => {
+    await compile(configDir);
   });
 
 program.parse(process.argv);

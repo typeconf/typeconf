@@ -1,11 +1,16 @@
+export type CatsInventory = {
+  cats: string[];
+  cutenessRatio: number;
+};
+
 export type DebuggingConfig = {
-  enableLogging: boolean;
+  logLevel: number;
   maxRetries: number;
   timeout: any;
 };
 
-export type PetServiceConfig = {
-  showBreed: boolean;
-  petTypes: string[];
+export type ProjectConfig = {
+  projectName: string;
+  inventory: CatsInventory;
   debugging: DebuggingConfig;
 };

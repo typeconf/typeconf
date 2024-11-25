@@ -4,13 +4,28 @@ title: Getting Started
 
 # Installation
 
-npm install
-
-# Setup
+```bash
+npm install -g @typeconf/typeconf
+```
 
 ## Setup configuration repo or directory
+First you need to create a repository for all your configs:
+
+```
+typeconf init <configs-dir>
+```
+
+With this command we'll generate the boilerplate for you. Before editing files you
+can run:
+
+```
+typeconf compile --watch <configs-dir>
+```
+for convenience.
 
 ## Create new config
+#
+Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
 
 ```typescript
 model DebuggingConfig {
@@ -24,6 +39,11 @@ model PetServiceConfig {
   petTypes: string[];
   debugging: DebuggingConfig;
 }
+```
+
+You can always regenerate files with this config:
+```
+typeconf compile <configs-dir>
 ```
 
 ## Set config values
@@ -43,4 +63,35 @@ let config: PetServiceConfig = {
 export default config;
 ```
 
+You can always regenerate files with this config:
+```
+typeconf compile <configs-dir>
+```
 ## Use config in your code
+
+To start using your config first you need to configure the typeconf :).
+
+Currently we only support Typescript, but later we'll add other languages.
+
+Install SDK package to your project:
+```
+npm install --save @typeconf/sdk
+```
+
+Create a file called `typeconf.config.ts` and add your config directory:
+```
+import * as typeconf from '@typeconf/sdk'
+
+const config: typeconf.Config = {
+    configs: [
+        "./configs",
+    ],
+};
+
+export default config;
+```
+
+To fetch the config or update it after any schema changes you should run this command:
+```
+typeconf update
+```

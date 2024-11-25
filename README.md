@@ -6,12 +6,12 @@
 
 A Typescript tool that adds types to configs.
 
-[Discord](https://discord.gg/F5d4TjsS8B)
+[Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
 
 ## Installation
 
 ```
-npm install -g typeconf
+npm install -g @typeconf/typeconf
 ```
 
 ## Setup
@@ -28,7 +28,7 @@ With this command we'll generate the boilerplate for you. Before editing files y
 can run:
 
 ```
-typeconf generate --watch <configs-dir>
+typeconf compile --watch <configs-dir>
 ```
 for convenience.
 
@@ -36,19 +36,36 @@ Now you can edit main.tsp, add your types and then use values.config.ts to fill 
 
 You can always regenerate files with this config:
 ```
-typeconf generate <configs-dir>
+typeconf compile <configs-dir>
 ```
 
 ### Read configs in your code
 
-To start using your config you can just add it to your project, either by specifying path to the configs in the same repository or using GitHub url:
+To start using your config first you need to configure the typeconf :).
+
+Currently we only support Typescript, but later we'll add other languages.
+
+Install SDK package to your project:
 ```
-typeconf add config <config-path>
+npm install --save @typeconf/sdk
 ```
 
-After any update in the config, or to fetch in again you can run the command to regenerate it:
+Create a file called `typeconf.config.ts` and add your config directory:
 ```
-typeconf generate
+import * as typeconf from '@typeconf/sdk'
+
+const config: typeconf.Config = {
+    configs: [
+        "./configs",
+    ],
+};
+
+export default config;
+```
+
+To fetch the config or update it after any schema changes you should run this command:
+```
+typeconf update
 ```
 
 ## Contributing
