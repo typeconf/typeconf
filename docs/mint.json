@@ -1,0 +1,59 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Typeconf",
+  "logo": {
+    "dark": "/assets/logo.png",
+    "light": "/assets/logo-background.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#9397ff",
+    "light": "#9397ff",
+    "dark": "#9397ff",
+    "anchors": {
+      "from": "#9397ff",
+      "to": "#9397ff"
+    }
+  },
+  "topbarCtaButton": {
+    "type": "github",
+    "url": "https://github.com/typeconf/typeconf"
+  },
+  "anchors": [
+    {
+      "name": "Github",
+      "icon": "github",
+      "url": "https://github.com/typeconf/typeconf"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://discord.gg/F5d4TjsS8B"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "getting-started/introduction",
+        "getting-started/getting-started"
+      ]
+    },
+    {
+      "group": "Usage",
+      "pages": [
+        "usage/faq"
+      ]
+    },
+    {
+      "group": "Contributing",
+      "pages": ["contributing/setting-up-project"]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/typeconf/typeconf"
+  },
+  "feedback": {
+    "thumbsRating": true
+  }
+}

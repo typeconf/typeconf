@@ -1,0 +1,25 @@
+---
+title: Introduction
+---
+
+# What is Typeconf
+
+Typeconf allows you to define and read configuration with types. Using
+[TypeSpec](https://typespec.io) you can define schema for your config and with
+Typescript you can then set values for this config and generate a JSON file
+suitable to be read by your service. In the service itself Typeconf generates
+the same config types that you can use to read the JSON file without errors.
+
+Typeconf is:
+ - Open-source
+ - Available via npm
+ - Can be adopted to existing codebase
+ - Ideal for automated flows (like hooks and ci)
+
+## Commands
+
+typeconf init config-directory
+
+typeconf compile config-directory
+
+typeconf update

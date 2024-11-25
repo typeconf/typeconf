@@ -1,23 +1,14 @@
-# Typeconf
+---
+title: Getting Started
+---
 
-<div align="center">
-    <img src="docs/assets/logo-background.png" alt="logo" width="30%"  style="border-radius: 50%; padding-bottom: 20px"/>
-</div>
+# Installation
 
-A Typescript tool that adds types to configs.
-
-[Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
-
-## Installation
-
-```
+```bash
 npm install -g @typeconf/typeconf
 ```
 
-## Setup
-
-### Configuration repository
-
+## Setup configuration repo or directory
 First you need to create a repository for all your configs:
 
 ```
@@ -32,14 +23,51 @@ typeconf compile --watch <configs-dir>
 ```
 for convenience.
 
+## Create new config
+#
 Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
+
+```typescript
+model DebuggingConfig {
+  enableLogging: boolean;
+  maxRetries: int32;
+  timeout: duration;
+}
+
+model PetServiceConfig {
+  showBreed: boolean;
+  petTypes: string[];
+  debugging: DebuggingConfig;
+}
+```
 
 You can always regenerate files with this config:
 ```
 typeconf compile <configs-dir>
 ```
 
-### Read configs in your code
+## Set config values
+
+```typescript
+let debuggingConfig: DebuggingConfig = {
+  enableLogging: true,
+  maxRetries: 10,
+  timeout: "500ms",
+};
+let config: PetServiceConfig = {
+  showBreed: true,
+  petTypes: ["dog", "cat"],
+  debugging: debuggingConfig,
+};
+
+export default config;
+```
+
+You can always regenerate files with this config:
+```
+typeconf compile <configs-dir>
+```
+## Use config in your code
 
 To start using your config first you need to configure the typeconf :).
 
@@ -67,7 +95,3 @@ To fetch the config or update it after any schema changes you should run this co
 ```
 typeconf update
 ```
-
-## Contributing
-
-Contributions are always welcome! There's a lot of stuff to implement right now, feel free to take a look at issues.
