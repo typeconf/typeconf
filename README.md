@@ -6,7 +6,7 @@
 
 A Typescript tool that adds types to configs.
 
-[Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
+[Website](https://typeconf.dev) [Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
 
 ## Installation
 
@@ -16,9 +16,9 @@ npm install -g @typeconf/typeconf
 
 ## Setup
 
-### Configuration repository
+### Configuration directory
 
-First you need to create a repository for all your configs:
+To start managing configs with types first you need to create a directory for all your configs:
 
 ```
 typeconf init <configs-dir>
@@ -39,11 +39,15 @@ You can always regenerate files with this config:
 typeconf compile <configs-dir>
 ```
 
+The command above will always update types for your configs and if you already
+exported config in `values.config.ts` it will generate a JSON file which you can
+read in your project.
+
 ### Read configs in your code
 
-To start using your config first you need to configure the typeconf :).
-
 Currently we only support Typescript, but later we'll add other languages.
+
+To start using your config first you need to configure the typeconf :).
 
 Install SDK package to your project:
 ```

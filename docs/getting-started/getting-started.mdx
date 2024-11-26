@@ -8,7 +8,8 @@ title: Getting Started
 npm install -g @typeconf/typeconf
 ```
 
-## Setup configuration repo or directory
+## Setup configuration directory
+#
 First you need to create a repository for all your configs:
 
 ```
@@ -24,7 +25,7 @@ typeconf compile --watch <configs-dir>
 for convenience.
 
 ## Create new config
-#
+
 Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
 
 ```typescript
@@ -41,10 +42,12 @@ model PetServiceConfig {
 }
 ```
 
-You can always regenerate files with this config:
+To update types and/or generate output JSON config you can always run this command:
 ```
 typeconf compile <configs-dir>
 ```
+
+Any time you update schema or values you can run it to apply changes.
 
 ## Set config values
 
@@ -63,15 +66,15 @@ let config: PetServiceConfig = {
 export default config;
 ```
 
-You can always regenerate files with this config:
+To generate output JSON run the same command as in the previous section:
 ```
 typeconf compile <configs-dir>
 ```
 ## Use config in your code
 
-To start using your config first you need to configure the typeconf :).
-
 Currently we only support Typescript, but later we'll add other languages.
+
+To start using your config first you need to configure the typeconf :).
 
 Install SDK package to your project:
 ```
