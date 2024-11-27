@@ -36,7 +36,8 @@
       "group": "Get Started",
       "pages": [
         "getting-started/introduction",
-        "getting-started/getting-started"
+        "getting-started/getting-started",
+        "getting-started/why"
       ]
     },
     {

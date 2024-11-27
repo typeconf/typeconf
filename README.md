@@ -25,7 +25,7 @@ typeconf init <configs-dir>
 ```
 
 With this command we'll generate the boilerplate for you. Before editing files you
-can run:
+can run in a separate terminal window:
 
 ```
 typeconf compile --watch <configs-dir>

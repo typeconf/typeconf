@@ -29,7 +29,7 @@ export async function log_event(
 }
 
 async function log_event_impl(args: LogArgs): Promise<void> {
-  if (process.env["TYPECONF_DISABLE_LOGGING"]) {
+  if (process.env["TYPECONF_DISABLE_LOGGING"] || process.env["NODE_ENV"] == "dev") {
     return;
   }
   const supabase = createClient(LOG_URL, LOG_ANON_KEY);
@@ -41,5 +41,5 @@ async function log_event_impl(args: LogArgs): Promise<void> {
     params: args.params,
     command: args.command,
     message: args.message,
-  }).abortSignal(AbortSignal.timeout(1000 /* ms */));
+  }).abortSignal(AbortSignal.timeout(500 /* ms */));
 }

@@ -7,7 +7,6 @@ import {
 } from "@typespec/compiler";
 import { spawn } from "child_process";
 import { promises as fsAsync } from 'fs';
-import {console} from "inspector";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -48,7 +47,7 @@ export async function compile(configDir: string): Promise<void> {
 
   logProgramResult(NodeHost, program);
   if (program.hasError()) {
-    process.exit(1);
+    throw new Error("Compilation failed");
   }
 
   await buildConfigFile(configDir);
@@ -93,7 +92,7 @@ async function buildConfigFile(configDir: string): Promise<void> {
     env: process.env,
   });
 
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     child.on("error", (error: SpawnError) => {
       if (error.code === "ENOENT") {
         console.log(
@@ -102,11 +101,13 @@ async function buildConfigFile(configDir: string): Promise<void> {
       } else {
         console.log(error.toString());
       }
-      process.exit(error.errno);
+      reject(new Error("Config generation failed"));
     });
     child.on("exit", (exitCode) => {
       if (exitCode != 0) {
-        process.exit(exitCode);
+        reject(new Error("Config generation failed"));
+      } else {
+        resolve();
       }
     });
   });
