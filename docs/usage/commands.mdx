@@ -2,8 +2,22 @@
 title: Commands
 ---
 
-# typeconf init config-directory
+# typeconf init
 
-# typeconf compile config-directory
+Parameters: config-directory - path to the target config dir.
+
+This command initializes the configuration directory and creates the boilerplate and npm package.
+
+# typeconf compile
+
+Parameters: config-directory - path to the target config dir.
+
+Options: watch - run compilation on changes.
+
+This command compiles the Typespec schema and materializes values to JSON.
 
 # typeconf update
+
+This command fetches the config and types from the config directory and adds it to the project.
+
+You'll need to have `typeconf.config.ts` in your project.&#x20;

@@ -1,5 +1,5 @@
 ---
-title: Getting Started
+title: "Getting Started"
 ---
 
 # Installation
@@ -9,24 +9,24 @@ npm install -g @typeconf/typeconf
 ```
 
 ## Setup configuration directory
-#
-First you need to create a repository for all your configs:
 
-```
+Typeconf manages all configs in a separate directory. Think of it as a configuration repository or package for your project. So, to start using the tool first you need to create the repository:
+
+```bash
 typeconf init <configs-dir>
 ```
 
-With this command we'll generate the boilerplate for you. Before editing files you
-can run:
+With this command, we'll generate all the necessary boilerplate for you. Before starting editing the files you can this command in a separate terminal window:
 
-```
+```bash
 typeconf compile --watch <configs-dir>
 ```
-for convenience.
+
+It will recompile the schema and config value on every change for convenience. You can always just run `typeconf compile` after any change yourself.
 
 ## Create new config
 
-Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
+Now you can edit the `main.tsp` file, add your types, and then use `values.config.ts` to fill the config.
 
 ```typescript
 model DebuggingConfig {
@@ -42,14 +42,15 @@ model PetServiceConfig {
 }
 ```
 
-To update types and/or generate output JSON config you can always run this command:
-```
-typeconf compile <configs-dir>
-```
+This file is a Typespec schema, please refer to their docs for more examples: [https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
 
-Any time you update schema or values you can run it to apply changes.
+<Info>
+  Remember to run `typeconf compile` to update the types.
+</Info>
 
 ## Set config values
+
+Now, to update the config values, edit the file `src/values.config.ts`:
 
 ```typescript
 let debuggingConfig: DebuggingConfig = {
@@ -66,23 +67,25 @@ let config: PetServiceConfig = {
 export default config;
 ```
 
-To generate output JSON run the same command as in the previous section:
-```
-typeconf compile <configs-dir>
-```
+After recompilation you should be able to see the output JSON file in the `out/` directory.
+
 ## Use config in your code
 
-Currently we only support Typescript, but later we'll add other languages.
+<Warning>
+  Currently, we only support Typescript, but later we'll add other languages.
+</Warning>
 
 To start using your config first you need to configure the typeconf :).
 
 Install SDK package to your project:
-```
+
+```bash
 npm install --save @typeconf/sdk
 ```
 
 Create a file called `typeconf.config.ts` and add your config directory:
-```
+
+```typescript
 import * as typeconf from '@typeconf/sdk'
 
 const config: typeconf.Config = {
@@ -95,6 +98,16 @@ export default config;
 ```
 
 To fetch the config or update it after any schema changes you should run this command:
-```
+
+```bash
 typeconf update
+```
+
+Read the config in your code:
+
+```
+import {ProjectConfig} from "@/typeconf-gen/all";
+import {readConfigFromFile} from "@typeconf/sdk";
+
+let projectConfig: ProjectConfig = readConfigFromFile("path/to/config.json");
 ```
