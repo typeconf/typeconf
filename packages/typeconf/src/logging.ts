@@ -14,13 +14,13 @@ export class LogArgs {
   message: string = "";
 }
 
-export function log_event(
+export async function log_event(
   level: LogLevel,
   command: string,
   message: string,
   params: Record<string, string> = {},
-): void {
-  log_event_impl({
+): Promise<void> {
+  await log_event_impl({
     level: level,
     params: params,
     command: command,
@@ -29,8 +29,11 @@ export function log_event(
 }
 
 async function log_event_impl(args: LogArgs): Promise<void> {
+  if (process.env["TYPECONF_DISABLE_LOGGING"]) {
+    return;
+  }
   const supabase = createClient(LOG_URL, LOG_ANON_KEY);
-  const { data, error } = await supabase.from("logs").upsert({
+  await supabase.from("logs").upsert({
     user_id: "dev",
     level: args.level,
     ts: new Date().toISOString(),
@@ -38,6 +41,5 @@ async function log_event_impl(args: LogArgs): Promise<void> {
     params: args.params,
     command: args.command,
     message: args.message,
-  });
-  console.log(`${data} ${error?.message}`);
+  }).abortSignal(AbortSignal.timeout(1000 /* ms */));
 }

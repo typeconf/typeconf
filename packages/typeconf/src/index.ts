@@ -21,7 +21,7 @@ program
     };
     log_event("info", "init", "start", params);
     await initProject(directory ?? process.cwd());
-    log_event("info", "init", "end", params);
+    await log_event("info", "init", "end", params);
   });
 
 program
@@ -30,7 +30,7 @@ program
   .action(async () => {
     log_event("info", "update", "start");
     await updateConfig();
-    log_event("info", "update", "end");
+    await log_event("info", "update", "end");
   });
 
 program
@@ -48,7 +48,8 @@ program
     };
     log_event("info", "compile", "start", params);
     await compile(configDir);
-    log_event("info", "compile", "end", params);
+    console.log("t");
+    await log_event("info", "compile", "end", params);
   });
 
 program.parse(process.argv);
