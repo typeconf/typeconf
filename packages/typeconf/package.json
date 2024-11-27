@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/typeconf",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Typeconf CLI for defining configs with types.",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -32,16 +32,15 @@
     "start": "npm run build && node dist/src/index.js"
   },
   "devDependencies": {
-    "@types/commander": "^2.12.0",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.10.0",
     "@types/prompts": "^2.4.9",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
     "@typeconf/config-emitter": "workspace:*",
     "@typeconf/sdk": "workspace:*",
-    "@typespec/compiler": "^0.59.1",
+    "@typespec/compiler": "^0.62.0",
     "commander": "^12.1.0",
     "jiti": "^2.4.0",
     "prompts": "^2.4.2"

@@ -9,7 +9,7 @@ import { log_event } from "./logging.js";
 import path from "path";
 
 const program = new Command();
-export const VERSION = "0.1.1";
+export const VERSION = "0.1.2";
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);

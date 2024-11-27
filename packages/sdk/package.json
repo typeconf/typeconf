@@ -1,19 +1,19 @@
 {
   "name": "@typeconf/sdk",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Typeconf SDK for reading typed configs in your repository",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
   "author": "Ivan Chebykin",
   "license": "Apache-2.0",
   "keywords": [
-      "typeconf",
-      "sdk"
+    "typeconf",
+    "sdk"
   ],
   "type": "module",
   "main": "dist/src/index.js",
   "files": [
-      "dist"
+    "dist"
   ],
   "engines": {
     "node": ">=18"
@@ -39,10 +39,9 @@
     "start": "npm run build && node dist/src/index.js"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "typescript": "^5.6.3"
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
   },
-  "dependencies": {},
   "publishConfig": {
     "access": "public"
   }

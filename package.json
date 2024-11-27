@@ -3,12 +3,17 @@
   "packageManager": "pnpm@9.5.0",
   "private": true,
   "scripts": {
-      "build": "pnpm -r --workspace-concurrency=Infinity --aggregate-output --reporter=append-only build",
-      "lint": "eslint . --max-warnings=0",
-      "lint:fix": "eslint . --fix",
-      "typeconf": "NODE_ENV=dev pnpm --filter @typeconf/typeconf run start"
+    "build": "pnpm -r --workspace-concurrency=Infinity --aggregate-output --reporter=append-only build",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "typeconf": "NODE_ENV=dev pnpm --filter @typeconf/typeconf run start"
+  },
+  "pnpm": {
+    "overrides": {
+      "whatwg-url": "13.0.0"
+    }
   },
   "devDependencies": {
-    "prettier": "3.3.3"
+    "prettier": "3.4.1"
   }
 }

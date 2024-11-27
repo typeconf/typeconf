@@ -1,19 +1,19 @@
 {
   "name": "@typeconf/config-emitter",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Typeconf internal config emitter",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
   "author": "Ivan Chebykin",
   "license": "Apache-2.0",
   "keywords": [
-      "typeconf",
-      "config-emitter"
+    "typeconf",
+    "config-emitter"
   ],
   "type": "module",
   "main": "dist/src/index.js",
   "files": [
-      "dist"
+    "dist"
   ],
   "engines": {
     "node": ">=18"
@@ -34,23 +34,18 @@
     "directory": "packages/config-emitter"
   },
   "dependencies": {
-    "@typespec/compiler": "^0.59.1",
-    "@typespec-tools/emitter-typescript": "latest"
+    "@typespec-tools/emitter-typescript": "^0.3.0",
+    "@typespec/compiler": "^0.62.0"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.45.0",
-    "typescript": "^5.3.3",
-    "prettier": "^3.0.3"
+    "@types/node": "^22.10.0",
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2"
   },
   "scripts": {
     "build": "tsc && cp package-dist.json dist/package.json",
     "watch": "tsc --watch",
     "test": "node --test",
-    "lint": "eslint src/ test/ --report-unused-disable-directives --max-warnings=0",
-    "lint:fix": "eslint . --report-unused-disable-directives --fix",
     "format": "prettier .  --write",
     "format:check": "prettier --check ."
   },
