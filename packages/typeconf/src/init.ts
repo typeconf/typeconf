@@ -21,10 +21,10 @@ const TEMPLATES = new Map<string, any>([
   "name": "${params.projectName}",
   "version": "0.1.0",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "out/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node out/index.js"
   }
 }`;
     },
@@ -53,7 +53,7 @@ if (values != null && 'default' in values) {
     () => {
       return `{
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "out",
     "strict": true,
     "target": "es2022",
     "module": "NodeNext",

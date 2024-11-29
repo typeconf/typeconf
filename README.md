@@ -8,6 +8,14 @@ A Typescript tool that adds types to configs.
 
 [Website](https://typeconf.dev) [Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
 
+This tool allows you to define and share complex configs that would be a nightmare
+to manage if you just operated with plain JSON or YAML. With typeconf you manage
+a config directory - a package with config schemas and values that should become
+your source of truth for all service configuration. Using typeconf SDK you can
+read the generated JSONs in your code with types.
+
+Check out our [examples](examples/README.md) for real world use cases.
+
 ## Installation
 
 ```
@@ -24,17 +32,17 @@ To start managing configs with types first you need to create a directory for al
 typeconf init <configs-dir>
 ```
 
-With this command we'll generate the boilerplate for you. Before editing files you
-can run in a separate terminal window:
+With this command we'll generate the boilerplate for you.
+Before editing files run in a separate terminal window:
 
 ```
 typeconf compile --watch <configs-dir>
 ```
-for convenience.
+This will run typeconf in background for automatic recompilation.
 
 Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
 
-You can always regenerate files with this config:
+You can always manually regenerate files with this config:
 ```
 typeconf compile <configs-dir>
 ```

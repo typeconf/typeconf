@@ -1,0 +1,197 @@
+---
+title: Commands
+---
+
+# typeconf init
+
+Parameters: config-directory - path to the target config dir.
+
+This command initializes the configuration directory and creates the boilerplate and npm package.
+
+# typeconf compile
+
+Parameters: config-directory - path to the target config dir.
+
+Options: watch - run compilation on changes.
+
+This command compiles the Typespec schema and materializes values to JSON.
+
+# typeconf update
+
+This command fetches the config and types from the config directory and adds it to the project.
+
+You'll need to have `typeconf.config.ts` in your project.&#x20;---
+title: Why Typeconf
+---
+
+Configuration is messy. We have many different formats, YAML, JSON, random ini
+files, not to mention environment variables. It's hard to track changes and
+easy to break stuff. So we thought let's add types there! Typeconf,
+allows you to define types for your configuration and read it in your code.
+
+Typeconf pursues two main goals:
+
+- Make configs easily shareable between services. Typespec schema allows you to
+read config between different languages and services. Second advantage is NPM -
+every configuration directory is just an NPM package which you can easily install
+and get configs.
+
+- Reduce editing errors. Having schema and strict typechecking that supports custom
+validations, should greatly reduce the number of errors caused by mistyping configs.
+---
+title: "Getting Started"
+---
+
+# Installation
+
+```bash
+npm install -g @typeconf/typeconf
+```
+
+## Setup configuration directory
+
+Typeconf manages all configs in a separate directory. Think of it as a configuration repository or package for your project. So, to start using the tool first you need to create the repository:
+
+```bash
+typeconf init <configs-dir>
+```
+
+With this command, we'll generate all the necessary boilerplate for you. Before starting editing the files you can this command in a separate terminal window:
+
+```bash
+typeconf compile --watch <configs-dir>
+```
+
+It will recompile the schema and config value on every change for convenience. You can always just run `typeconf compile` after any change yourself.
+
+## Create new config
+
+Now you can edit the `main.tsp` file, add your types, and then use `values.config.ts` to fill the config.
+
+```typescript
+model DebuggingConfig {
+  enableLogging: boolean;
+  maxRetries: int32;
+  timeout: duration;
+}
+
+model PetServiceConfig {
+  showBreed: boolean;
+  petTypes: string[];
+  debugging: DebuggingConfig;
+}
+```
+
+This file is a Typespec schema, please refer to their docs for more examples: [https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
+
+<Info>
+  Remember to run `typeconf compile` to update the types.
+</Info>
+
+## Set config values
+
+Now, to update the config values, edit the file `src/values.config.ts`:
+
+```typescript
+let debuggingConfig: DebuggingConfig = {
+  enableLogging: true,
+  maxRetries: 10,
+  timeout: "500ms",
+};
+let config: PetServiceConfig = {
+  showBreed: true,
+  petTypes: ["dog", "cat"],
+  debugging: debuggingConfig,
+};
+
+export default config;
+```
+
+After recompilation you should be able to see the output JSON file in the `out/` directory.
+
+## Use config in your code
+
+<Warning>
+  Currently, we only support Typescript, but later we'll add other languages.
+</Warning>
+
+To start using your config first you need to configure the typeconf :).
+
+Install SDK package to your project:
+
+```bash
+npm install --save @typeconf/sdk
+```
+
+Create a file called `typeconf.config.ts` and add your config directory:
+
+```typescript
+import * as typeconf from '@typeconf/sdk'
+
+const config: typeconf.Config = {
+    configs: [
+        "./configs",
+    ],
+};
+
+export default config;
+```
+
+To fetch the config or update it after any schema changes you should run this command:
+
+```bash
+typeconf update
+```
+
+Read the config in your code:
+
+```
+import {ProjectConfig} from "@/typeconf-gen/all";
+import {readConfigFromFile} from "@typeconf/sdk";
+
+let projectConfig: ProjectConfig = readConfigFromFile("path/to/config.json");
+```---
+title: Introduction
+---
+
+# What is Typeconf
+
+Typeconf allows you to define and read configuration with types. Using
+[TypeSpec](https://typespec.io) you can define schema for your config and with
+Typescript you can then set values for this config and generate a JSON file
+suitable to be read by your service. In the service itself Typeconf generates
+the same config types that you can use to read the JSON file without errors.
+
+Typeconf is:
+
+* Open-source
+
+* Available via npm
+
+* Can be adopted to existing codebase
+
+* Ideal for automated flows (like hooks and CI)---
+title: Setting up project
+---
+
+We use pnpm monorepo for managing the project. Right now this guide is quite simple as we don't have much testing yet.
+
+# Install dependendecies
+
+```
+pnpm install
+```
+
+# Build
+
+```
+pnpm build
+```
+
+
+
+# Run examples
+
+```
+pnpm typeconf compile $PWD/examples/simple
+```

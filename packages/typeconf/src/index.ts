@@ -37,12 +37,13 @@ program
 program
   .command("init [directory]", { isDefault: false })
   .description("Init new configuration package")
-  .action(async (directory) => {
+  .action(async (directoryRaw) => {
+    const configDir = path.resolve(directoryRaw);
     const params: Record<string, string> = {
-      configDir: directory,
+      configDir: path.basename(configDir),
     };
     log_event("info", "init", "start", params);
-    await initProject(directory ?? process.cwd());
+    await initProject(configDir ?? process.cwd());
     await log_event("info", "init", "end", params);
   });
 
@@ -63,9 +64,10 @@ program
     false,
   )
   .description("Compile the configuration package")
-  .action(async (configDir: string, options: any) => {
+  .action(async (configDirRaw: string, options: any) => {
+    const configDir = path.resolve(configDirRaw);
     const params: Record<string, string> = {
-      configDir: configDir,
+      configDir: path.basename(configDir), // only log basename
       watch: (options?.watch ?? false).toString(),
     };
     await doCompile(configDir, params);

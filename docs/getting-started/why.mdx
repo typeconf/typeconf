@@ -6,3 +6,13 @@ Configuration is messy. We have many different formats, YAML, JSON, random ini
 files, not to mention environment variables. It's hard to track changes and
 easy to break stuff. So we thought let's add types there! Typeconf,
 allows you to define types for your configuration and read it in your code.
+
+Typeconf pursues two main goals:
+
+- Make configs easily shareable between services. Typespec schema allows you to
+read config between different languages and services. Second advantage is NPM -
+every configuration directory is just an NPM package which you can easily install
+and get configs.
+
+- Reduce editing errors. Having schema and strict typechecking that supports custom
+validations, should greatly reduce the number of errors caused by mistyping configs.
