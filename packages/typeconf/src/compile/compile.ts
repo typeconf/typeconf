@@ -81,14 +81,11 @@ function logProgramResult(
   console.log(); // Insert a newline
 }
 
-async function buildConfigFile(configDir: string): Promise<void> {
-  await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
-
-  const targetPath = path.join("out", `${path.basename(configDir)}.json`);
-  const child = spawn("npm", ["run", "start", targetPath], {
+async function runNpm(cwd: string, params: Array<string>): Promise<void> {
+  const child = spawn("npm", params, {
     shell: process.platform === "win32",
     stdio: "inherit",
-    cwd: configDir,
+    cwd: cwd,
     env: process.env,
   });
 
@@ -111,4 +108,11 @@ async function buildConfigFile(configDir: string): Promise<void> {
       }
     });
   });
+}
+
+async function buildConfigFile(configDir: string): Promise<void> {
+  await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
+  const targetPath = path.join("out", `${path.basename(configDir)}.json`);
+  await runNpm(configDir, ["install"]);
+  await runNpm(configDir, ["run", "start", targetPath]);
 }

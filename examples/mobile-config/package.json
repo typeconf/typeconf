@@ -1,11 +1,11 @@
 {
-  "name": "simple",
+  "name": "mobile-config",
   "version": "0.1.0",
   "type": "module",
   "main": "out/index.js",
   "keywords": [
       "typeconf",
-      "simple"
+      "mobile-config"
   ],
   "devDependencies": {
     "@types/node": "^18.0.0"

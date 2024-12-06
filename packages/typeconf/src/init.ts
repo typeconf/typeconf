@@ -11,6 +11,10 @@ type ValuesParams = {
   projectName: string;
 };
 
+type ReadmeParams = {
+  projectName: string;
+};
+
 const DIRS = ["types", "src"];
 
 const TEMPLATES = new Map<string, any>([
@@ -22,11 +26,57 @@ const TEMPLATES = new Map<string, any>([
   "version": "0.1.0",
   "type": "module",
   "main": "out/index.js",
+  "keywords": [
+      "typeconf",
+      "${params.projectName}"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node out/index.js"
   }
 }`;
+    },
+  ],
+  [
+    ".gitignore",
+    () => {
+      return `out/
+dist/
+node_modules/
+`;
+    },
+  ],
+  [
+    "README.md",
+    (params: ReadmeParams) => {
+      return `# ${params.projectName}
+
+A configuration package. Add your description here.
+
+## Index
+
+- [Schema](src/main.tsp)
+- [Values](src/values.config.ts)
+
+## Command reference
+
+After updating schema or values run this command on a package directory:
+
+\`\`\`
+$ typeconf compile ${params.projectName}
+\`\`\`
+
+Or you can run compile in background:
+
+\`\`\`
+$ typeconf compile --watch ${params.projectName}
+\`\`\`
+
+For more info please refer to the [docs](https://docs.typeconf.dev).
+`;
     },
   ],
   [

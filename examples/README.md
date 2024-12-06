@@ -1,8 +1,12 @@
 # Examples
 
-| Name                | Schema                                  | Values                                          |
-| ------------------- | --------------------------------------- | ----------------------------------------------- |
-| simple              | [Link](simple/src/main.tsp)             | [Link](simple/src/values.config.ts)             |
-| country-based-conf  | [Link](country-based-conf/src/main.tsp) | [Link](country-based-conf/src/values.config.ts) |
-| dashboards          | [Link](dashboards/src/main.tsp)         | [Link](dashboards/src/values.config.ts)         |
-| experiments         | [Link](experiments/src/main.tsp)        | [Link](experiments/src/values.config.ts)        |
+Check out examples for typeconf. Each one demonstrates how you can use it in real project.
+
+| Name                                      | Description
+| ----------------------------------------- | -----------
+| [api-gateway](api-gateway)                | Mock API gateway config
+| [country-based-conf](country-based-conf)  | Define config per region
+| [dashboards](dashboards)                  | Define dashboards using typeconf
+| [experiments](experiments)                | Feature flags with parameters
+| [simple](simple)                          | Minimal example
+| [mobile-config](mobile-config)            | An example of config for mobile devices

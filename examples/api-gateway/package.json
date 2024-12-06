@@ -1,11 +1,11 @@
 {
-  "name": "simple",
+  "name": "api-gateway",
   "version": "0.1.0",
   "type": "module",
   "main": "out/index.js",
   "keywords": [
       "typeconf",
-      "simple"
+      "api-gateway"
   ],
   "devDependencies": {
     "@types/node": "^18.0.0"

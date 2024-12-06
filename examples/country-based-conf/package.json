@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "type": "module",
   "main": "out/index.js",
+  "keywords": [
+      "typeconf",
+      "country-based-conf"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node out/index.js"
