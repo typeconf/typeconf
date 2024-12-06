@@ -6,13 +6,19 @@
 
 A Typescript tool that adds types to configs.
 
-[Website](https://typeconf.dev) [Docs](https://docs.typeconf.dev) [Discord](https://discord.gg/F5d4TjsS8B)
+[Website](https://typeconf.dev) | [Docs](https://docs.typeconf.dev) | [Discord](https://discord.gg/F5d4TjsS8B)
 
-This tool allows you to define and share complex configs that would be a nightmare
-to manage if you just operated with plain JSON or YAML. With typeconf you manage
-a config directory - a package with config schemas and values that should become
-your source of truth for all service configuration. Using typeconf SDK you can
-read the generated JSONs in your code with types.
+Every developer deals with configs every day. We have a lot of different
+formats and storages, and it's quite messy. In a growing product developers
+sometimes have to deal with large configs, usually JSONs or YAMLs, which are
+managed differently for each environment or experiment. Doing this is not fun,
+and it's hard to avoid errors.
+
+This is where Typeconf helps - it you to define and share complex configs using
+types. With typeconf you manage a config directory - a package with config
+schemas and values that should become your source of truth for all service
+configuration. Using typeconf SDK you can read the generated JSONs in your code
+with types.
 
 Check out our [examples](examples/README.md) for real world use cases.
 
@@ -42,18 +48,41 @@ This will run typeconf in background for automatic recompilation.
 
 Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
 
+Example `main.tsp`:
+
+```
+model ProductConfig {
+    enable_feature1: boolean;
+    rollout_ab: Record<boolean>;
+}
+```
+
+Example `values.config.ts`:
+
+```
+import { ProductConfig } from '@root/types/all.js'
+
+let config: ProductConfig = {
+    enable_feature1: true,
+    rollout_ab: {
+        "london": true,
+        "sf": false,
+    },
+};
+```
+
 You can always manually regenerate files with this config:
 ```
 typeconf compile <configs-dir>
 ```
 
-The command above will always update types for your configs and if you already
-exported config in `values.config.ts` it will generate a JSON file which you can
-read in your project.
+The command above will always regenerate types for your configs and generate
+output JSON file containing the config values.
 
 ### Read configs in your code
 
-Currently we only support Typescript, but later we'll add other languages.
+Typeconf also allows reading configs with typing. Currently we only support
+Typescript, but later we'll add other languages.
 
 To start using your config first you need to configure the typeconf :).
 

@@ -10,19 +10,23 @@ npm install -g @typeconf/typeconf
 
 ## Setup configuration directory
 
-Typeconf manages all configs in a separate directory. Think of it as a configuration repository or package for your project. So, to start using the tool first you need to create the repository:
+Typeconf manages all configs in a separate directory. Think of it as a
+configuration repository or package for your project. So, to start using the
+tool first you need to create the repository:
 
 ```bash
 typeconf init <configs-dir>
 ```
 
-With this command, we'll generate all the necessary boilerplate for you. Before starting editing the files you can this command in a separate terminal window:
+With this command, we'll generate all the necessary boilerplate for you. Before
+starting editing the files you can this command in a separate terminal window:
 
 ```bash
 typeconf compile --watch <configs-dir>
 ```
 
-It will recompile the schema and config value on every change for convenience. You can always just run `typeconf compile` after any change yourself.
+It will recompile the schema and config value on every change for convenience.
+You can always just run `typeconf compile` after any change yourself.
 
 ## Create new config
 
@@ -42,7 +46,8 @@ model PetServiceConfig {
 }
 ```
 
-This file is a Typespec schema, please refer to their docs for more examples: [https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
+This file is a Typespec schema, please refer to their docs for more examples:
+[https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
 
 <Info>
   Remember to run `typeconf compile` to update the types.
@@ -53,6 +58,7 @@ This file is a Typespec schema, please refer to their docs for more examples: [h
 Now, to update the config values, edit the file `src/values.config.ts`:
 
 ```typescript
+import { DebuggingConfig, PetServiceConfig } from '@root/types/all.js'
 let debuggingConfig: DebuggingConfig = {
   enableLogging: true,
   maxRetries: 10,
