@@ -2,11 +2,98 @@
 
 <div align="center">
     <img src="docs/assets/logo-background.png" alt="logo" width="30%"  style="border-radius: 50%; padding-bottom: 20px"/>
-</div>
 
 A Typescript tool that adds types to configs.
 
 [Website](https://typeconf.dev) | [Docs](https://docs.typeconf.dev) | [Discord](https://discord.gg/F5d4TjsS8B)
+
+<table>
+<tr>
+<th align="left">Define schema</th>
+<th align="left">Set values</th>
+</tr>
+<tr>
+<td align="left">
+
+```typescript
+model ProductConfig {
+  enable_flag: boolean;
+  coeffs: Record<float32>;
+  notify: Record<boolean>;
+}
+```
+
+</td>
+<td align="left">
+
+```typescript
+import {
+  ProductConfig,
+} from "@root/types/all.js";
+
+let config: ProductConfig = {
+    enable_flag: true,
+    coeffs: {
+        "lon": 0.99,
+        "nyc": 1.25,
+        "sf": 9000.0,
+    },
+    notify: {
+        "ios>=17": true,
+        "android<=15": false,
+    },
+};
+
+export default config;
+```
+
+</td>
+</tr>
+<tr>
+<th align="left">Read in your code</th>
+<th align="left">Or use JSON</th>
+</tr>
+<tr>
+<td align="left">
+
+```typescript
+import {
+  ProductConfig,
+} from "@/typeconf-gen/all";
+
+import {
+  readConfigFromFile,
+} from "@typeconf/sdk";
+
+let conf: ProductConfig =
+  readConfigFromFile(
+    "path/to/config.json"
+);
+```
+
+</td>
+<td align="left">
+
+```json
+{
+    "enable_flag": true,
+    "coeffs": {
+        "lon": 0.99,
+        "nyc": 1.25,
+        "sf": 9000.0
+    },
+    "notify": {
+        "ios>=17": true,
+        "android<=15": false
+    }
+}
+```
+
+</td>
+</tr>
+</table>
+
+</div>
 
 Every developer deals with configs every day. We have a lot of different
 formats and storages, and it's quite messy. In a growing product developers
@@ -50,7 +137,7 @@ Now you can edit main.tsp, add your types and then use values.config.ts to fill 
 
 Example `main.tsp`:
 
-```
+```typescript
 model ProductConfig {
     enable_feature1: boolean;
     rollout_ab: Record<boolean>;
@@ -59,7 +146,7 @@ model ProductConfig {
 
 Example `values.config.ts`:
 
-```
+```typescript
 import { ProductConfig } from '@root/types/all.js'
 
 let config: ProductConfig = {
@@ -92,7 +179,7 @@ npm install --save @typeconf/sdk
 ```
 
 Create a file called `typeconf.config.ts` and add your config directory:
-```
+```typescript
 import * as typeconf from '@typeconf/sdk'
 
 const config: typeconf.Config = {
