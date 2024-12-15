@@ -61,19 +61,32 @@ A configuration package. Add your description here.
 - [Schema](src/main.tsp)
 - [Values](src/values.config.ts)
 
-## Command reference
+## Creating new package
 
-After updating schema or values run this command on a package directory:
+This package was created by running:
+
+\`\`\`
+$ typeconf init ${params.projectName}
+\`\`\`
+
+## Working with package
+
+Before editing files it is recommended to start compilation in background:
+
+\`\`\`
+$ typeconf compile --watch ${params.projectName}
+\`\`\`
+
+Or you can manually run this command after you update schema or values:
 
 \`\`\`
 $ typeconf compile ${params.projectName}
 \`\`\`
 
-Or you can run compile in background:
+## Publishing the configs package
 
-\`\`\`
-$ typeconf compile --watch ${params.projectName}
-\`\`\`
+You can publish this package in the same way as other NPM packages using [\`npm publish\`](https://docs.npmjs.com/cli/v8/commands/npm-publish).
+
 
 For more info please refer to the [docs](https://docs.typeconf.dev).
 `;

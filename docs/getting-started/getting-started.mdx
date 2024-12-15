@@ -8,11 +8,18 @@ title: "Getting Started"
 npm install -g @typeconf/typeconf
 ```
 
-## Setup configuration directory
+## Working with Typeconf
 
 Typeconf manages all configs in a separate directory. Think of it as a
-configuration repository or package for your project. So, to start using the
-tool first you need to create the repository:
+configuration repository or package for your project. In the config directory
+there are three main parts:
+    - Schema, located at `src/main.tsp`
+    - Values file, located at `src/values.config.ts`
+    - Output JSON file, located at out/<config-name>.json
+
+## Setup configuration directory
+
+To start using the tool first you need to create the configuration directory:
 
 ```bash
 typeconf init <configs-dir>
@@ -30,7 +37,10 @@ You can always just run `typeconf compile` after any change yourself.
 
 ## Create new config
 
-Now you can edit the `main.tsp` file, add your types, and then use `values.config.ts` to fill the config.
+In Typeconf you define configs with schema and values separately. We describe
+schema in language based on Typescript called [TypeSpec](https://typespec.io).
+
+To change the schema locate the file at `src/main.tsp`, here's a simple example of schema:
 
 ```typescript
 model DebuggingConfig {
@@ -46,7 +56,7 @@ model PetServiceConfig {
 }
 ```
 
-This file is a Typespec schema, please refer to their docs for more examples:
+Please refer to their docs for more examples:
 [https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
 
 <Info>
@@ -55,7 +65,8 @@ This file is a Typespec schema, please refer to their docs for more examples:
 
 ## Set config values
 
-Now, to update the config values, edit the file `src/values.config.ts`:
+Now, to update the config values, edit the file `src/values.config.ts`.
+Here's the counterpart example for the schema above:
 
 ```typescript
 import { DebuggingConfig, PetServiceConfig } from '@root/types/all.js'
@@ -73,7 +84,11 @@ let config: PetServiceConfig = {
 export default config;
 ```
 
-After recompilation you should be able to see the output JSON file in the `out/` directory.
+## Getting the output JSON file
+
+After editing the schema and values you should be able to locate the JSON file
+in the `out/` directory. Please make sure that you have ran `typeconf compile`
+or that you have `typeconf compile --watch` running in the background.
 
 ## Use config in your code
 
@@ -111,9 +126,11 @@ typeconf update
 
 Read the config in your code:
 
-```
+```typescript
 import {ProjectConfig} from "@/typeconf-gen/all";
 import {readConfigFromFile} from "@typeconf/sdk";
 
-let projectConfig: ProjectConfig = readConfigFromFile("path/to/config.json");
+let projectConfig: ProjectConfig = readConfigFromFile("<configs-dir>/out/config.json");
 ```
+
+If you want to learn more, check out our examples at in the repo [here](https://github.com/typeconf/typeconf/tree/main/examples).
