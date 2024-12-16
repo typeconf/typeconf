@@ -109,6 +109,10 @@ with types.
 
 Check out our [examples](examples/README.md) for real world use cases.
 
+## Demo
+
+https://github.com/user-attachments/assets/2a50ae36-76cd-4b51-b0e3-744997895717
+
 ## Installation
 
 ```
