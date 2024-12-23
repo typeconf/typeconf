@@ -8,6 +8,7 @@ import { updateConfig } from "./update.js";
 import { log_event } from "./logging.js";
 import path from "path";
 import { version } from "../package.json";
+import { getConfigValue, updateConfigValue } from "./cloud/config-value.js";
 
 const program = new Command();
 export const VERSION = version;
@@ -93,5 +94,38 @@ program
       });
     }
   });
+
+program
+  .command("cloud")
+  .description("Cloud-related commands")
+  .command("update-config-value <configName>")
+  .requiredOption("--project <id>", "Project id")
+  .description("Update configuration in cloud")
+  .action(async (configName: string, options: { projectId: string }) => {
+    await log_event("info", "cloud:update-config-value", "start", { configName, projectId: options.projectId });
+
+    const res = await getConfigValue(configName, options.projectId)
+    console.log('Config was fetched from cloud: ');
+    console.log(res);
+    
+    await log_event("info", "cloud:update-config-value", "end", { configName, projectName: options.projectId });
+  });
+
+program
+  .command("cloud")
+  .description("Cloud-related commands") 
+  .command("get-config-value <configName>")
+  .requiredOption("--project <id>", "Project id")
+  .requiredOption("--json <json>", "Json value")
+  .description("Fetch configuration from cloud")
+  .action(async (configName: string, options: { projectId: string, json: string }) => {
+    await log_event("info", "cloud:get-config-value", "start", { configName, projectId: options.projectId });
+
+    await updateConfigValue(configName, options.projectId, options.json)
+
+    // TODO: Implement cloud config fetch
+    await log_event("info", "cloud:get-config-value", "end", { configName, projectName: options.projectId });
+  });
+
 
 program.parse(process.argv);
