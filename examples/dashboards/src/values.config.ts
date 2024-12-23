@@ -1,4 +1,4 @@
-import { Widget, WidgetType, Header, Dashboard } from "@root/types/all.js";
+import { Widget, WidgetType, Header, Dashboard } from "~/types/all.js";
 
 // In this example we demonstrate that you can create a generated dashboard
 // which can be created from resulting JSON. In real life you can probably describe full

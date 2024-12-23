@@ -2,16 +2,27 @@
   "name": "country-based-conf",
   "version": "0.1.0",
   "type": "module",
-  "main": "out/index.js",
+  "main": "dist/src/index.js",
   "keywords": [
       "typeconf",
       "country-based-conf"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "dependencies": {
+    "@typeconf/typeconf": "*",
+    "@typeconf/sdk": "*"
+  },
   "devDependencies": {
-    "@types/node": "^18.0.0"
+    "@types/node": "^18.0.0",
+    "resolve-tspaths": "*"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "npm run build && node out/index.js"
+    "build": "typeconf build .",
+    "build:watch": "typeconf build . --watch"
   }
 }

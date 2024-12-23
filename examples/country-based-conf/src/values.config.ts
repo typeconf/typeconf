@@ -1,4 +1,4 @@
-import { CountrySettings } from "@root/types/all.js";
+import { CountrySettings } from "../types/all.js";
 
 // In this config you can define list of regions in the same way you categorize them
 // and query by them when you read the config.

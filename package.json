@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r --workspace-concurrency=Infinity --aggregate-output --reporter=append-only build",
+    "test:typeconf": "pnpm --filter @typeconf/typeconf build && ./tests/compile-examples.sh",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
-    "typeconf": "NODE_ENV=dev pnpm --filter @typeconf/typeconf run start"
+    "typeconf": "NODE_ENV=dev pnpm --filter @typeconf/typeconf run start",
+    "create-pkg": "NODE_ENV=dev pnpm --filter create-typeconf-package run start"
   },
   "pnpm": {
     "overrides": {

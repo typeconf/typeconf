@@ -2,23 +2,36 @@
 
 Simple example, just demonstration of the minimal schema.
 
-## Index
+## Creating new package
 
-- [Schema](src/main.tsp)
-- [Values](src/values.config.ts)
-
-## Command reference
-
-After updating schema or values run this command on a package directory:
+This package was created by running:
 
 ```
-$ typeconf compile simple
+$ npx create-typeconf-package simple
 ```
 
-Or you can run compile in background:
+## Working with package
+
+Make sure to install dependencies:
 
 ```
-$ typeconf compile --watch simple
+npm install
 ```
+
+Before editing files it is recommended to start compilation in background:
+
+```
+$ npm run build:watch
+```
+
+Or you can manually run this command after you update schema or values:
+
+```
+$ npm run build
+```
+
+## Publishing the configs package
+
+You can publish this package in the same way as other NPM packages using [\`npm publish\`](https://docs.npmjs.com/cli/v8/commands/npm-publish).
 
 For more info please refer to the [docs](https://docs.typeconf.dev).
