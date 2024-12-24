@@ -1,6 +1,6 @@
 {
   "name": "create-typeconf-package",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "CLI for creating typeconf package",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
