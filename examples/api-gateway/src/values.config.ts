@@ -1,4 +1,4 @@
-import { APIGatewayConfig } from "../types/all.js";
+import { APIGatewayConfig } from "~/types/all.js";
 let config: APIGatewayConfig = {
     routes: {
         "/user": {

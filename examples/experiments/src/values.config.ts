@@ -1,4 +1,4 @@
-import { ProjectConfig } from "../types/all.js";
+import { ProjectConfig } from "~/types/all.js";
 
 
 let config: ProjectConfig = {
