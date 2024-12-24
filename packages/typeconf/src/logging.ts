@@ -29,9 +29,9 @@ export async function log_event(
 }
 
 async function log_event_impl(args: LogArgs): Promise<void> {
-  if (process.env["TYPECONF_DISABLE_LOGGING"] || process.env["NODE_ENV"] == "dev") {
-    return;
-  }
+  //if (process.env["TYPECONF_DISABLE_LOGGING"] || process.env["NODE_ENV"] == "dev") {
+  //  return;
+  //}
   const supabase = createClient(LOG_URL, LOG_ANON_KEY);
   await supabase.from("logs").upsert({
     user_id: "dev",

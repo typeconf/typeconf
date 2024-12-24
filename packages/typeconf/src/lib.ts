@@ -4,9 +4,6 @@ import { compile as typeconfCompile } from "./compile/compile.js";
 import initProject from "./init.js";
 import { log_event } from "./logging.js";
 import path from "path";
-import packageJson from "../package.json" with { type: "json" }
-
-export const VERSION = packageJson.version;
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);

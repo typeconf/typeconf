@@ -2,12 +2,6 @@
 title: "Getting Started"
 ---
 
-# Installation
-
-```bash
-npm install -g @typeconf/typeconf
-```
-
 ## Working with Typeconf
 
 Typeconf manages all configs in a separate directory. Think of it as a
@@ -25,18 +19,18 @@ there are three main parts:
 To start using the tool first you need to create the configuration directory:
 
 ```bash
-typeconf init <configs-dir>
+npx create-typeconf-package@latest <configs-dir>
 ```
 
 With this command, we'll generate all the necessary boilerplate for you. Before
 starting editing the files you can this command in a separate terminal window:
 
 ```bash
-typeconf compile --watch <configs-dir>
+npm run build:watch
 ```
 
 It will recompile the schema and config value on every change for convenience.
-You can always just run `typeconf compile` after any change yourself.
+You can always just run `npm run build` after any change yourself.
 
 ## Create new config
 
@@ -63,7 +57,7 @@ Please refer to their docs for more examples:
 [https://typespec.io/docs/language-basics/overview/](https://typespec.io/docs/language-basics/overview/)
 
 <Info>
-  Remember to run `typeconf compile` to update the types.
+  Remember to run `npm run build` to update the types.
 </Info>
 
 ## Set config values
@@ -90,50 +84,30 @@ export default config;
 ## Getting the output JSON file
 
 After editing the schema and values you should be able to locate the JSON file
-in the `out/` directory. Please make sure that you have ran `typeconf compile`
-or that you have `typeconf compile --watch` running in the background.
+in the `out/` directory. Please make sure that you have ran `npm run build`
+or that you have `npm run build:watch` running in the background.
 
 ## Use config in your code
 
 <Warning>
-  Currently, we only support Typescript, but later we'll add other languages.
+  Currently, we only support Typescript, but we intend to add other languages later.
 </Warning>
 
-To start using your config first you need to configure the typeconf :).
+To start using your config you can just install your configuration package that
+you just created simply as a dependency!
 
-Install SDK package to your project:
-
-```bash
-npm install --save @typeconf/sdk
-```
-
-Create a file called `typeconf.config.ts` and add your config directory:
+After that you'll be able to read it from any JSON file you provide:
 
 ```typescript
-import * as typeconf from '@typeconf/sdk'
+import { ProductConfig, readConfigFromFile } from "you-config-package";
 
-const config: typeconf.Config = {
-    configs: [
-        "./configs",
-    ],
-};
-
-export default config;
+let conf: ProductConfig = readConfigFromFile("path/to/config.json");
 ```
 
-To fetch the config or update it after any schema changes you should run this command:
+Pro tip: If you want to use the configs package before pushing it there is a handly tool, run it in your project:
 
-```bash
-typeconf update
 ```
-
-Read the config in your code:
-
-```typescript
-import {ProjectConfig} from "@/typeconf-gen/all";
-import {readConfigFromFile} from "@typeconf/sdk";
-
-let projectConfig: ProjectConfig = readConfigFromFile("<configs-dir>/out/config.json");
+npx link@latest <path/to/package>
 ```
 
 If you want to learn more, check out our examples at in the repo [here](https://github.com/typeconf/typeconf/tree/main/examples).

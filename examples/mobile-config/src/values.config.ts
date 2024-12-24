@@ -1,4 +1,4 @@
-import { MobileFeatureConfig } from "@root/types/all.js";
+import { MobileFeatureConfig } from "../types/all.js";
 
 let config: MobileFeatureConfig = {
     platformConfigs: {

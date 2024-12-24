@@ -29,7 +29,7 @@ model ProductConfig {
 ```typescript
 import {
   ProductConfig,
-} from "@root/types/all.js";
+} from "~/types/all.js";
 
 let config: ProductConfig = {
     enable_flag: true,
@@ -59,11 +59,8 @@ export default config;
 ```typescript
 import {
   ProductConfig,
-} from "@/typeconf-gen/all";
-
-import {
   readConfigFromFile,
-} from "@typeconf/sdk";
+} from "you-config-package";
 
 let conf: ProductConfig =
   readConfigFromFile(
@@ -113,29 +110,23 @@ Check out our [examples](examples/README.md) for real world use cases.
 
 https://github.com/user-attachments/assets/2a50ae36-76cd-4b51-b0e3-744997895717
 
-## Installation
+## Getting started
 
 ```
-npm install -g @typeconf/typeconf
+npx create-typeconf-package@latest <config-dir>
 ```
 
-## Setup
+This command will create you a configuration package managed by typeconf.
 
-### Configuration directory
-
-To start managing configs with types first you need to create a directory for all your configs:
-
+Before editing files in the package make sure to install dependencies:
 ```
-typeconf init <configs-dir>
+$ npm install
 ```
 
-With this command we'll generate the boilerplate for you.
-Before editing files run in a separate terminal window:
-
+and run configs compilation in background in a separate terminal:
 ```
-typeconf compile --watch <configs-dir>
+$ npm run build:watch
 ```
-This will run typeconf in background for automatic recompilation.
 
 Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
 
@@ -151,7 +142,7 @@ model ProductConfig {
 Example `values.config.ts`:
 
 ```typescript
-import { ProductConfig } from '@root/types/all.js'
+import { ProductConfig } from '~/types/all.js'
 
 let config: ProductConfig = {
     enable_feature1: true,
@@ -164,7 +155,7 @@ let config: ProductConfig = {
 
 You can always manually regenerate files with this config:
 ```
-typeconf compile <configs-dir>
+npm build <configs-dir>
 ```
 
 The command above will always regenerate types for your configs and generate
@@ -175,29 +166,21 @@ output JSON file containing the config values.
 Typeconf also allows reading configs with typing. Currently we only support
 Typescript, but later we'll add other languages.
 
-To start using your config first you need to configure the typeconf :).
+To start using your config you can just install your configuration package that
+you just created simply as a dependency!
 
-Install SDK package to your project:
-```
-npm install --save @typeconf/sdk
-```
+After that you'll be able to read it from any JSON file you provide:
 
-Create a file called `typeconf.config.ts` and add your config directory:
 ```typescript
-import * as typeconf from '@typeconf/sdk'
+import { ProductConfig, readConfigFromFile } from "you-config-package";
 
-const config: typeconf.Config = {
-    configs: [
-        "./configs",
-    ],
-};
-
-export default config;
+let conf: ProductConfig = readConfigFromFile("path/to/config.json");
 ```
 
-To fetch the config or update it after any schema changes you should run this command:
+Pro tip: If you want to use the configs package before pushing it there is a handly tool, run it in your project:
+
 ```
-typeconf update
+npx link@latest <path/to/package>
 ```
 
 ## Contributing

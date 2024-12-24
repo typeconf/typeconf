@@ -1,7 +1,7 @@
 {
-  "name": "@typeconf/typeconf",
-  "version": "0.2.0",
-  "description": "Typeconf CLI for defining configs with types.",
+  "name": "create-typeconf-package",
+  "version": "0.1.5",
+  "description": "CLI for creating typeconf package",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
   "author": "Ivan Chebykin",
@@ -13,7 +13,7 @@
   "main": "dist/src/index.js",
   "type": "module",
   "bin": {
-    "typeconf": "dist/src/cli.js"
+    "create-typeconf-package": "dist/src/index.js"
   },
   "files": [
     "dist"
@@ -21,21 +21,15 @@
   "engines": {
     "node": ">=18"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "default": "./dist/src/index.js"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/typeconf/typeconf.git",
-    "directory": "packages/typeconf"
+    "directory": "packages/create-typeconf-package"
   },
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node dist/src/cli.js"
+    "start": "npm run build && node dist/src/index.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
@@ -44,9 +38,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
-    "@typeconf/config-emitter": "workspace:*",
+    "@typeconf/typeconf": "workspace:*",
     "@typespec/compiler": "^0.62.0",
     "commander": "^12.1.0",
+    "jiti": "^2.4.0",
     "prompts": "^2.4.2"
   },
   "publishConfig": {

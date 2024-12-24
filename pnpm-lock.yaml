@@ -34,6 +34,37 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
 
+  packages/create-typeconf-package:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.46.1
+        version: 2.46.1
+      '@typeconf/typeconf':
+        specifier: workspace:*
+        version: link:../typeconf
+      '@typespec/compiler':
+        specifier: ^0.62.0
+        version: 0.62.0
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
+      jiti:
+        specifier: ^2.4.0
+        version: 2.4.0
+      prompts:
+        specifier: ^2.4.2
+        version: 2.4.2
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.0
+        version: 22.10.0
+      '@types/prompts':
+        specifier: ^2.4.9
+        version: 2.4.9
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
   packages/sdk:
     devDependencies:
       '@types/node':
