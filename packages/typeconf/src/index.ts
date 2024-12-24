@@ -7,10 +7,10 @@ import initProject from "./init.js";
 import { updateConfig } from "./update.js";
 import { log_event } from "./logging.js";
 import path from "path";
-import { version } from "../package.json";
+import packageJson from "../package.json" with { type: "json" }
 
 const program = new Command();
-export const VERSION = version;
+export const VERSION = packageJson.version;
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);
