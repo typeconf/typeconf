@@ -10,6 +10,7 @@ for e in ./examples/*; do
         cd "$DIR"
         npm install
         npx link@latest ../../packages/typeconf
+        npx link@latest ../../packages/sdk
         npm run build
     ) || echo "fail"
     echo "done"

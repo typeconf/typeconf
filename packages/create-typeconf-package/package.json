@@ -1,6 +1,6 @@
 {
   "name": "create-typeconf-package",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "CLI for creating typeconf package",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
-    "@typeconf/typeconf": "workspace:*",
-    "@typeconf/package-json": "workspace:*",
+    "@typeconf/typeconf": "workspace:~",
+    "@typeconf/package-json": "workspace:~",
     "@typespec/compiler": "^0.62.0",
     "commander": "^12.1.0",
     "jiti": "^2.4.0",

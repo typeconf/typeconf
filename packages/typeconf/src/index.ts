@@ -1,4 +1,5 @@
 import fs from "fs";
+import { fileURLToPath } from "url";
 
 import { compile as typeconfCompile } from "./compile/compile.js";
 import initProject from "./init.js";
@@ -7,9 +8,9 @@ import path from "path";
 import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
 
 export const VERSION = readConfigFromFile<PackageJson>(
-  path.resolve(import.meta.dirname, "../package.json"),
+  fileURLToPath(import.meta.resolve("../package.json")),
 ).version;
-//export const VERSION = "0.1.0";
+// export const VERSION = "dev";
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);

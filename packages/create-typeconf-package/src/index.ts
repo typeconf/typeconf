@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
+import { fileURLToPath } from "url";
 import { Command } from "commander";
 // TODO: replace this with direct json import after that stops being experimental
 import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
 import { initPackage } from "@typeconf/typeconf";
-import path from "path";
 
 const VERSION = readConfigFromFile<PackageJson>(
-  path.resolve(import.meta.dirname, "../package.json"),
+  fileURLToPath(import.meta.resolve("../package.json")),
 ).version;
 const program = new Command();
 

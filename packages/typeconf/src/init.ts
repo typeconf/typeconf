@@ -128,12 +128,8 @@ For more info please refer to the [docs](https://docs.typeconf.dev).
     (): Template => {
       return {
         canBeOverwritten: false,
-        value: `
-// These are the required exports for Typeconf, please keep them!
-export * from '@typeconf/sdk' // Typeconf SDK
-export * from '~/types/all.js' // Your config types
-export { default as values } from '~/src/values.config.js' // Your config values
-`,
+        value: `// This is for Typeconf interface and types, please keep it!
+export * from '~/types/index.js'`,
       };
     },
   ],
