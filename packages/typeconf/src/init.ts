@@ -91,7 +91,7 @@ You can replace this text with your own description here.
 This package was created by running:
 
 \`\`\`
-$ npx create-typeconf-package ${params.projectName}
+$ npx create-typeconf-package@latest ${params.projectName}
 \`\`\`
 
 ## Working with package
@@ -129,15 +129,10 @@ For more info please refer to the [docs](https://docs.typeconf.dev).
       return {
         canBeOverwritten: false,
         value: `
-// created via typeconf
-// external interface of the package
-export * from '../types/all.js'
-export * from '@typeconf/sdk'
-
-// write JSON file to out/
-import * as values from './values.config.js'
-import { writeConfigToFile } from '@typeconf/sdk'
-writeConfigToFile(values, process.argv[2] ?? null);
+// These are the required exports for Typeconf, please keep them!
+export * from '@typeconf/sdk' // Typeconf SDK
+export * from '~/types/all.js' // Your config types
+export { default as values } from '~/src/values.config.js' // Your config values
 `,
       };
     },

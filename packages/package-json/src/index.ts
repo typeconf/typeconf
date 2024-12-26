@@ -1,6 +1,4 @@
-export * from '../types/all.js'
-export * from '@typeconf/sdk'
-
-import * as values from './values.config.js'
-import { writeConfigToFile } from '@typeconf/sdk'
-writeConfigToFile(values, process.argv[2] ?? null);
+// These are the required exports for Typeconf, please keep them!
+export * from '@typeconf/sdk' // Typeconf SDK
+export * from '~/types/all.js' // Your config types
+export { default as values } from '~/src/values.config.js' // Your config values

@@ -129,5 +129,7 @@ async function buildConfigFile(configDir: string): Promise<void> {
 
   await runCommand(configDir, "npx", ["tsc"]);
   await runCommand(configDir, "npx", ["resolve-tspaths"]);
-  await runCommand(configDir, "node", ["dist/src/index.js", targetPath]);
+
+  const configModule = await import(path.join(configDir, "dist/src/index.js"));
+  await configModule.writeConfigToFile(configModule.values, targetPath);
 }
