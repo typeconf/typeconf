@@ -4,9 +4,11 @@ import { compile as typeconfCompile } from "./compile/compile.js";
 import initProject from "./init.js";
 import { log_event } from "./logging.js";
 import path from "path";
-import packageJson from "../package.json" with { type: "json" }
+import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
 
-export const VERSION = packageJson.version;
+export const VERSION = readConfigFromFile<PackageJson>(
+  path.resolve(import.meta.dirname, "../package.json"),
+).version;
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);

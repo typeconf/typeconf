@@ -45,6 +45,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
     "@typeconf/config-emitter": "workspace:*",
+    "@typeconf/package-json": "workspace:*",
     "@typespec/compiler": "^0.62.0",
     "commander": "^12.1.0",
     "prompts": "^2.4.2"

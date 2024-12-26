@@ -1,10 +1,14 @@
-#!/usr/bin/env -S node --no-warnings
+#!/usr/bin/env node
 
 import { Command } from "commander";
-import packageJson from "../package.json" with { type: "json" }
-import { initPackage } from "@typeconf/typeconf"
+// TODO: replace this with direct json import after that stops being experimental
+import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
+import { initPackage } from "@typeconf/typeconf";
+import path from "path";
 
-const VERSION = packageJson.version;
+const VERSION = readConfigFromFile<PackageJson>(
+  path.resolve(import.meta.dirname, "../package.json"),
+).version;
 const program = new Command();
 
 program
@@ -12,8 +16,8 @@ program
   .description("A CLI tool for creating new typeconf package");
 
 program.arguments("<target-directory>").action(async (targetDir: string) => {
-    console.log(`create ${targetDir}`);
-    initPackage(targetDir);
+  console.log(`create ${targetDir}`);
+  initPackage(targetDir);
 });
 
 program.parse(process.argv);

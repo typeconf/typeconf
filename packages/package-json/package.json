@@ -1,0 +1,31 @@
+{
+  "name": "@typeconf/package-json",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "keywords": [
+      "typeconf",
+      "package-json"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "dependencies": {
+    "@typeconf/typeconf": "workspace:*",
+    "@typeconf/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "resolve-tspaths": "*"
+  },
+  "scripts": {
+    "build": "typeconf build .",
+    "build:watch": "typeconf build . --watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
