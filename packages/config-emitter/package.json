@@ -34,8 +34,8 @@
     "directory": "packages/config-emitter"
   },
   "dependencies": {
-    "@typespec-tools/emitter-typescript": "^0.3.0",
-    "@typespec/compiler": "^0.62.0"
+    "@typespec-tools/emitter-typescript": "github:codingmatty/typespec-tools#path:/packages/emitter-typescript",
+    "@typespec/compiler": "^0.63.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

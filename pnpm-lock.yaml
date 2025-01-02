@@ -18,11 +18,11 @@ importers:
   packages/config-emitter:
     dependencies:
       '@typespec-tools/emitter-typescript':
-        specifier: ^0.3.0
-        version: 0.3.0(@typespec/compiler@0.62.0)
+        specifier: github:codingmatty/typespec-tools#path:/packages/emitter-typescript
+        version: https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript(@typespec/compiler@0.63.0)
       '@typespec/compiler':
-        specifier: ^0.62.0
-        version: 0.62.0
+        specifier: ^0.63.0
+        version: 0.63.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
@@ -40,10 +40,10 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/package-json':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../package-json
       '@typeconf/typeconf':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../typeconf
       '@typespec/compiler':
         specifier: ^0.62.0
@@ -71,10 +71,10 @@ importers:
   packages/package-json:
     dependencies:
       '@typeconf/sdk':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../sdk
       '@typeconf/typeconf':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../typeconf
     devDependencies:
       '@types/node':
@@ -99,10 +99,10 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/config-emitter':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../config-emitter
       '@typeconf/package-json':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../package-json
       '@typespec/compiler':
         specifier: ^0.62.0
@@ -191,14 +191,20 @@ packages:
   '@types/ws@8.5.13':
     resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
 
-  '@typespec-tools/emitter-typescript@0.3.0':
-    resolution: {integrity: sha512-aty5BaVKBsiwkUyGBI0NqDC/79L9yr7ayoiZoz/EpkO6LPKi0RM9DTJ49iFH8Gy/Vnlo8zMQ46VbHynxx7ZaPA==}
+  '@typespec-tools/emitter-typescript@https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript':
+    resolution: {path: /packages/emitter-typescript, tarball: https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5}
+    version: 0.4.0
     engines: {node: '>=18'}
     peerDependencies:
       '@typespec/compiler': ^0.59.1
 
   '@typespec/compiler@0.62.0':
     resolution: {integrity: sha512-RfKJ/rF2Wjxu7dl74oJE8yEfSkeL7NopFlyJ4dW1JQXpRN2IOJYPxas12qZA6H9ZEIB8rBjyrHNxJSQbvn/UDQ==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
+  '@typespec/compiler@0.63.0':
+    resolution: {integrity: sha512-cC3YniwbFghn1fASX3r1IgNjMrwaY4gmzznkHT4f/NxE+HK4XoXWn4EG7287QgVMCaHUykzJCIfW9k7kIleW5A==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -598,11 +604,28 @@ snapshots:
     dependencies:
       '@types/node': 22.10.0
 
-  '@typespec-tools/emitter-typescript@0.3.0(@typespec/compiler@0.62.0)':
+  '@typespec-tools/emitter-typescript@https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript(@typespec/compiler@0.63.0)':
     dependencies:
-      '@typespec/compiler': 0.62.0
+      '@typespec/compiler': 0.63.0
 
   '@typespec/compiler@0.62.0':
+    dependencies:
+      '@babel/code-frame': 7.25.9
+      ajv: 8.17.1
+      change-case: 5.4.4
+      globby: 14.0.2
+      mustache: 4.2.0
+      picocolors: 1.1.1
+      prettier: 3.3.3
+      prompts: 2.4.2
+      semver: 7.6.3
+      temporal-polyfill: 0.2.5
+      vscode-languageserver: 9.0.1
+      vscode-languageserver-textdocument: 1.0.12
+      yaml: 2.5.1
+      yargs: 17.7.2
+
+  '@typespec/compiler@0.63.0':
     dependencies:
       '@babel/code-frame': 7.25.9
       ajv: 8.17.1

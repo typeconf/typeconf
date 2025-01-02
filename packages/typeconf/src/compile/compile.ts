@@ -1,4 +1,3 @@
-import fs from 'fs'
 import {
   compile as typespecCompile,
   NodeHost,
@@ -9,7 +8,7 @@ import {
 import { spawn } from "child_process";
 import { promises as fsAsync } from 'fs';
 import path from "path";
-import { fileURLToPath } from "url";
+//import { fileURLToPath } from "url";
 import {generateTemplates} from '../init.js';
 
 const EMITTER = "@typeconf/config-emitter";
@@ -22,14 +21,15 @@ interface SpawnError {
   spawnArgs: string[];
 }
 
-async function reactPackageFile(configDir: string): Promise<Record<string, any>> {
+async function reactPackageFile(configDir: string, host: CompilerHost): Promise<Record<string, any>> {
   // good candidate for typeconf package!
-  const fileContent = await fsAsync.readFile(path.join(configDir, "package.json"), 'utf-8');
-  return JSON.parse(fileContent) as Record<string, any>;
+  const pkgPath = path.join(configDir, "package.json");
+  const fileContent = await host.readFile(pkgPath);
+  return JSON.parse(fileContent.text) as Record<string, any>;
 }
 
-export async function compile(configDir: string): Promise<void> {
-  const packageFile = await reactPackageFile(configDir);
+export async function compile(configDir: string, host: CompilerHost = NodeHost): Promise<void> {
+  const packageFile = await reactPackageFile(configDir, host);
   const projectName = packageFile["projectName"] ?? path.basename(configDir);
   await generateTemplates(projectName, configDir, false)
 
@@ -42,7 +42,7 @@ export async function compile(configDir: string): Promise<void> {
   };
   const program = await typespecCompile(
     {
-      ...NodeHost,
+      ...host,
       logSink: {
         log: (log) => {
           console.log(log);
@@ -57,7 +57,7 @@ export async function compile(configDir: string): Promise<void> {
     },
   );
 
-  logProgramResult(NodeHost, program);
+  logProgramResult(host, program);
   if (program.hasError()) {
     throw new Error("Compilation failed");
   }
@@ -66,7 +66,7 @@ export async function compile(configDir: string): Promise<void> {
 }
 
 function getEmitterPath() {
-  const emitterPath = fileURLToPath(import.meta.resolve(EMITTER));
+  const emitterPath = import.meta.resolve(EMITTER).replace("file://", "");
   return path.join(path.dirname(emitterPath), "..");
 }
 
