@@ -18,8 +18,8 @@ importers:
   packages/config-emitter:
     dependencies:
       '@typespec-tools/emitter-typescript':
-        specifier: github:codingmatty/typespec-tools#path:/packages/emitter-typescript
-        version: https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript(@typespec/compiler@0.63.0)
+        specifier: ^0.3.0
+        version: 0.3.0(@typespec/compiler@0.63.0)
       '@typespec/compiler':
         specifier: ^0.63.0
         version: 0.63.0
@@ -191,9 +191,8 @@ packages:
   '@types/ws@8.5.13':
     resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
 
-  '@typespec-tools/emitter-typescript@https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript':
-    resolution: {path: /packages/emitter-typescript, tarball: https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5}
-    version: 0.4.0
+  '@typespec-tools/emitter-typescript@0.3.0':
+    resolution: {integrity: sha512-aty5BaVKBsiwkUyGBI0NqDC/79L9yr7ayoiZoz/EpkO6LPKi0RM9DTJ49iFH8Gy/Vnlo8zMQ46VbHynxx7ZaPA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@typespec/compiler': ^0.59.1
@@ -604,7 +603,7 @@ snapshots:
     dependencies:
       '@types/node': 22.10.0
 
-  '@typespec-tools/emitter-typescript@https://codeload.github.com/codingmatty/typespec-tools/tar.gz/67c7224b241e0929d93306d98ffd377b99d7edb5#path:/packages/emitter-typescript(@typespec/compiler@0.63.0)':
+  '@typespec-tools/emitter-typescript@0.3.0(@typespec/compiler@0.63.0)':
     dependencies:
       '@typespec/compiler': 0.63.0
 
