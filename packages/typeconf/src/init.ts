@@ -216,6 +216,22 @@ export async function generateTemplates(
   }
 }
 
+export async function initPackageNonInteractive(packagePath: string, packageName: string) {
+  if (packagePath == "" || packageName == "") {
+    throw new Error("packagePath and packageName are required");
+  }
+  fs.mkdirSync(packagePath, { recursive: true });
+  for (const dirname of DIRS) {
+    const filepath = path.join(packagePath, dirname);
+    fs.mkdirSync(filepath, { recursive: true });
+  }
+
+  await generateTemplates(packageName, packagePath, true);
+  console.log(
+    "Done! Now you can edit main.tsp and set your configuration schema.",
+  );
+}
+
 export default async function initProject(projectPath: string) {
   const dirName = path.basename(projectPath);
   if (fs.existsSync(projectPath)) {

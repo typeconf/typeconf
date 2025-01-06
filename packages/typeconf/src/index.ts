@@ -6,6 +6,7 @@ import initProject from "./init.js";
 import { log_event } from "./logging.js";
 import path from "path";
 import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
+import { initPackageNonInteractive as initPackageImpl } from "./init.js";
 
 export const VERSION = readConfigFromFile<PackageJson>(
   fileURLToPath(import.meta.resolve("../package.json")),
@@ -38,6 +39,16 @@ export async function initPackage(directory: string) {
   };
   log_event("info", "init", "start", params);
   await initProject(configDir ?? process.cwd());
+  await log_event("info", "init", "end", params);
+}
+
+export async function initPackageNonInteractive(directory: string, packageName: string) {
+  const params: Record<string, string> = {
+    configDir: path.basename(directory),
+    packageName: packageName,
+  };
+  log_event("info", "init", "start", params);
+  await initPackageImpl(directory, packageName);
   await log_event("info", "init", "end", params);
 }
 
