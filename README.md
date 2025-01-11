@@ -113,7 +113,7 @@ https://github.com/user-attachments/assets/2a50ae36-76cd-4b51-b0e3-744997895717
 ## Getting started
 
 ```
-npx create-typeconf-package@latest <config-dir>
+npx create-typeconf-package
 ```
 
 This command will create you a configuration package managed by typeconf.

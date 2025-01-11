@@ -33,22 +33,17 @@
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting Started",
       "pages": [
-        "getting-started/introduction",
-        "getting-started/getting-started",
-        "getting-started/why"
-      ]
-    },
-    {
-      "group": "Usage",
-      "pages": [
-        "usage/commands"
+        "getting-started/quickstart",
+        "getting-started/overview"
       ]
     },
     {
       "group": "Contributing",
-      "pages": ["contributing/setting-up-project"]
+      "pages": [
+        "contributing/setting-up-project"
+      ]
     }
   ],
   "footerSocials": {

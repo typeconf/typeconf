@@ -1,0 +1,113 @@
+---
+title: "Quickstart"
+---
+
+## Working with Typeconf
+
+Typeconf helps you manage configurations by keeping them in a separate
+directory, which acts as a configuration repository or package for your project.
+The configuration directory contains three main components:
+
+- **Schema**: Located at `src/main.tsp`
+- **Values file**: Located at `src/values.config.ts`
+- **Output JSON file**: Located at `out/<config-name>.json`
+
+## Setting Up the Configuration Directory
+
+To begin using Typeconf, you need to create the configuration directory. Run the following command to generate the necessary boilerplate:
+
+```bash
+npx create-typeconf-package
+```
+
+After that, you can open a separate terminal window and run this command to
+automatically recompile the schema and configuration values whenever you make
+changes:
+
+```bash
+npm run build:watch
+```
+Alternatively, you can manually run npm run build whenever you make changes to the configuration files.
+
+## Creating a new config
+
+In Typeconf, configurations are defined using schemas and values separately. The
+schema is written using a TypeSpec-based language, which is a TypeScript-like
+syntax. Learn more about TypeSpec [here](https://typespec.io/).
+
+### Defining the schema
+
+To modify the schema, locate the `src/main.tsp` file. Here's an example schema:
+
+```typescript
+model DebuggingConfig {
+  enableLogging: boolean;
+  maxRetries: int32;
+  timeout: duration;
+}
+
+model PetServiceConfig {
+  showBreed: boolean;
+  petTypes: string[];
+  debugging: DebuggingConfig;
+}
+```
+
+Refer to the TypeSpec
+[documentation](https://typespec.io/docs/language-basics/overview/) for
+additional examples and language features.
+
+<Info>
+  Remember to run `npm run build` to update the types whenever you modify the schema. 
+</Info>
+
+## Setting Config Values
+
+To set the values for your config, edit the `src/values.config.ts` file. Below is
+an example of how to configure the values corresponding to the schema above:
+
+```typescript
+import { DebuggingConfig, PetServiceConfig } from '@root/types/all.js'
+let debuggingConfig: DebuggingConfig = {
+  enableLogging: true,
+  maxRetries: 10,
+  timeout: "500ms",
+};
+let config: PetServiceConfig = {
+  showBreed: true,
+  petTypes: ["dog", "cat"],
+  debugging: debuggingConfig,
+};
+
+export default config;
+```
+
+## Generating the Output JSON File
+
+After editing the schema and values you should be able to locate the JSON file
+in the `out/` directory. Please make sure that you have ran `npm run build`
+or that you have `npm run build:watch` running in the background.
+
+## Using the config in your code
+
+<Warning>
+  Currently, Typeconf only supports TypeScript, but we plan to add support for other languages in the future. 
+</Warning>
+
+To use your configuration in your code, you can install the configuration
+package you just created as a dependency. Once installed, you can read the
+configuration from any JSON file like this:
+
+```typescript
+import { ProductConfig, readConfigFromFile } from "you-config-package";
+
+let conf: ProductConfig = readConfigFromFile("path/to/config.json");
+```
+
+Pro tip: If you want to use the configuration package before pushing it to the package registry, you can use this handy tool:
+
+```
+npx link@latest <path/to/package>
+```
+
+For more examples, check out the examples in the [repository](https://github.com/typeconf/typeconf/tree/main/examples).
