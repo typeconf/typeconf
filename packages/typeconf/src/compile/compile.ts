@@ -1,4 +1,3 @@
-import fs from 'fs'
 import {
   compile as typespecCompile,
   NodeHost,
@@ -130,6 +129,6 @@ async function buildConfigFile(configDir: string): Promise<void> {
   await runCommand(configDir, "npx", ["tsc"]);
   await runCommand(configDir, "npx", ["resolve-tspaths"]);
 
-  const configModule = await import(path.join(configDir, "dist/src/index.js"));
+  const configModule: any = await import(path.join(configDir, "dist/src/index.js"));
   await configModule.writeConfigToFile(configModule.values, targetPath);
 }

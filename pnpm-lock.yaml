@@ -40,10 +40,10 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/package-json':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../package-json
       '@typeconf/typeconf':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../typeconf
       '@typespec/compiler':
         specifier: ^0.62.0
@@ -71,10 +71,10 @@ importers:
   packages/package-json:
     dependencies:
       '@typeconf/sdk':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../sdk
       '@typeconf/typeconf':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../typeconf
     devDependencies:
       '@types/node':
@@ -99,10 +99,10 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/config-emitter':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../config-emitter
       '@typeconf/package-json':
-        specifier: workspace:*
+        specifier: workspace:~
         version: link:../package-json
       '@typespec/compiler':
         specifier: ^0.62.0

@@ -1,5 +1,6 @@
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { Worker } from "worker_threads";
 
 import { compile as typeconfCompile } from "./compile/compile.js";
 import initProject from "./init.js";
@@ -8,10 +9,14 @@ import path from "path";
 import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
 import { initPackageNonInteractive as initPackageImpl } from "./init.js";
 
-export const VERSION = readConfigFromFile<PackageJson>(
-  fileURLToPath(import.meta.resolve("../package.json")),
-).version;
-// export const VERSION = "dev";
+export const VERSION = (() => {
+  if (process.env["NODE_ENV"] == "dev") {
+    return "dev";
+  }
+  return readConfigFromFile<PackageJson>(
+    fileURLToPath(import.meta.resolve("../package.json")),
+  ).version;
+})();
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {
   log_event("info", "compile", "start", logParams);
@@ -19,16 +24,42 @@ async function doCompile(configDir: string, logParams: Record<string, string>) {
   await log_event("info", "compile", "end", logParams);
 }
 
+async function runWorker(configDir: string) {
+  const worker = new Worker(new URL("./worker.js", import.meta.url), {
+    workerData: configDir,
+  });
+
+  return new Promise((resolve, reject) => {
+    worker.on("message", (message) => {
+      resolve(message);
+      worker.terminate();
+    });
+
+    worker.on("error", (error) => {
+      reject(error);
+    });
+
+    worker.on("exit", (code) => {
+      if (code !== 0) {
+        reject(new Error(`Worker stopped with exit code ${code}`));
+      }
+    });
+  });
+}
+
 async function doCompileInLoop(
   configDir: string,
   logParams: Record<string, string>,
   onFinish: Function,
 ) {
+  log_event("info", "compile", "start", logParams);
   try {
-    await doCompile(configDir, logParams);
+    const result = await runWorker(configDir);
+    console.log("Main thread received:", result);
   } catch (e) {
     console.log(e);
   }
+  await log_event("info", "compile", "end", logParams);
   onFinish();
 }
 
@@ -42,7 +73,10 @@ export async function initPackage(directory: string) {
   await log_event("info", "init", "end", params);
 }
 
-export async function initPackageNonInteractive(directory: string, packageName: string) {
+export async function initPackageNonInteractive(
+  directory: string,
+  packageName: string,
+) {
   const params: Record<string, string> = {
     configDir: path.basename(directory),
     packageName: packageName,
@@ -71,6 +105,7 @@ export async function compilePackage(directory: string, watch: boolean) {
         return;
       }
       if (compileTask !== undefined) {
+        console.log("AA");
         return;
       }
       console.log(`Detected changes in ${filename}, recompiling`);
