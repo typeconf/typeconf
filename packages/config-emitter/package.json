@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@typespec-tools/emitter-typescript": "^0.3.0",
-    "@typespec/compiler": "^0.62.0"
+    "@typespec/compiler": "^0.59.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

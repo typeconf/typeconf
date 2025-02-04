@@ -44,8 +44,8 @@ const TEMPLATES = new Map<string, any>([
     }
   },
   "dependencies": {
-    "@typeconf/typeconf": ">=0.2.0",
-    "@typeconf/sdk": ">=0.1.0"
+    "@typeconf/typeconf": "^0.2.0",
+    "@typeconf/sdk": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
@@ -91,7 +91,7 @@ You can replace this text with your own description here.
 This package was created by running:
 
 \`\`\`
-$ npx create-typeconf-package@latest ${params.projectName}
+$ npx create-typeconf-package ${params.projectName}
 \`\`\`
 
 ## Working with package

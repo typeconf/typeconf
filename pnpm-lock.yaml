@@ -19,10 +19,10 @@ importers:
     dependencies:
       '@typespec-tools/emitter-typescript':
         specifier: ^0.3.0
-        version: 0.3.0(@typespec/compiler@0.62.0)
+        version: 0.3.0(@typespec/compiler@0.59.1)
       '@typespec/compiler':
-        specifier: ^0.62.0
-        version: 0.62.0
+        specifier: ^0.59.1
+        version: 0.59.1
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
@@ -40,10 +40,10 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/package-json':
-        specifier: workspace:~
+        specifier: workspace:^
         version: link:../package-json
       '@typeconf/typeconf':
-        specifier: workspace:~
+        specifier: workspace:^
         version: link:../typeconf
       '@typespec/compiler':
         specifier: ^0.62.0
@@ -71,10 +71,10 @@ importers:
   packages/package-json:
     dependencies:
       '@typeconf/sdk':
-        specifier: workspace:~
+        specifier: workspace:^
         version: link:../sdk
       '@typeconf/typeconf':
-        specifier: workspace:~
+        specifier: workspace:^
         version: link:../typeconf
     devDependencies:
       '@types/node':
@@ -99,14 +99,11 @@ importers:
         specifier: ^2.46.1
         version: 2.46.1
       '@typeconf/config-emitter':
-        specifier: workspace:~
+        specifier: workspace:latest
         version: link:../config-emitter
-      '@typeconf/package-json':
-        specifier: workspace:~
-        version: link:../package-json
       '@typespec/compiler':
-        specifier: ^0.62.0
-        version: 0.62.0
+        specifier: ^0.59.1
+        version: 0.59.1
       commander:
         specifier: ^12.1.0
         version: 12.1.0
@@ -125,6 +122,10 @@ importers:
         version: 5.7.2
 
 packages:
+
+  '@babel/code-frame@7.24.7':
+    resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/code-frame@7.25.9':
     resolution: {integrity: sha512-z88xeGxnzehn2sqZ8UdGQEvYErF1odv2CftxInpSYJt6uHuPe9YjahKZITGs3l5LeI9d2ROG+obuDAoSlqbNfQ==}
@@ -196,6 +197,11 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@typespec/compiler': ^0.59.1
+
+  '@typespec/compiler@0.59.1':
+    resolution: {integrity: sha512-O2ljgr6YoFaIH6a8lWc90/czdv4B2X6N9wz4WsnQnVvgO0Tj0s+3xkvp4Tv59RKMhT0f3fK6dL8oEGO32FYk1A==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   '@typespec/compiler@0.62.0':
     resolution: {integrity: sha512-RfKJ/rF2Wjxu7dl74oJE8yEfSkeL7NopFlyJ4dW1JQXpRN2IOJYPxas12qZA6H9ZEIB8rBjyrHNxJSQbvn/UDQ==}
@@ -347,6 +353,9 @@ packages:
     resolution: {integrity: sha512-5HviZNaZcfqP95rwpv+1HDgUamezbqdSYTyzjTvwtJSnIH+3vnbmWsItli8OFEndS984VT55M3jduxZbX351gg==}
     engines: {node: '>=12'}
 
+  picocolors@1.0.1:
+    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -494,6 +503,11 @@ packages:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
 
+  yaml@2.4.5:
+    resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
   yaml@2.5.1:
     resolution: {integrity: sha512-bLQOjaX/ADgQ20isPJRvF0iRUHIxVhYvr53Of7wGcWlO2jvtUlH5m87DsmulFVxRpNLOnI4tB6p/oh8D7kpn9Q==}
     engines: {node: '>= 14'}
@@ -508,6 +522,11 @@ packages:
     engines: {node: '>=12'}
 
 snapshots:
+
+  '@babel/code-frame@7.24.7':
+    dependencies:
+      '@babel/highlight': 7.25.9
+      picocolors: 1.1.1
 
   '@babel/code-frame@7.25.9':
     dependencies:
@@ -598,9 +617,26 @@ snapshots:
     dependencies:
       '@types/node': 22.10.0
 
-  '@typespec-tools/emitter-typescript@0.3.0(@typespec/compiler@0.62.0)':
+  '@typespec-tools/emitter-typescript@0.3.0(@typespec/compiler@0.59.1)':
     dependencies:
-      '@typespec/compiler': 0.62.0
+      '@typespec/compiler': 0.59.1
+
+  '@typespec/compiler@0.59.1':
+    dependencies:
+      '@babel/code-frame': 7.24.7
+      ajv: 8.17.1
+      change-case: 5.4.4
+      globby: 14.0.2
+      mustache: 4.2.0
+      picocolors: 1.0.1
+      prettier: 3.3.3
+      prompts: 2.4.2
+      semver: 7.6.3
+      temporal-polyfill: 0.2.5
+      vscode-languageserver: 9.0.1
+      vscode-languageserver-textdocument: 1.0.12
+      yaml: 2.4.5
+      yargs: 17.7.2
 
   '@typespec/compiler@0.62.0':
     dependencies:
@@ -744,6 +780,8 @@ snapshots:
 
   path-type@5.0.0: {}
 
+  picocolors@1.0.1: {}
+
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -851,6 +889,8 @@ snapshots:
   ws@8.18.0: {}
 
   y18n@5.0.8: {}
+
+  yaml@2.4.5: {}
 
   yaml@2.5.1: {}
 
