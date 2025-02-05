@@ -1,0 +1,105 @@
+---
+title: Using Typeconf in Monorepo
+description: Learn how to set up and use Typeconf effectively in a monorepo environment
+---
+
+This guide will walk you through setting up and using Typeconf in a monorepo
+environment, where you can define your configurations in a shared package and
+use them across multiple projects. The whole process is similar to our
+quickstart guide, because with the monorepo setup you can just use a separate
+configuration package and share it across your projects.
+
+## Setting Up the Config Package
+
+First, create a new package in your monorepo for your shared configurations:
+
+```bash
+npx create-typeconf-package packages/configs
+```
+
+## Defining Shared Configurations
+
+Create your configuration definitions in the config package:
+
+```typescript
+// packages/configs/src/main.tsp
+model NotificationConfig {
+  email: boolean;
+  push: boolean;
+}
+
+model UserSettings {
+  theme: string;
+  notifications: Record<NotificationConfig>;
+}
+```
+
+Create values file for your config:
+
+```typescript
+// packages/configs/src/values.config.ts
+import { UserSettings } from './types/all.js';
+
+const config: UserSettings = {
+  theme: 'light',
+  notifications: {
+    "promo": {
+      email: true,
+      push: false,
+    },
+    "alerts": {
+      email: true,
+      push: true,
+    },
+  }
+};
+export default config;
+```
+
+Build your config package:
+
+```bash
+# In packages/configs
+npm run build
+# or pnpm build
+# or yarn build
+```
+
+## Using the config package in other projects
+
+Now you can use your shared configurations in other packages within your monorepo:
+
+```typescript
+// packages/backend/src/index.ts
+import { UserSettings, readConfigFromFile } from '@your-org/config';
+
+const config: UserSettings = readConfigFromFile('./packages/configs/user-settings.json');
+```
+
+## CI/CD Considerations
+
+1. **Build Order**:
+   - Ensure config package is built before dependent packages
+   - Use tools like [Turborepo](https://turborepo.org/) or [Nx](https://nx.dev/) for efficient builds
+
+2. **Validation**:
+   - Add a CI step to build configuration before other packages
+   - Check for breaking changes in config updates
+
+Here's an example Github Actions workflow to update config:
+```yaml
+# .github/workflows/update-config.yml
+name: Update Config
+on: [push]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Build config
+        run: cd packages/config && npm run build
+      - name: Test config
+        run: cd packages/config && npm test
+```
