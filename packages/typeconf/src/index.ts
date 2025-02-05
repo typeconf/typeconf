@@ -6,16 +6,21 @@ import { compile as typeconfCompile } from "./compile/compile.js";
 import initProject from "./init.js";
 import { log_event } from "./logging.js";
 import path from "path";
-import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
+
 import { initPackageNonInteractive as initPackageImpl } from "./init.js";
+
+interface PackageJson {
+  version: string;
+  [key: string]: any;
+}
 
 export const VERSION = (() => {
   if (process.env["NODE_ENV"] == "dev") {
     return "dev";
   }
-  return readConfigFromFile<PackageJson>(
-    fileURLToPath(import.meta.resolve("../package.json")),
-  ).version;
+  const packagePath = fileURLToPath(import.meta.resolve("../package.json"));
+  const packageContent = fs.readFileSync(packagePath, 'utf-8');
+  return JSON.parse(packageContent).version;
 })();
 
 async function doCompile(configDir: string, logParams: Record<string, string>) {

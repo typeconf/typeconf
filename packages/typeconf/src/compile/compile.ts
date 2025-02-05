@@ -5,13 +5,37 @@ import {
   Program,
   logDiagnostics,
 } from "@typespec/compiler";
-import { spawn } from "child_process";
+import { spawn, StdioOptions } from "child_process";
 import { promises as fsAsync } from 'fs';
 import path from "path";
 import { fileURLToPath } from "url";
-import {generateTemplates} from '../init.js';
 
 const EMITTER = "@typeconf/config-emitter";
+
+export enum ConfigMode {
+  STANDALONE = "standalone",
+  IN_PROJECT = "in_project"
+}
+
+async function getConfigMode(configDir: string): Promise<ConfigMode> {
+  try {
+    const mainTspExists = await fsAsync.access(path.join(configDir, 'src', 'main.tsp'))
+      .then(() => true)
+      .catch(() => false);
+
+    const packageJsonExists = await fsAsync.access(path.join(configDir, 'package.json'))
+      .then(() => true)
+      .catch(() => false);
+
+    if (!mainTspExists && !packageJsonExists) {
+      return ConfigMode.IN_PROJECT;
+    }
+    
+    return ConfigMode.STANDALONE;
+  } catch {
+    return ConfigMode.STANDALONE;
+  }
+}
 
 interface SpawnError {
   errno: number;
@@ -21,18 +45,27 @@ interface SpawnError {
   spawnArgs: string[];
 }
 
-async function reactPackageFile(configDir: string): Promise<Record<string, any>> {
-  // good candidate for typeconf package!
-  const fileContent = await fsAsync.readFile(path.join(configDir, "package.json"), 'utf-8');
-  return JSON.parse(fileContent) as Record<string, any>;
+async function reactPackageFile(configDir: string): Promise<Record<string, any> | null> {
+  try {
+    const fileContent = await fsAsync.readFile(path.join(configDir, "package.json"), 'utf-8');
+    return JSON.parse(fileContent) as Record<string, any>;
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
+  }
 }
 
 export async function compile(configDir: string): Promise<void> {
   const packageFile = await reactPackageFile(configDir);
-  const projectName = packageFile["projectName"] ?? path.basename(configDir);
-  await generateTemplates(projectName, configDir, false)
+  const projectName = packageFile ? packageFile["projectName"] : path.basename(configDir);
 
   console.log(`Compiling ${configDir}...`);
+
+  const mainTspPath = path.join(configDir, 'main.tsp');
+  const hasMainTsp = await fsAsync.access(mainTspPath).then(() => true).catch(() => false);
+  const sourcePath = hasMainTsp ? configDir : path.join(configDir, 'src');
 
   let options: Record<string, any> = {};
   options[EMITTER] = {
@@ -48,11 +81,11 @@ export async function compile(configDir: string): Promise<void> {
         },
       },
     },
-    path.join(configDir, "src"),
+    sourcePath,
     {
       emit: [getEmitterPath()],
-      outputDir: configDir,
-      options: options,
+    outputDir: configDir,
+    options: options,
     },
   );
 
@@ -95,13 +128,25 @@ function logProgramResult(
   console.log(); // Insert a newline
 }
 
-async function runCommand(cwd: string, command: string, params: Array<string>): Promise<void> {
+async function runCommand(
+  cwd: string, 
+  command: string, 
+  params: Array<string>, 
+  stdin?: string
+): Promise<void> {
+  const stdio: StdioOptions = stdin ? ['pipe', 'inherit', 'inherit'] : 'inherit';
+  
   const child = spawn(command, params, {
     shell: process.platform === "win32",
-    stdio: "inherit",
+    stdio,
     cwd: cwd,
     env: process.env,
   });
+
+  if (stdin && child.stdin) {
+    child.stdin.write(stdin);
+    child.stdin.end();
+  }
 
   return new Promise((resolve, reject) => {
     child.on("error", (error: SpawnError) => {
@@ -125,10 +170,20 @@ async function runCommand(cwd: string, command: string, params: Array<string>): 
 async function buildConfigFile(configDir: string): Promise<void> {
   await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
   const targetPath = path.join("out", `${path.basename(configDir)}.json`);
+  const configMode = await getConfigMode(configDir);
 
-  await runCommand(configDir, "npx", ["tsc"]);
-  await runCommand(configDir, "npx", ["resolve-tspaths"]);
+  if (configMode == ConfigMode.STANDALONE) {
+    await runCommand(configDir, "npx", ["tsc"]);
+    await runCommand(configDir, "npx", ["resolve-tspaths"]);
 
-  const configModule: any = await import(path.join(configDir, "dist/src/index.js"));
-  await configModule.writeConfigToFile(configModule.values, targetPath);
+    const configModule: any = await import(path.join(configDir, "dist/types/index.js"));
+    await configModule.writeConfigToFile(configModule.values, targetPath);
+    return;
+  }
+  await runCommand(configDir, "npx", ["tsx"], `
+import * as configs from '${configDir}/types/index.js';
+configs.default.writeConfigToFile(
+  configs.default.values, '${targetPath}'
+);
+`);
 }

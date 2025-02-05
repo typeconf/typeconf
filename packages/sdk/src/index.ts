@@ -14,7 +14,7 @@ export async function writeConfigToFile(values: any, filepath?: string) {
     if (values == null) {
         return;
     }
-    const data = JSON.stringify(values);
+    const data = JSON.stringify(values, null, 4);
     const target_path = filepath;
     if (target_path != null) {
         fs.writeFileSync(target_path, data, { flag: 'w' });
