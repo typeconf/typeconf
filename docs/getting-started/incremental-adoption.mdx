@@ -19,7 +19,7 @@ mkdir configs
 cd configs
 ```
 
-1. Create a configuration model:
+2. Create a configuration model:
 
 ```typescript
 // main.tsp
@@ -34,7 +34,7 @@ model UserSettings {
 }
 ```
 
-1. Create values file:
+3. Create values file:
 
 ```typescript
 // values.config.ts
@@ -56,13 +56,13 @@ const config: UserSettings = {
 export default config;
 ```
 
-1. Generate config types and JSON:
+4. Generate config types and JSON:
 
 ```bash
 $ npx @typeconf/typeconf@latest build configs
 ```
 
-1. Use the configuration in your app:
+5. Use the configuration in your app:
 
 ```typescript
 import { UserSettings, readConfigFromFile } from './configs/types';
@@ -88,7 +88,9 @@ function UserPreferences() {
 
    * Areas prone to configuration errors
 
-3. **Maintain Backward Compatibility**: When converting existing configurations:```typescript
+3. **Maintain Backward Compatibility whenconverting existing configurations**:
+
+```typescript
    // Wrap existing config with Typeconf type while maintaining
    // the old interface
    const legacyConfig = {
@@ -102,7 +104,7 @@ function UserPreferences() {
      ...legacyConfig,
      ...newConfig
    };
-   ```
+```
 
 ## Integration with Other Tools
 
