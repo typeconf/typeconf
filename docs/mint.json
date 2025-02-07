@@ -19,18 +19,7 @@
     "type": "github",
     "url": "https://github.com/typeconf/typeconf"
   },
-  "anchors": [
-    {
-      "name": "Github",
-      "icon": "github",
-      "url": "https://github.com/typeconf/typeconf"
-    },
-    {
-      "name": "Community",
-      "icon": "discord",
-      "url": "https://discord.gg/F5d4TjsS8B"
-    }
-  ],
+  "anchors": [],
   "navigation": [
     {
       "group": "Getting Started",
@@ -39,6 +28,13 @@
         "getting-started/overview",
         "getting-started/incremental-adoption",
         "getting-started/monorepo-setup"
+      ]
+    },
+    {
+      "group": "Usage",
+      "pages": [
+        "usage/reading-configs",
+        "usage/nextjs-guide"
       ]
     },
     {

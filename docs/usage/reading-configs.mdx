@@ -1,0 +1,38 @@
+---
+title: "Reading Configs"
+---
+
+Once you have defined your configuration schema and values, you can read them in
+your application. TypeConf provides a simple and type-safe way to access your
+configurations.
+
+## Basic Usage
+
+To read your configurations, use the `readConfigFromFile` function:
+
+```typescript
+import { ConfigType, readConfigFromFile } from 'your-config-package';
+
+const config: ConfigType = readConfigFromFile('path/to/config.json');
+```
+
+The `readConfigFromFile` function returns your configuration object with full
+type safety based on your schema.
+
+## Type Safety
+
+One of TypeConf's key features is complete type safety. Your IDE will provide
+full autocomplete and type checking:
+
+```typescript
+const config: ConfigType = readConfigFromFile('path/to/config.json');
+
+// TypeScript knows the exact type of your config
+config.database.host; // ✅ Type safe
+config.nonexistent; // ❌ TypeScript error
+```
+
+## Using with Different Frameworks
+
+TypeConf works seamlessly with various frameworks and environments. Check out our framework-specific guides:
+- [Next.js Integration](/docs/usage/nextjs-guide)

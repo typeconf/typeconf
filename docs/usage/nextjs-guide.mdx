@@ -1,0 +1,145 @@
+---
+title: "Using TypeConf with Next.js"
+description: "Learn how to use TypeConf in your Next.js projects"
+---
+
+This guide shows you how to integrate TypeConf into your Next.js project for
+type-safe configuration management.
+
+## Configuration Structure
+
+Create your configuration files in a dedicated directory:
+
+```
+your-nextjs-project/
+├── configs/
+│   ├── main.tsp
+│   └── values.config.ts
+├── src/
+└── next.config.js
+```
+
+## Define Your Schema
+
+In `configs/main.tsp`:
+
+```typescript
+model NotificationConfig {
+  email: boolean;
+  push: boolean;
+}
+
+model UserSettings {
+  theme: string;
+  notifications: Record<NotificationConfig>;
+}
+
+import { defineSchema } from 'typeconf';
+```
+
+## Define Your Values
+
+In `configs/values.config.ts`:
+
+```typescript
+import { UserSettings } from './types/all.js';
+
+const config: UserSettings = {
+  theme: 'light',
+  notifications: {
+    "promo": {
+      email: true,
+      push: false,
+    },
+    "alerts": {
+      email: true,
+      push: true,
+    },
+  }
+};
+export default config;
+```
+
+## Generate Config and Types
+
+```bash
+npx @typeconf/typeconf@latest build configs
+```
+
+## Using in Next.js Server Components
+
+We recommend creating a helper for instance in `lib/config.ts` file with the
+marker to run only in server mode. To ensure that config is loaded only once,
+use cache helper from React.
+
+```typescript
+import { UserSettings, readConfigFromFile } from "@/configs/types";
+import { cache } from "react";
+import 'server-only';
+
+export const getConfig = cache((): UserSettings => {
+    return readConfigFromFile("configs/out/configs.json");
+});
+```
+
+### Client-side Usage
+
+For client-side configuration, it's recommended to use `ConfigProvider` component:
+
+```typescript
+// components/config-provider.tsx
+'use client';
+
+import { createContext, useContext } from 'react';
+import type { UserSettings } from '@/configs/types';
+
+const ConfigContext = createContext<UserSettings | null>(null);
+
+export function useConfig() {
+  const config = useContext(ConfigContext);
+  if (!config) {
+    throw new Error('useConfig must be used within a ConfigProvider');
+  }
+  return config;
+}
+
+interface ConfigProviderProps {
+  config: UserSettings;
+  children: React.ReactNode;
+}
+
+export function ConfigProvider({ config, children }: ConfigProviderProps) {
+  return (
+    <ConfigContext.Provider value={config}>
+      {children}
+    </ConfigContext.Provider>
+  );
+}
+```
+
+You need to pass config to the `ConfigProvider` component from the app layout:
+```typescript
+// app/layout.tsx
+import { ConfigProvider } from "@/components/config-provider";
+import { getConfig } from "@/lib/config";
+
+// other code
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const config = getConfig();
+
+  return (
+    <html lang="en">
+      <body>
+        <ConfigProvider config={config}>
+          {children}
+        </ConfigProvider>
+      </body>
+    </html>
+  );
+}
+```
