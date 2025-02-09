@@ -180,7 +180,7 @@ async function buildConfigFile(configDir: string): Promise<void> {
     await configModule.writeConfigToFile(configModule.values, targetPath);
     return;
   }
-  await runCommand(configDir, "npx", ["tsx"], `
+  await runCommand(configDir, "npx", ["tsx", "--input-type=module"], `
 import * as configs from '${configDir}/types/index.js';
 configs.default.writeConfigToFile(
   configs.default.values, '${targetPath}'
