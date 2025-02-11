@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/react-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Typeconf SDK for React applications",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -23,6 +23,10 @@
     ".": {
       "types": "./dist/src/index.d.ts",
       "default": "./dist/src/index.js"
+    },
+    "./server": {
+      "types": "./dist/src/server.d.ts",
+      "default": "./dist/src/server.js"
     }
   },
   "repository": {

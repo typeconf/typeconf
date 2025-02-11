@@ -1,6 +1,3 @@
-import { getLocalJSONConfig } from "./server.js";
-import { ConfigProvider, useTypeconf } from "./client.js";
-
-export { getLocalJSONConfig, ConfigProvider, useTypeconf };
-
-export type { ConfigProviderProps } from "./client.js";
+import { TypeconfProvider, useTypeconf } from "./client.js";
+export { TypeconfProvider, useTypeconf };
+export type { TypeconfProviderProps } from "./client.js";
