@@ -1,7 +1,7 @@
 import { readConfigFromFile } from "@typeconf/sdk";
 import { cache } from "react";
 
-export async function getLocalJSONConfig<T>(path: string): Promise<T> {
+export function getLocalJSONConfig<T>(path: string): T {
   return cache((): T => {
     return readConfigFromFile<T>(path);
   })();
