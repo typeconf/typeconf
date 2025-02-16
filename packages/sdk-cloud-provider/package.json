@@ -1,0 +1,52 @@
+{
+  "name": "@typeconf/sdk-cloud-provider",
+  "version": "0.1.0",
+  "description": "Typeconf SDK for reading typed configs from Typeconf Cloud",
+  "homepage": "https://typeconf.dev",
+  "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
+  "author": "Ivan Chebykin",
+  "license": "Apache-2.0",
+  "keywords": [
+    "typeconf",
+    "sdk-cloud-provider"
+  ],
+  "type": "module",
+  "main": "dist/src/index.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./testing": {
+      "types": "./dist/src/testing/index.d.ts",
+      "default": "./dist/src/testing/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typeconf/typeconf.git",
+    "directory": "packages/sdk-cloud-provider"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build && node dist/src/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2" 
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.46.1",
+    "uuid": "^11.0.5"
+  }
+}
