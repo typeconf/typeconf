@@ -7,6 +7,7 @@ import {
 } from "@typespec/compiler";
 import { spawn, StdioOptions } from "child_process";
 import { promises as fsAsync } from 'fs';
+import fs from 'fs';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -30,7 +31,6 @@ async function getConfigMode(configDir: string): Promise<ConfigMode> {
     if (!mainTspExists && !packageJsonExists) {
       return ConfigMode.IN_PROJECT;
     }
-    
     return ConfigMode.STANDALONE;
   } catch {
     return ConfigMode.STANDALONE;
@@ -124,8 +124,6 @@ function logProgramResult(
   } else {
     log("Compilation completed successfully.");
   }
-  // eslint-disable-next-line no-console
-  console.log(); // Insert a newline
 }
 
 async function runCommand(
@@ -167,23 +165,44 @@ async function runCommand(
   });
 }
 
+
+export function readConfigFromFile<T>(filepath: string): T {
+  const data = fs.readFileSync(filepath, "utf8");
+  return JSON.parse(data) as T;
+}
+
+export function writeConfigToFile(values: any, filepath?: string) {
+    console.log(`Writing config file to ${filepath}`);
+    if (values == null) {
+        return;
+    }
+    const data = JSON.stringify(values, null, 4);
+    const target_path = filepath;
+    if (target_path != null) {
+        fs.writeFileSync(target_path, data, { flag: 'w' });
+    } else {
+        console.log(data);
+    }
+}
+
 async function buildConfigFile(configDir: string): Promise<void> {
   await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
   const targetPath = path.join("out", `${path.basename(configDir)}.json`);
   const configMode = await getConfigMode(configDir);
 
-  if (configMode == ConfigMode.STANDALONE) {
+  const isStandalone = configMode == ConfigMode.STANDALONE;
+  console.log("Is standalone package:", isStandalone);
+  if (isStandalone) {
     await runCommand(configDir, "npx", ["tsc"]);
     await runCommand(configDir, "npx", ["resolve-tspaths"]);
 
     const configModule: any = await import(path.join(configDir, "dist/types/index.js"));
-    await configModule.writeConfigToFile(configModule.values, targetPath);
+    writeConfigToFile(configModule.values, targetPath);
     return;
   }
   await runCommand(configDir, "npx", ["tsx", "--input-type=module"], `
+import { writeConfigToFile } from '@typeconf/typeconf';
 import * as configs from '${configDir}/types/index.js';
-configs.default.writeConfigToFile(
-  configs.default.values, '${targetPath}'
-);
-`);
+
+writeConfigToFile(configs.default.values, '${targetPath}');`);
 }
