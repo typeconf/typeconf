@@ -2,12 +2,14 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { Worker } from "worker_threads";
 
-import { compile as typeconfCompile } from "./compile/compile.js";
+import { compile as typeconfCompile, readConfigFromFile, writeConfigToFile } from "./compile/compile.js";
 import initProject from "./init.js";
 import { log_event } from "./logging.js";
 import path from "path";
 
 import { initPackageNonInteractive as initPackageImpl } from "./init.js";
+
+export { readConfigFromFile, writeConfigToFile };
 
 interface PackageJson {
   version: string;

@@ -3,8 +3,8 @@
 import { fileURLToPath } from "url";
 import { Command } from "commander";
 // TODO: replace this with direct json import after that stops being experimental
-import { PackageJson, readConfigFromFile } from "@typeconf/package-json";
-import { initPackageNonInteractive } from "@typeconf/typeconf";
+import { PackageJson } from "@typeconf/package-json";
+import { initPackageNonInteractive, readConfigFromFile } from "@typeconf/typeconf";
 import prompts from "prompts";
 import path from "path";
 import fs from 'fs';

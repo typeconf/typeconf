@@ -6,12 +6,16 @@ for e in ./examples/*; do
     [ ! -z "$1" ] && [ "$1" != $(basename "$DIR") ] && continue
     echo "testing $DIR..."
     (
-        set -e
+    set -e
+    if [ ! -e "$DIR/package.json" ]; then
+        npx link@latest ./packages/typeconf
+        ./packages/typeconf/dist/src/cli.js build "$DIR"
+    else
         cd "$DIR"
         npm install
         npx link@latest ../../packages/typeconf
-        npx link@latest ../../packages/sdk
         npm run build
+    fi
     ) || echo "fail"
     echo "done"
 

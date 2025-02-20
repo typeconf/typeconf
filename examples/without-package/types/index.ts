@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 export * from './all.js' // Your config types
-export { default as values } from '../src/values.config.js' // Your config values
+export { default as values } from '../values.config.js' // Your config values
 
 /**
  * @deprecated The method should not be used, instead use @typeconf/sdk or @typeconf/react-sdk
