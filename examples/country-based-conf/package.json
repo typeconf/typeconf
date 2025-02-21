@@ -14,8 +14,7 @@
     }
   },
   "dependencies": {
-    "@typeconf/typeconf": "*",
-    "@typeconf/sdk": "*"
+    "@typeconf/typeconf": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
