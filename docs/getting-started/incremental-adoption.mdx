@@ -13,7 +13,6 @@ Instead of create a separate package for Typeconf you can use it directly in
 your project.
 
 1. Create a directory which will contain your configurations:
-
 ```bash
 mkdir configs
 cd configs
@@ -34,8 +33,7 @@ model UserSettings {
 }
 ```
 
-3. Create values file:
-
+2. Create values file:
 ```typescript
 // values.config.ts
 import { UserSettings } from './types/all.js';
@@ -56,14 +54,13 @@ const config: UserSettings = {
 export default config;
 ```
 
-4. Generate config types and JSON:
+3. Generate config types and JSON:
 
 ```bash
-$ npx @typeconf/typeconf@latest build configs
+$ typeconf build configs
 ```
 
-5. Use the configuration in your app:
-
+4. Use the configuration in your app:
 ```typescript
 import { UserSettings, readConfigFromFile } from './configs/types';
 
@@ -78,19 +75,15 @@ function UserPreferences() {
 ## Best Practices for Incremental Adoption
 
 1. **Start with New Features**: When adding new features, use Typeconf from the
-   start rather than converting existing code.
+start rather than converting existing code.
 
 2. **Identify High-Value Targets**: Focus on areas where type-safe configuration would provide the most value:
+   - Complex configuration objects
+   - Frequently changing settings
+   - Areas prone to configuration errors
 
-   * Complex configuration objects
-
-   * Frequently changing settings
-
-   * Areas prone to configuration errors
-
-3. **Maintain Backward Compatibility whenconverting existing configurations**:
-
-```typescript
+3. **Maintain Backward Compatibility**: When converting existing configurations:
+   ```typescript
    // Wrap existing config with Typeconf type while maintaining
    // the old interface
    const legacyConfig = {
@@ -104,14 +97,12 @@ function UserPreferences() {
      ...legacyConfig,
      ...newConfig
    };
-```
+   ```
 
 ## Integration with Other Tools
 
 Typeconf works well with other tools in your ecosystem:
 
-* **Environment Variables**: Use with `dotenv` or similar tools
-
-* **CI/CD**: Add config generation in your CI pipeline
-
-* **Testing**: Use in your test environment for consistent configuration
+- **Environment Variables**: Use with `dotenv` or similar tools
+- **CI/CD**: Add config generation in your CI pipeline
+- **Testing**: Use in your test environment for consistent configuration

@@ -1,11 +1,11 @@
 {
   "name": "@typeconf/package-json",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "main": "dist/src/index.js",
   "keywords": [
-      "typeconf",
-      "package-json"
+    "typeconf",
+    "package-json"
   ],
   "exports": {
     ".": {

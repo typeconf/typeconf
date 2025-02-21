@@ -6,6 +6,10 @@ description: "Learn how to use TypeConf in your Next.js projects"
 This guide shows you how to integrate TypeConf into your Next.js project for
 type-safe configuration management.
 
+### Video Guide
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y2V4aaTb4c0?si=roWc2CEuBsrJUteK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Configuration Structure
 
 Create your configuration files in a dedicated directory:
@@ -33,8 +37,6 @@ model UserSettings {
   theme: string;
   notifications: Record<NotificationConfig>;
 }
-
-import { defineSchema } from 'typeconf';
 ```
 
 ## Define Your Values
@@ -62,66 +64,38 @@ export default config;
 
 ## Generate Config and Types
 
+First install the SDK:
+```bash
+npm install @typeconf/react-sdk
+```
+
+Then generate the config and types:
 ```bash
 npx @typeconf/typeconf@latest build configs
 ```
 
 ## Using in Next.js Server Components
 
-We recommend creating a helper for instance in `lib/config.ts` file with the
-marker to run only in server mode. To ensure that config is loaded only once,
-use cache helper from React.
+Typeconf React SDK provides both server and client side helpers.
+Here's how to use it in a server component:
 
 ```typescript
-import { UserSettings, readConfigFromFile } from "@/configs/types";
-import { cache } from "react";
-import 'server-only';
+import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { ButtonSettings } from "@/configs/types/all";
 
-export const getConfig = cache((): UserSettings => {
-    return readConfigFromFile("configs/out/configs.json");
-});
+export default function Component() {
+  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
+}
 ```
 
 ### Client-side Usage
 
-For client-side configuration, it's recommended to use `ConfigProvider` component:
-
-```typescript
-// components/config-provider.tsx
-'use client';
-
-import { createContext, useContext } from 'react';
-import type { UserSettings } from '@/configs/types';
-
-const ConfigContext = createContext<UserSettings | null>(null);
-
-export function useConfig() {
-  const config = useContext(ConfigContext);
-  if (!config) {
-    throw new Error('useConfig must be used within a ConfigProvider');
-  }
-  return config;
-}
-
-interface ConfigProviderProps {
-  config: UserSettings;
-  children: React.ReactNode;
-}
-
-export function ConfigProvider({ config, children }: ConfigProviderProps) {
-  return (
-    <ConfigContext.Provider value={config}>
-      {children}
-    </ConfigContext.Provider>
-  );
-}
-```
-
-You need to pass config to the `ConfigProvider` component from the app layout:
+For client-side configuration you need to add a provider to the layout:
 ```typescript
 // app/layout.tsx
-import { ConfigProvider } from "@/components/config-provider";
-import { getConfig } from "@/lib/config";
+import { TypeconfProvider } from "@typeconf/react-sdk";
+import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { ButtonSettings } from "@/configs/types/all";
 
 // other code
 
@@ -130,16 +104,27 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const config = getConfig();
+  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
 
   return (
     <html lang="en">
       <body>
-        <ConfigProvider config={config}>
+        <TypeconfProvider config={config}>
           {children}
-        </ConfigProvider>
+        </TypeconfProvider>
       </body>
     </html>
   );
+}
+```
+
+Then in the component you can use the `useTypeconf` hook:
+```typescript
+import { useTypeconf } from "@typeconf/react-sdk";
+import { ButtonSettings } from "@/configs/types/all";
+
+export default function Component() {
+  const config: ButtonSettings = useTypeconf();
+  // rest of the component
 }
 ```
