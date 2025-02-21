@@ -1,19 +1,82 @@
-# typeconf
+# Typeconf
 
-A tool that adds types to your configs.
+Typeconf is a library and CLI that adds types to your configs. You can
+create configuration packages and use them in your code to read JSONs with
+type validation.
 
 ## Usage
 
-For convienience please use [https://www.npmjs.com/package/create-typeconf-package](create-typeconf-package);
+### In existing project
 
-Create configuration directory:
+Create a directory for your future configs and put `main.tsp` and `values.config.ts` files there:
+
 ```
-typeconf init <config-dir>
+your-project/
+├── configs/
+│   ├── main.tsp
+│   └── values.config.ts
+├── src/
+└── next.config.js
 ```
 
-Compile the config:
+### Define your config schema
+
 ```
-typeconf build <config-dir>
+model NotificationConfig {
+  email: boolean;
+  push: boolean;
+}
+
+model UserSettings {
+  theme: string;
+  notifications: Record<NotificationConfig>;
+}
 ```
 
-For the full guide please check our [https://docs.typeconf.dev](docs).
+### Define values
+
+```
+import { UserSettings } from './types/all.js';
+
+const config: UserSettings = {
+  theme: 'light',
+  notifications: {
+    "promo": {
+      email: true,
+      push: false,
+    },
+    "alerts": {
+      email: true,
+      push: true,
+    },
+  }
+};
+export default config;
+```
+
+### Generate config and types
+
+```
+npx @typeconf/typeconf@latest build configs
+```
+
+### Use in React project
+
+First install react support SDK:
+
+```
+npm install @typeconf/react-sdk
+```
+
+And then you can read config in your components:
+
+```
+import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { ButtonSettings } from "@/configs/types/all";
+
+export default function Component() {
+  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
+}
+```
+
+For more info check our docs: https://typeconf.dev/docs
