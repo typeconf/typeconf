@@ -13,6 +13,7 @@ for e in ./examples/*; do
     else
         cd "$DIR"
         npm install
+        npx link@latest ../../packages/sdk
         npx link@latest ../../packages/typeconf
         npm run build
     fi

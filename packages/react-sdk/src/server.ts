@@ -1,8 +1,3 @@
-import { readConfigFromFile } from "@typeconf/sdk";
-import { cache } from "react";
-
-export function getLocalJSONConfig<T>(path: string): T {
-  return cache((): T => {
-    return readConfigFromFile<T>(path);
-  })();
-}
+import { getLocalJSONConfig } from "@typeconf/sdk/react-server";
+// @deprecated use @typeconf/sdk/react-server instead
+export { getLocalJSONConfig };

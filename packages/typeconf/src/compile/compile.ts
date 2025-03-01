@@ -1,3 +1,8 @@
+import { spawn, StdioOptions } from "child_process";
+import { promises as fsAsync } from 'fs';
+import path from "path";
+import { fileURLToPath } from "url";
+
 import {
   compile as typespecCompile,
   NodeHost,
@@ -5,11 +10,8 @@ import {
   Program,
   logDiagnostics,
 } from "@typespec/compiler";
-import { spawn, StdioOptions } from "child_process";
-import { promises as fsAsync } from 'fs';
-import fs from 'fs';
-import path from "path";
-import { fileURLToPath } from "url";
+
+import { writeConfigToFile } from "@typeconf/sdk";
 
 const EMITTER = "@typeconf/config-emitter";
 
@@ -71,6 +73,7 @@ export async function compile(configDir: string): Promise<void> {
   options[EMITTER] = {
     "emitter-output-dir": `${configDir}/types`,
     "output-file": "all.ts",
+    "zod-output-file": "all.zod.ts",
   };
   const program = await typespecCompile(
     {
@@ -130,9 +133,14 @@ async function runCommand(
   cwd: string, 
   command: string, 
   params: Array<string>, 
-  stdin?: string
+  stdin?: string,
+  silent?: boolean
 ): Promise<void> {
-  const stdio: StdioOptions = stdin ? ['pipe', 'inherit', 'inherit'] : 'inherit';
+  const stdio: StdioOptions = [
+    stdin ? 'pipe' : silent ? 'ignore' : 'inherit',
+    silent ? 'ignore' : 'inherit',
+    silent ? 'ignore' : 'inherit',
+  ];
   
   const child = spawn(command, params, {
     shell: process.platform === "win32",
@@ -150,7 +158,7 @@ async function runCommand(
     child.on("error", (error: SpawnError) => {
       if (error.code === "ENOENT") {
         console.log(`Cannot find "${command}" executable`);
-      } else {
+      } else if (!silent) {
         console.log(error.toString());
       }
       reject(new Error("Config generation failed"));
@@ -165,26 +173,6 @@ async function runCommand(
   });
 }
 
-
-export function readConfigFromFile<T>(filepath: string): T {
-  const data = fs.readFileSync(filepath, "utf8");
-  return JSON.parse(data) as T;
-}
-
-export function writeConfigToFile(values: any, filepath?: string) {
-    console.log(`Writing config file to ${filepath}`);
-    if (values == null) {
-        return;
-    }
-    const data = JSON.stringify(values, null, 4);
-    const target_path = filepath;
-    if (target_path != null) {
-        fs.writeFileSync(target_path, data, { flag: 'w' });
-    } else {
-        console.log(data);
-    }
-}
-
 async function buildConfigFile(configDir: string): Promise<void> {
   await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
   const targetPath = path.join("out", `${path.basename(configDir)}.json`);
@@ -192,6 +180,13 @@ async function buildConfigFile(configDir: string): Promise<void> {
 
   const isStandalone = configMode == ConfigMode.STANDALONE;
   console.log("Is standalone package:", isStandalone);
+  try {
+    await runCommand(configDir, "node", ["-p", "require('@typeconf/sdk')"], undefined, true);
+    console.log("@typeconf/sdk is installed");
+  } catch(e) {
+    console.log("Installing @typeconf/sdk...");
+    await runCommand(configDir, "npm", ["install", "--save", "@typeconf/sdk"]);
+  }
   if (isStandalone) {
     await runCommand(configDir, "npx", ["tsc"]);
     await runCommand(configDir, "npx", ["resolve-tspaths"]);
@@ -201,7 +196,7 @@ async function buildConfigFile(configDir: string): Promise<void> {
     return;
   }
   await runCommand(configDir, "npx", ["tsx", "--input-type=module"], `
-import { writeConfigToFile } from '@typeconf/typeconf';
+import { writeConfigToFile } from '@typeconf/sdk';
 import * as configs from '${configDir}/types/index.js';
 
 writeConfigToFile(configs.default.values, '${targetPath}');`);

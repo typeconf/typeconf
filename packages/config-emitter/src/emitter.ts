@@ -1,7 +1,8 @@
 import { EmitContext, emitFile, resolvePath } from "@typespec/compiler";
-import { $onEmit as typescriptEmit } from "@typespec-tools/emitter-typescript";
 import { promises as fsAsync } from 'fs';
 import path from 'path';
+import { typescriptEmit } from "./typescript-emitter.js";
+//import { zodEmit } from "./zod-emitter.js";
 
 async function fileExists(filePath: string): Promise<boolean> {
   return fsAsync.access(filePath).then(() => true).catch(() => false);
@@ -88,7 +89,7 @@ export * from './all${extension}' // Your config types
 export { default as values } from '${valuesPath}' // Your config values
 
 /**
- * @deprecated The method should not be used, instead use @typeconf/sdk or @typeconf/react-sdk
+ * @deprecated The method should not be used, instead use @typeconf/sdk
  */
 export function readConfigFromFile<T>(filepath: string): T {
   const data = fs.readFileSync(filepath, "utf8");
@@ -99,4 +100,5 @@ export function readConfigFromFile<T>(filepath: string): T {
 
   });
   await typescriptEmit(context);
+  //await zodEmit(context);
 }

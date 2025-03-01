@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@typeconf/sdk@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.npmjs.org/@typeconf/sdk/-/sdk-0.1.4.tgz"
+  integrity sha512-XGhN5WgF0vUMVlJIKW2e9e7U8tf4WS3qPXB/Q0KkBfb9ts76ePk940Sq9SCoCkUc/kGFYWcIxA/BThDhl+c/dQ==
+
 prettier@^3.4.1, prettier@3.4.1:
   version "3.4.1"
   resolved "https://registry.npmjs.org/prettier/-/prettier-3.4.1.tgz"

@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
-    "@typeconf/typeconf": "workspace:^",
     "@typeconf/package-json": "workspace:^",
-    "@typespec/compiler": "^0.62.0",
+    "@typeconf/sdk": "^0.1.4",
+    "@typeconf/typeconf": "workspace:^",
     "commander": "^12.1.0",
     "jiti": "^2.4.0",
     "prompts": "^2.4.2"
