@@ -23,6 +23,9 @@ importers:
       '@typespec/compiler':
         specifier: ^0.59.1
         version: 0.59.1
+      '@typespec/json-schema':
+        specifier: ^0.59.0
+        version: 0.59.0(@typespec/compiler@0.59.1)
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
@@ -129,13 +132,22 @@ importers:
       '@typespec/compiler':
         specifier: ^0.59.1
         version: 0.59.1
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
       commander:
         specifier: ^12.1.0
         version: 12.1.0
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
+      yaml:
+        specifier: ^2.7.0
+        version: 2.7.0
     devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: ^22.10.0
         version: 22.10.0
@@ -202,6 +214,9 @@ packages:
   '@supabase/supabase-js@2.46.1':
     resolution: {integrity: sha512-HiBpd8stf7M6+tlr+/82L8b2QmCjAD8ex9YdSAKU+whB/SHXXJdus1dGlqiH9Umy9ePUuxaYmVkGd9BcvBnNvg==}
 
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
+
   '@types/lodash@4.17.15':
     resolution: {integrity: sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==}
 
@@ -241,6 +256,12 @@ packages:
     resolution: {integrity: sha512-RfKJ/rF2Wjxu7dl74oJE8yEfSkeL7NopFlyJ4dW1JQXpRN2IOJYPxas12qZA6H9ZEIB8rBjyrHNxJSQbvn/UDQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  '@typespec/json-schema@0.59.0':
+    resolution: {integrity: sha512-pEljn1lZNx3eNkqMmhl1yjFHy0MzGumm1DPYpEzDHEt0DEdPJe8/dN44T26XG3wA4p134ph4YMr8+d+GRLTRLQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@typespec/compiler': ~0.59.0
 
   ajv@8.17.1:
     resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
@@ -562,6 +583,11 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
+  yaml@2.7.0:
+    resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -647,6 +673,8 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@types/js-yaml@4.0.9': {}
+
   '@types/lodash@4.17.15': {}
 
   '@types/node@18.19.68':
@@ -713,6 +741,11 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       yaml: 2.5.1
       yargs: 17.7.2
+
+  '@typespec/json-schema@0.59.0(@typespec/compiler@0.59.1)':
+    dependencies:
+      '@typespec/compiler': 0.59.1
+      yaml: 2.4.5
 
   ajv@8.17.1:
     dependencies:
@@ -960,6 +993,8 @@ snapshots:
   yaml@2.4.5: {}
 
   yaml@2.5.1: {}
+
+  yaml@2.7.0: {}
 
   yargs-parser@21.1.1: {}
 

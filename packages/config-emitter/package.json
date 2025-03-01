@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@typespec-tools/emitter-typescript": "^0.3.0",
+    "@typespec/json-schema": "^0.59.0",
     "@typespec/compiler": "^0.59.1"
   },
   "devDependencies": {

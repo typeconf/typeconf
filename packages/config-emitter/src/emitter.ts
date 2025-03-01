@@ -1,5 +1,6 @@
 import { EmitContext, emitFile, resolvePath } from "@typespec/compiler";
 import { $onEmit as typescriptEmit } from "@typespec-tools/emitter-typescript";
+import { $onEmit as jsonSchemaEmit } from "@typespec/json-schema";
 import { promises as fsAsync } from 'fs';
 import path from 'path';
 
@@ -99,4 +100,20 @@ export function readConfigFromFile<T>(filepath: string): T {
 
   });
   await typescriptEmit(context);
+  
+  const jsonSchemaContext: EmitContext = {
+    ...context,
+    options: {
+      ...context.options,
+      // @ts-ignore
+      "file-type": "json",
+      // @ts-ignore
+      "bundleId": "all.jsonschema.json",
+      // @ts-ignore
+      "emitAllModels": true,
+      // @ts-ignore
+      "emitAllRefs": true,
+    }
+  };
+  await jsonSchemaEmit(jsonSchemaContext);
 }
