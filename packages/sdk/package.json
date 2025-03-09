@@ -8,6 +8,8 @@
   "license": "Apache-2.0",
   "keywords": [
     "typeconf",
+    "react",
+    "node",
     "sdk"
   ],
   "type": "module",
@@ -22,6 +24,18 @@
     ".": {
       "types": "./dist/src/index.d.ts",
       "default": "./dist/src/index.js"
+    },
+    "./zod-shim": {
+      "types": "./dist/src/zod-shim.d.ts",
+      "default": "./dist/src/zod-shim.js"
+    },
+    "./react-client": {
+      "types": "./dist/src/react/client.d.ts",
+      "default": "./dist/src/react/client.js"
+    },
+    "./react-server": {
+      "types": "./dist/src/react/server.d.ts",
+      "default": "./dist/src/react/server.js"
     },
     "./testing": {
       "types": "./dist/src/testing/index.d.ts",
@@ -44,5 +58,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@types/react": "^19.0.8",
+    "react": "19.0.0",
+    "zod": "^3.24.2"
   }
 }

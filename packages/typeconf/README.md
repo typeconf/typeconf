@@ -57,21 +57,21 @@ export default config;
 ### Generate config and types
 
 ```
-npx @typeconf/typeconf@latest build configs
+npx @typeconf/typeconf build configs
 ```
 
 ### Use in React project
 
-First install react support SDK:
+First install the Typeconf SDK:
 
 ```
-npm install @typeconf/react-sdk
+npm install @typeconf/sdk
 ```
 
 And then you can read config in your components:
 
 ```
-import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { getLocalJSONConfig } from "@typeconf/sdk/react-server";
 import { ButtonSettings } from "@/configs/types/all";
 
 export default function Component() {

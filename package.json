@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "prettier": "3.4.1"
+  },
+  "dependencies": {
+    "@typeconf/sdk": "^0.1.4"
   }
 }

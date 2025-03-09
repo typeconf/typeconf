@@ -5,7 +5,7 @@ export * from './all.js' // Your config types
 export { default as values } from '../src/values.config.js' // Your config values
 
 /**
- * @deprecated The method should not be used, instead use @typeconf/sdk or @typeconf/react-sdk
+ * @deprecated The method should not be used, instead use @typeconf/sdk
  */
 export function readConfigFromFile<T>(filepath: string): T {
   const data = fs.readFileSync(filepath, "utf8");

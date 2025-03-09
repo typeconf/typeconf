@@ -9,6 +9,7 @@
     "outDir": "dist",
     "sourceMap": true,
     "declaration": true,
+    "jsx": "react",
 
     /* Linting */
     "strict": true
