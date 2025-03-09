@@ -137,6 +137,9 @@ importers:
       '@typeconf/config-emitter':
         specifier: workspace:latest
         version: link:../config-emitter
+      '@typeconf/sdk':
+        specifier: workspace:^
+        version: link:../sdk
       '@typespec/compiler':
         specifier: ^0.66.0
         version: 0.66.0(@types/node@22.10.0)

@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/typeconf",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Typeconf CLI for defining configs with types.",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -46,6 +46,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
     "@typeconf/config-emitter": "workspace:latest",
+    "@typeconf/sdk": "workspace:^",
     "@typespec/compiler": "^0.66.0",
     "ajv": "^8.17.1",
     "commander": "^12.1.0",
