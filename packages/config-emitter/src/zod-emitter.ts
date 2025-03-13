@@ -442,10 +442,10 @@ export class ZodEmitter extends CodeTypeEmitter<EmitterOptions> {
 
     emittedSourceFile.contents += this.emitNamespaces(sourceFile.globalScope);
 
-    // const allTypes = this.collectAllDeclarations(sourceFile.globalScope);
-    // for (const type of allTypes) {
-    //   emittedSourceFile.contents += type.name + this.getSuffix() + "\n";
-    // }
+    const allTypes = this.collectAllDeclarations(sourceFile.globalScope);
+    for (const type of allTypes) {
+      emittedSourceFile.contents += type.name + this.getSuffix() + "\n";
+    }
 
     emittedSourceFile.contents = await prettier.format(
       emittedSourceFile.contents,

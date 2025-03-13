@@ -64,6 +64,8 @@ export async function compile(configDir: string): Promise<void> {
   const projectName = packageFile ? packageFile["projectName"] : path.basename(configDir);
 
   console.log(`Compiling ${configDir}...`);
+  // for each tsp file compile (need to distinguish between main and other files)
+  // for each ts file that exports a config -> build json
 
   const mainTspPath = path.join(configDir, 'main.tsp');
   const hasMainTsp = await fsAsync.access(mainTspPath).then(() => true).catch(() => false);

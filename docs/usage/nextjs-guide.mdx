@@ -8,7 +8,16 @@ type-safe configuration management.
 
 ### Video Guide
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/y2V4aaTb4c0?si=roWc2CEuBsrJUteK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/y2V4aaTb4c0?si=roWc2CEuBsrJUteK"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
 
 ## Configuration Structure
 
@@ -44,20 +53,20 @@ model UserSettings {
 In `configs/values.config.ts`:
 
 ```typescript
-import { UserSettings } from './types/all.js';
+import { UserSettings } from "./types/all.js";
 
 const config: UserSettings = {
-  theme: 'light',
+  theme: "light",
   notifications: {
-    "promo": {
+    promo: {
       email: true,
       push: false,
     },
-    "alerts": {
+    alerts: {
       email: true,
       push: true,
     },
-  }
+  },
 };
 export default config;
 ```
@@ -65,13 +74,15 @@ export default config;
 ## Generate Config and Types
 
 First install the SDK:
+
 ```bash
-npm install @typeconf/react-sdk
+npm install @typeconf/sdk
 ```
 
 Then generate the config and types:
+
 ```bash
-npx @typeconf/typeconf@latest build configs
+npx @typeconf/typeconf build configs
 ```
 
 ## Using in Next.js Server Components
@@ -91,6 +102,7 @@ export default function Component() {
 ### Client-side Usage
 
 For client-side configuration you need to add a provider to the layout:
+
 ```typescript
 // app/layout.tsx
 import { TypeconfProvider } from "@typeconf/react-sdk";
@@ -119,6 +131,7 @@ export default async function RootLayout({
 ```
 
 Then in the component you can use the `useTypeconf` hook:
+
 ```typescript
 import { useTypeconf } from "@typeconf/react-sdk";
 import { ButtonSettings } from "@/configs/types/all";

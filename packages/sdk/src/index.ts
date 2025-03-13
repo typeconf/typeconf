@@ -1,14 +1,27 @@
 import fs from "fs";
 
-export type Config = {
-  configs: Array<string>;
-};
+export type ReadConfigOptions = {};
 
 export function readConfigFromFile<T>(filepath: string): T {
   const data = fs.readFileSync(filepath, "utf8");
   return JSON.parse(data) as T;
 }
 
+export function readConfig<T>(repoFilePath: string, options: ReadConfigOptions = {}): T {
+  /*
+  if found env for remote cloud
+  get config from remote
+  if failed, get config from local
+  auto trigger rebuild if local env
+  validate using map path -> zod schema
+  */
+  return readConfigFromFile<T>(repoFilePath);
+}
+
+
+
+// semi-private API
+// this is used by typeconf update the config
 export async function writeConfigToFile(values: any, filepath?: string) {
   console.log(`Writing config file to ${filepath}`);
   if (values == null) {
