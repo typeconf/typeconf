@@ -4,6 +4,7 @@ import { MyTestConfig } from './config-package/types/all.js';
 import { readConfig } from '@typeconf/sdk';
 import path from 'path';
 import fs from 'fs';
+import { testExports } from '../index.js';
 
 describe('readConfigFromCloud', () => {
   it('should read config from cloud correctly', async () => {
@@ -37,3 +38,15 @@ describe('readConfigFromCloud', () => {
     await expect(readConfig<MyTestConfig>('NonExistentConfig')).rejects.toThrow('Failed to read config from Typeconf Cloud: Error: Config value not found');
   });
 }); 
+
+describe('resolveConfigId', () => {
+  it('should resolve config from local path correctly', async () => {
+    const info = await testExports.resolveConfigPath('src/tests/config-package/src/values');
+    expect(info).toEqual({
+      configId: 'config-package/src/values.config.ts',
+      configDir: path.resolve(__dirname, 'config-package'),
+      schemasPath: path.resolve(__dirname, 'config-package/types/all.zod.ts'),
+      valuesPath: path.resolve(__dirname, 'config-package/out/values.json'),
+    });
+  });
+});

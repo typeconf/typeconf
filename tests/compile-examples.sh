@@ -1,6 +1,7 @@
 #!/bin/bash
 
-for e in ./examples/*; do
+PROJECTROOT="$(dirname "$0")/.."
+for e in "$PROJECTROOT/examples"/*; do
     DIR="$(realpath "$e")"
     [ ! -d "$DIR" ] && continue
     [ ! -z "$1" ] && [ "$1" != $(basename "$DIR") ] && continue
@@ -8,8 +9,8 @@ for e in ./examples/*; do
     (
     set -e
     if [ ! -e "$DIR/package.json" ]; then
-        npx link@latest ./packages/typeconf
-        ./packages/typeconf/dist/src/cli.js build "$DIR"
+        npx link@latest "$(dirname "$0")/../packages/typeconf"
+        "$PROJECTROOT/packages/typeconf/dist/src/cli.js" build "$DIR"
     else
         cd "$DIR"
         npm install

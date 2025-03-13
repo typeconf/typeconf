@@ -1,4 +1,4 @@
-import { z } from "@typeconf/sdk/zod-shim";
+import { z } from "zod";
 
 export const ProjectConfigSchema = z.object({
   projectName: z.string(),
@@ -21,3 +21,9 @@ export const PackageJsonSchema = z.object({
   scripts: z.map(z.string(), z.string()).optional(),
 });
 export namespace TypeSpec {}
+
+const TYPECONF_SCHEMAS_MAP = {
+  "package-json/src/values.config.ts": PackageJsonSchema,
+};
+
+export default TYPECONF_SCHEMAS_MAP;

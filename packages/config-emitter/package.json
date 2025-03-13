@@ -34,17 +34,20 @@
     "directory": "packages/config-emitter"
   },
   "dependencies": {
-    "@typespec/compiler": "^0.66.0"
+    "@typespec/compiler": "^0.66.0",
+    "jsonc": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "prettier": "^3.4.1",
-    "typescript": "^5.7.2"
+    "source-map-support": "^0.5.21",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.9"
   },
   "scripts": {
     "build": "tsc && cp package-dist.json dist/package.json",
     "watch": "tsc --watch",
-    "test": "node --test",
+    "test": "vitest run",
     "format": "prettier .  --write",
     "format:check": "prettier --check ."
   },

@@ -5,13 +5,13 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
+    "types": ["node"],
     "rootDir": ".",
     "outDir": "dist",
     "sourceMap": true,
     "declaration": true,
 
-    /* Linting */
     "strict": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "vitest.d.ts"]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/sdk",
-  "version": "0.2.3",
+  "version": "0.2.3-test2",
   "description": "Typeconf SDK for reading typed configs in your repository",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -8,8 +8,8 @@
   "license": "Apache-2.0",
   "keywords": [
     "typeconf",
-    "react",
     "node",
+    "config",
     "sdk"
   ],
   "type": "module",
@@ -24,18 +24,6 @@
     ".": {
       "types": "./dist/src/index.d.ts",
       "default": "./dist/src/index.js"
-    },
-    "./zod-shim": {
-      "types": "./dist/src/zod-shim.d.ts",
-      "default": "./dist/src/zod-shim.js"
-    },
-    "./react-client": {
-      "types": "./dist/src/react/client.d.ts",
-      "default": "./dist/src/react/client.js"
-    },
-    "./react-server": {
-      "types": "./dist/src/react/server.d.ts",
-      "default": "./dist/src/react/server.js"
     },
     "./testing": {
       "types": "./dist/src/testing/index.d.ts",
@@ -54,20 +42,20 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "dotenv": "^16.4.7",
     "typescript": "^5.7.2",
-    "vitest": "^3.0.9",
-    "dotenv": "^16.4.7"
+    "vitest": "^3.0.9"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@types/lodash": "^4.17.15",
     "@supabase/supabase-js": "^2.46.1",
-    "@types/react": ">=18",
-    "lodash": "^4.17.21",
-    "uuid": "^11.0.5",
-    "react": ">=18",
+    "cli-table": "^0.3.11",
+    "jiti": "^2.4.0",
+    "jsonc": "^2.0.0",
+    "prompts": "^2.4.2",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2"
   }
 }
