@@ -175,7 +175,7 @@ async function runCommand(
 
 async function buildConfigFile(configDir: string): Promise<void> {
   await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
-  const targetPath = path.join("out", `${path.basename(configDir)}.json`);
+  const targetPath = path.join(configDir, "out", `${path.basename(configDir)}.json`);
   const configMode = await getConfigMode(configDir);
 
   const isStandalone = configMode == ConfigMode.STANDALONE;

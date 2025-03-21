@@ -10,6 +10,7 @@
     "sourceMap": true,
     "declaration": true,
     "jsx": "react",
+    "skipLibCheck": true,
 
     /* Linting */
     "strict": true
