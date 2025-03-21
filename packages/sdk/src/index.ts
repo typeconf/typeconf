@@ -1,4 +1,5 @@
 import fs from "fs";
+import { isCloudEnabled, typeconfCloud } from "./cloud/cloud.js";
 
 export type Config = {
   configs: Array<string>;
@@ -21,4 +22,18 @@ export async function writeConfigToFile(values: any, filepath?: string) {
   } else {
       console.log(data);
   }
+}
+
+export async function readConfig<T>(filepath: string): Promise<T> {
+  if (isCloudEnabled()) {
+    const result = await typeconfCloud().readConfig<T>(filepath);
+    
+    if (result.err) throw result.err;
+    
+    if (!result.config) throw new Error("No config found");
+    
+    return result.config;
+  }
+  
+  return readConfigFromFile<T>(filepath);
 }
