@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/sdk",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Typeconf SDK for reading typed configs in your repository",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -60,7 +60,9 @@
     "access": "public"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.15",
     "@types/react": "^19.0.8",
+    "lodash": "^4.17.21",
     "react": "19.0.0",
     "zod": "^3.24.2"
   }
