@@ -1,8 +1,22 @@
 import { readConfigFromFile } from "@typeconf/sdk";
-import { cache } from "react";
+
+interface CacheEntry<T> {
+  value: T;
+  timestamp: number;
+}
+
+const configCache = new Map<string, CacheEntry<any>>();
+const ONE_HOUR = 60 * 60 * 1000; 
 
 export function getLocalJSONConfig<T>(path: string): T {
-  return cache((): T => {
-    return readConfigFromFile<T>(path);
-  })();
+  const cached = configCache.get(path);
+  const now = Date.now();
+
+  if (!cached || now - cached.timestamp > ONE_HOUR) {
+    const value = readConfigFromFile<T>(path);
+    configCache.set(path, { value, timestamp: now });
+    return value;
+  }
+
+  return cached.value;
 }
