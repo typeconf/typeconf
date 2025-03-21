@@ -49,10 +49,13 @@
     "@typeconf/sdk": "workspace:^",
     "@typespec/compiler": "^0.66.0",
     "ajv": "^8.17.1",
+    "@types/cli-table": "^0.3.4",
+    "cli-table": "^0.3.11",
     "commander": "^12.1.0",
     "prompts": "^2.4.2",
     "yaml": "^2.7.0",
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "uuid": "^11.0.5"
   },
   "publishConfig": {
     "access": "public"
