@@ -5,14 +5,18 @@ interface CacheEntry<T> {
   timestamp: number;
 }
 
+interface ReadConfigOptions {
+  disableCache?: boolean;
+}
+
 const configCache = new Map<string, CacheEntry<any>>();
-const ONE_HOUR = 60 * 60 * 1000; 
+const EXPIRATION_TIME = 60 * 10; 
 
 export function getLocalJSONConfig<T>(path: string): T {
   const cached = configCache.get(path);
   const now = Date.now();
 
-  if (!cached || now - cached.timestamp > ONE_HOUR) {
+  if (!cached || now - cached.timestamp > EXPIRATION_TIME) {
     const value = readConfigFromFile<T>(path);
     configCache.set(path, { value, timestamp: now });
     return value;
@@ -21,11 +25,11 @@ export function getLocalJSONConfig<T>(path: string): T {
   return cached.value;
 }
 
-export async function readConfig<T>(path: string): Promise<T> {
+export async function readConfig<T>(path: string, options: ReadConfigOptions = {}): Promise<T> {
   const cached = configCache.get(path);
   const now = Date.now();
-
-  if (!cached || now - cached.timestamp > ONE_HOUR) {
+  const disableCache = options.disableCache ?? false;
+  if (!cached || now - cached.timestamp > EXPIRATION_TIME || disableCache) {
     const value = await sdkReadConfig<T>(path);
     configCache.set(path, { value, timestamp: now });
     return value;

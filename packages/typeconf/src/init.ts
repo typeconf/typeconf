@@ -44,8 +44,8 @@ const TEMPLATES = new Map<string, any>([
     }
   },
   "dependencies": {
-    "@typeconf/sdk": "^0.2.0",
-    "@typeconf/typeconf": "^0.2.0"
+    "@typeconf/typeconf": "^0.2.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

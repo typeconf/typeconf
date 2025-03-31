@@ -169,9 +169,9 @@ async function findClosestTsconfig(startDir: string): Promise<string | null> {
 }
 
 async function typeCheck(configFile: string, configDir: string): Promise<void> {
-  // Find and read tsconfig.json
   const tsconfigPath = await findClosestTsconfig(configDir);
-  
+  let parsedCommandLine: ts.ParsedCommandLine;
+
   const defaultCompilerOptions = {
     target: ts.ScriptTarget.ES2020,
     module: ts.ModuleKind.ESNext,
@@ -183,35 +183,44 @@ async function typeCheck(configFile: string, configDir: string): Promise<void> {
       "~/*": ["./*"]
     }
   };
+  if (tsconfigPath) {
+    try {
+      const tsconfigContent = await fsAsync.readFile(tsconfigPath, 'utf-8');
+      const configJson = jsonc.parse(tsconfigContent);
+      const basePath = path.dirname(tsconfigPath);
+      
+      // Parse the config file
+      const configParseResult = ts.parseJsonConfigFileContent(
+        configJson,
+        ts.sys,
+        basePath,
+        {
+          baseUrl: configDir,
+          paths: {
+            "~/*": ["./*"]
+          }
+        },
+        tsconfigPath
+      );
 
-  let parsedCommandLine: ts.ParsedCommandLine;
-  
-  try {
-    const configJson = tsconfigPath 
-      ? jsonc.parse(await fsAsync.readFile(tsconfigPath, 'utf-8'))
-      : { compilerOptions: {} };
-    
-    const basePath = tsconfigPath ? path.dirname(tsconfigPath) : configDir;
-    
-    parsedCommandLine = ts.parseJsonConfigFileContent(
-      configJson,
-      ts.sys,
-      basePath,
-      defaultCompilerOptions,
-      tsconfigPath ?? undefined
-    );
-
-    console.log(tsconfigPath 
-      ? `Using tsconfig.json from ${tsconfigPath}`
-      : 'No tsconfig.json found, using default compiler options'
-    );
-  } catch (error) {
-    console.warn(`Failed to parse tsconfig.json at ${tsconfigPath}, using default options:`, error);
+      parsedCommandLine = configParseResult;
+      console.log(`Using tsconfig.json from ${tsconfigPath}`);
+    } catch (error) {
+      console.warn(`Failed to parse tsconfig.json at ${tsconfigPath}, using default options:`, error);
+      parsedCommandLine = ts.parseJsonConfigFileContent(
+        { compilerOptions: {} },
+        ts.sys,
+        configDir,
+        defaultCompilerOptions,
+      );
+    }
+  } else {
+    console.log('No tsconfig.json found, using default compiler options');
     parsedCommandLine = ts.parseJsonConfigFileContent(
       { compilerOptions: {} },
       ts.sys,
       configDir,
-      defaultCompilerOptions
+      defaultCompilerOptions,
     );
   }
 

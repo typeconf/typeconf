@@ -2,112 +2,146 @@
 title: "Quickstart"
 ---
 
-## Working with Typeconf
+## Overview
 
-Typeconf helps you manage configurations by keeping them in a separate
-directory, which acts as a configuration repository or package for your project.
-The configuration directory contains three main components:
+Typeconf is a library that allows you to write configs in Typescript and produce JSONs while keeping the type validation.
+With Typeconf you create a configuration directory or package and manage all your configs there.
+Then for your configs we generate types in your project language and you can read them just list a regular object in code.
 
-- **Schema**: Located at `src/main.tsp`
-- **Values file**: Located at `src/values.config.ts`
-- **Output JSON file**: Located at `out/<config-name>.json`
+<Info>
+  Currently, Typeconf only supports TypeScript, but we plan to add support for
+  other languages in the near future.
+</Info>
 
-## Setting Up the Configuration Directory
-
-To begin using Typeconf, you need to create the configuration directory. Run the following command to generate the necessary boilerplate:
-
-```bash
-npx create-typeconf-package
-```
-
-After that, you can open a separate terminal window and run this command to
-automatically recompile the schema and configuration values whenever you make
-changes:
-
-```bash
-npm run build:watch
-```
-Alternatively, you can manually run npm run build whenever you make changes to the configuration files.
-
-## Creating a new config
+## Typespec schema
 
 In Typeconf, configurations are defined using schemas and values separately. The
 schema is written using a TypeSpec-based language, which is a TypeScript-like
-syntax. Learn more about TypeSpec [here](https://typespec.io/).
-
-### Defining the schema
-
-To modify the schema, locate the `src/main.tsp` file. Here's an example schema:
+syntax. Learn more about TypeSpec [here](https://typespec.io/). Here's an example of such schema:
 
 ```typescript
-model DebuggingConfig {
-  enableLogging: boolean;
-  maxRetries: int32;
-  timeout: duration;
+model FeedParams {
+  fetchLimit: int32;
+  rankScore: float32;
 }
 
-model PetServiceConfig {
-  showBreed: boolean;
-  petTypes: string[];
-  debugging: DebuggingConfig;
+model AppParams {
+  feedParamsByPostType: Record<FeedParams>;
 }
 ```
 
-Refer to the TypeSpec
-[documentation](https://typespec.io/docs/language-basics/overview/) for
-additional examples and language features.
+## Typescript configuration files
 
-<Info>
-  Remember to run `npm run build` to update the types whenever you modify the schema. 
-</Info>
+To set the values of the configuration file you can create a TypeScript file with the name `<config-name>.config.ts` inside your configuration
+directory and this file will be compiled to JSON after build. You can create multiple files, this is useful for separating environments or
+different parts of the application.
 
-## Setting Config Values
-
-To set the values for your config, edit the `src/values.config.ts` file. Below is
-an example of how to configure the values corresponding to the schema above:
+Continuing our example, here are the values for the model defined above:
 
 ```typescript
-import { DebuggingConfig, PetServiceConfig } from '~/types/all.js'
-let debuggingConfig: DebuggingConfig = {
-  enableLogging: true,
-  maxRetries: 10,
-  timeout: "500ms",
-};
-let config: PetServiceConfig = {
-  showBreed: true,
-  petTypes: ["dog", "cat"],
-  debugging: debuggingConfig,
+import { AppParams } from "./types/all.js";
+
+const config: AppParams = {
+  "promo-campaign": {
+    fetchLimit: 3,
+    rankScore: 2.0,
+  },
+  creators: {
+    fetchLimit: 10,
+    rankScore: 1.5,
+  },
 };
 
 export default config;
 ```
 
-## Generating the Output JSON File
+## Generated JSON files
 
-After editing the schema and values you should be able to locate the JSON file
-in the `out/` directory. Please make sure that you have ran `npm run build`
-or that you have `npm run build:watch` running in the background.
+After changing the config.ts file you can run `npx @typeconf/typeconf build
+configs` to produce JSON file which you can read in your app, either with
+Typeconf SDK with type validation or just as a plain JSON.
+
+Here's the JSON from our example:
+
+```json
+{
+  "promo-campaign": {
+    "fetchLimit": 3,
+    "rankScore": 2
+  },
+  "creators": {
+    "fetchLimit": 10,
+    "rankScore": 1.5
+  }
+}
+```
+
+## Project structure
+
+### In project
+
+The most straighforward way to use Typeconf is to create a separate directory in your project and put configs there:
+
+```
+your-project/
+├── configs/
+│   ├── main.tsp
+│   └── my-config.config.ts
+├── src/
+└── next.config.js
+```
+
+### Standalone
+
+If you want to share configuration between multiple projects or inherit types you can create a separate package with this helper CLI:
+
+```bash
+npx create-typeconf-package
+```
+
+This will generate all the necessary boilerplate and you will be able to update configs with `npm run build`.
+
+## CLI
+
+If you're not using a separate package you need to use Typeconf CLI to update the configs:
+
+```
+npx @typeconf/typeconf build configs
+```
+
+<Info>Tip: you can add --watch to track changes in background!</Info>
 
 ## Using the config in your code
 
-<Warning>
-  Currently, Typeconf only supports TypeScript, but we plan to add support for other languages in the future. 
-</Warning>
-
 To use your configuration in your code, you can install the configuration
-package you just created as a dependency. Once installed, you can read the
-configuration from any JSON file like this:
+package you just created as a dependency. Paired with the package you need to install Typeconf SDK:
+
+```
+# Node.JS
+$ npm install @typeconf/sdk
+
+# React/Next
+$ npm install @typeconf/react-sdk
+```
+
+Once everything is installed, you can read the configuration from any JSON file like this:
 
 ```typescript
-import { ProductConfig, readConfigFromFile } from "you-config-package";
+import { ProductConfig } from "you-config-package";
+import { readConfig } from "@typeconf/sdk";
+// or in React: import { readConfig } from "@typeconf/react-sdk/server";
 
-let conf: ProductConfig = readConfigFromFile("path/to/config.json");
+// pass path to config values file without extension
+let conf: ProductConfig = readConfig("path/to/config-dir/my-config");
 ```
 
-Pro tip: If you want to use the configuration package before pushing it to the package registry, you can use this handy tool:
+## FAQ
 
-```
-npx link@latest <path/to/package>
-```
+**How to update changes locally if I use a separate package for configs?**
 
-For more examples, check out the examples in the [repository](https://github.com/typeconf/typeconf/tree/main/examples).
+Use `npx link@latest <path/to/package>` to add a symlink to local version of the package.
+
+**Where can I see more examples**
+
+Check out the examples in the [repository](https://github.com/typeconf/typeconf/tree/main/examples).
+Or check out [playground](/playground), you can try out the examples without installing it locally.

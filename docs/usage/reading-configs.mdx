@@ -8,12 +8,14 @@ configurations.
 
 ## Basic Usage
 
-To read your configurations, use the `readConfigFromFile` function:
+To read your configurations, it's pretty straightforward, use the `readConfig` function:
 
 ```typescript
-import { ConfigType, readConfigFromFile } from 'your-config-package';
+import { ConfigType } from "your-config-package";
+import { readConfig } from "@typeconf/sdk";
 
-const config: ConfigType = readConfigFromFile('path/to/config.json');
+// Path to your config without extension
+const config: ConfigType = readConfig("path/to/config-dir/my-params");
 ```
 
 The `readConfigFromFile` function returns your configuration object with full
@@ -25,7 +27,7 @@ One of TypeConf's key features is complete type safety. Your IDE will provide
 full autocomplete and type checking:
 
 ```typescript
-const config: ConfigType = readConfigFromFile('path/to/config.json');
+const config: ConfigType = readConfig("path/to/config-dir/my-params");
 
 // TypeScript knows the exact type of your config
 config.database.host; // ✅ Type safe
@@ -35,4 +37,5 @@ config.nonexistent; // ❌ TypeScript error
 ## Using with Different Frameworks
 
 TypeConf works seamlessly with various frameworks and environments. Check out our framework-specific guides:
+
 - [Next.js Integration](/docs/usage/nextjs-guide)

@@ -2,4 +2,4 @@
 import fs from 'fs';
 
 export * from './all.js' // Your config types
-export { default as valuesConfig } from '../src/values.config.js'
+export { default as srcValuesConfig } from '../src/values.config.js'

@@ -13,6 +13,7 @@ Instead of create a separate package for Typeconf you can use it directly in
 your project.
 
 1. Create a directory which will contain your configurations:
+
 ```bash
 mkdir configs
 cd configs
@@ -33,23 +34,24 @@ model UserSettings {
 }
 ```
 
-2. Create values file:
+2. Create config values file:
+
 ```typescript
-// values.config.ts
-import { UserSettings } from './types/all.js';
+// user-settings.config.ts
+import { UserSettings } from "./types/all.js";
 
 const config: UserSettings = {
-  theme: 'light',
+  theme: "light",
   notifications: {
-    "promo": {
+    promo: {
       email: true,
       push: false,
     },
-    "alerts": {
+    alerts: {
       email: true,
       push: true,
     },
-  }
+  },
 };
 export default config;
 ```
@@ -57,15 +59,27 @@ export default config;
 3. Generate config types and JSON:
 
 ```bash
-$ typeconf build configs
+$ npx @typeconf/typeconf build configs
 ```
 
-4. Use the configuration in your app:
+4. Install SDK;
+
+```bash
+$ npm install --save @typeconf/sdk
+# Or with React/Next
+$ npm install --save @typeconf/react-sdk
+```
+
+5. Use the configuration in your app:
+
 ```typescript
-import { UserSettings, readConfigFromFile } from './configs/types';
+import { UserSettings } from "./configs/types";
+import { readConfig } from "@typeconf/sdk";
+// with React: import { readConfig } from "@typeconf/react-sdk/server";
 
 function UserPreferences() {
-  const config: UserSettings = readConfigFromFile('./configs/out/configs.json');
+  // Path to your config without extension
+  const config: UserSettings = readConfig("configs/user-settings");
 
   // Your config is now fully typed and validated
   console.log(config.theme); // 'light'
@@ -75,14 +89,16 @@ function UserPreferences() {
 ## Best Practices for Incremental Adoption
 
 1. **Start with New Features**: When adding new features, use Typeconf from the
-start rather than converting existing code.
+   start rather than converting existing code.
 
 2. **Identify High-Value Targets**: Focus on areas where type-safe configuration would provide the most value:
+
    - Complex configuration objects
    - Frequently changing settings
    - Areas prone to configuration errors
 
 3. **Maintain Backward Compatibility**: When converting existing configurations:
+
    ```typescript
    // Wrap existing config with Typeconf type while maintaining
    // the old interface
@@ -90,7 +106,7 @@ start rather than converting existing code.
      // ... your existing config
    } as TypeconfConfig;
 
-   const newConfig: TypeconfConfig = readConfigFromFile(...);
+   const newConfig: TypeconfConfig = readConfig(...);
 
    // Provide both until migration is complete
    export const config = {

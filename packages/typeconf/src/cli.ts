@@ -36,10 +36,15 @@ let cloud = program
 cloud
   .command("update-config-value <configName>")
   .requiredOption("--project <project>", "Project name or id")
-  .requiredOption("--json <json>", "Json value")
+  .option("--json <json>", "Set JSON value")
+  .option("--json-file <json>", "Set JSON value from file")
   .description("Update configuration in cloud")
-  .action(async (configName: string, options: { project: string, json: string }) => {
-    await setCloudConfigValue(configName, options.project, options.json)
+  .action(async (configName: string, options: { project: string, json?: string, jsonFile?: string }) => {
+    const fs = await import('fs');
+    let jsonStr = options.json ?? (options.jsonFile ? fs.readFileSync(options.jsonFile, 'utf8') : null)
+    let jsonData = jsonStr ? JSON.parse(jsonStr) : null;
+
+    await setCloudConfigValue(configName, options.project, jsonData)
   });
 
 cloud

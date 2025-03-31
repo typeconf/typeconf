@@ -22,7 +22,13 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
     private defaultProject: string | undefined;
 
     constructor() {
-        this.supabase = createClient<Database>(CLOUD_URL, CLOUD_ANON_KEY);
+        this.supabase = createClient<Database>(CLOUD_URL, CLOUD_ANON_KEY, {
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false,
+                detectSessionInUrl: false,
+            },
+        });
     }
 
     private async getProjectByNameOrId(project: string): Promise<Database['public']['Tables']['projects']['Row']> {
@@ -45,7 +51,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
         const { data: projectData, error } = uuidValidate(project) ? await laodByIdOrName() : await loadByName()
     
         if (error) {
-            throw new Error("Failed to get project", { cause: error })
+            throw new Error(`Failed to get project ${project}`, { cause: error })
         }
     
         if (!projectData) {
@@ -55,7 +61,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
         return projectData
     }
     
-    private async getConfigValue(configName: string, projectId: string): Promise<string> {
+    private async getConfigValue(configName: string, projectId: string): Promise<any> {
         const { data, error } = await this.supabase
             .from('config_values')
             .select(`
@@ -68,7 +74,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
             .eq('project_configs.name', configName)
             .order('version', { ascending: false })
             .limit(1)
-            .maybeSingle()
+            .single()
     
         if (error) {
             throw error
@@ -78,7 +84,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
             throw new Error('Config value not found')
         }
     
-        return data.value as string
+        return JSON.parse(data.value as string)
     }
 
     public async init(options: TypeconfCloudClientInitOptions): Promise<Error | undefined> {
@@ -128,7 +134,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
         } catch (err) {
             return {
                 config: undefined,
-                err: new Error(`Failed to read config from Typeconf Cloud: ${err}`)
+                err: new Error(`Failed to read config ${configName} from Typeconf Cloud: ${err}`)
             }
         }
     }

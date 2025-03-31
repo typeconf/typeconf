@@ -1,0 +1,101 @@
+---
+title: "Separating Environments"
+---
+
+In a production app you need to have different config versions for local
+development, staging and production. Here's how to do it with Typeconf.
+
+## Creating a config
+
+Let's create a schema for our config:
+
+```typescript
+model AgentConfig {
+    prompt: string;
+    searchAPIEndpoint: string;
+}
+```
+
+Now let's create a default config under `configs/agent.config.ts`:
+
+```typescript
+import { AgentConfig } from "./types/all.js";
+
+const config: AgentConfig = {
+  prompt: "You're an AI agent designed to do my work for me",
+  searchAPIEndpoint: "https://google.com",
+};
+```
+
+### Environment based configs
+
+Using this config we can create a separate config for each environment:
+
+Dev:
+
+```typescript
+// configs/dev/agent.config.ts
+import { AgentConfig } from "../types/all.js";
+import defaultConfig from "../agent.config.js";
+
+const config: AgentConfig = {
+  ...defaultConfig,
+  searchAPIEndpoint: "http://localhost:1337",
+};
+
+export default config;
+```
+
+Staging:
+
+```typescript
+// configs/dev/agent.config.ts
+import { AgentConfig } from "../types/all.js";
+import defaultConfig from "../agent.config.js";
+
+const config: AgentConfig = {
+  ...defaultConfig,
+  prompt: "You're an agent designed to do my work for me and do my laundry",
+};
+
+export default config;
+```
+
+You should end up with this directory structure:
+
+```
+your-project/
+├── configs/
+│   ├── main.tsp
+│   └── agent.config.ts
+│   └── staging/
+│       └── agent.config.ts
+│   └── dev/
+│       └── agent.config.ts
+├── src/
+└── next.config.js
+```
+
+### Reading in your project
+
+In you code you can just parametrize path depending on environment:
+
+```typescript
+import { AgentConfig } from "./configs/types/all";
+import { readConfig } from "@typeconf/react-sdk/server";
+
+const env = (() => {
+  switch (process.env.NODE_ENV) {
+    case "production":
+      return "";
+    case "staging":
+      return "staging";
+    case "development":
+      return "dev";
+    default:
+      return "dev";
+  }
+})();
+
+const config: AgentConfig = readConfig(`configs/${env}/agent`);
+```

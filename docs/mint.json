@@ -25,7 +25,6 @@
       "group": "Getting Started",
       "pages": [
         "getting-started/quickstart",
-        "getting-started/overview",
         "getting-started/incremental-adoption",
         "getting-started/monorepo-setup"
       ]
@@ -34,14 +33,13 @@
       "group": "Usage",
       "pages": [
         "usage/reading-configs",
-        "usage/nextjs-guide"
+        "usage/nextjs-guide",
+        "usage/separating-environments"
       ]
     },
     {
       "group": "Contributing",
-      "pages": [
-        "contributing/setting-up-project"
-      ]
+      "pages": ["contributing/setting-up-project"]
     }
   ],
   "footerSocials": {

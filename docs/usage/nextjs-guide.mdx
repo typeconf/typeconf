@@ -27,10 +27,12 @@ Create your configuration files in a dedicated directory:
 your-nextjs-project/
 ├── configs/
 │   ├── main.tsp
-│   └── values.config.ts
+│   └── <config-name>.config.ts
 ├── src/
 └── next.config.js
 ```
+
+You can create multiple config files.
 
 ## Define Your Schema
 
@@ -50,7 +52,7 @@ model UserSettings {
 
 ## Define Your Values
 
-In `configs/values.config.ts`:
+In `configs/user-settings.config.ts`:
 
 ```typescript
 import { UserSettings } from "./types/all.js";
@@ -73,10 +75,10 @@ export default config;
 
 ## Generate Config and Types
 
-First install the SDK:
+First install the React SDK:
 
 ```bash
-npm install @typeconf/sdk
+npm install @typeconf/react-sdk
 ```
 
 Then generate the config and types:
@@ -91,11 +93,12 @@ Typeconf React SDK provides both server and client side helpers.
 Here's how to use it in a server component:
 
 ```typescript
-import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { readConfig } from "@typeconf/react-sdk/server";
 import { ButtonSettings } from "@/configs/types/all";
 
 export default function Component() {
-  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
+  // Path to your config without extension
+  const config: ButtonSettings = readConfig("configs/user-settings");
 }
 ```
 
@@ -106,7 +109,7 @@ For client-side configuration you need to add a provider to the layout:
 ```typescript
 // app/layout.tsx
 import { TypeconfProvider } from "@typeconf/react-sdk";
-import { getLocalJSONConfig } from "@typeconf/react-sdk/server";
+import { readConfig } from "@typeconf/react-sdk/server";
 import { ButtonSettings } from "@/configs/types/all";
 
 // other code
@@ -116,7 +119,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
+  // Path to your config without extension
+  const config: ButtonSettings = readConfig("configs/user-settings");
 
   return (
     <html lang="en">

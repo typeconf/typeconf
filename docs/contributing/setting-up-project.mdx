@@ -4,22 +4,46 @@ title: Setting up project
 
 We use pnpm monorepo for managing the project. Right now this guide is quite simple as we don't have much testing yet.
 
-# Install dependendecies
+## Install dependendecies
 
 ```
 pnpm install
 ```
 
-# Build
+## Build all
 
 ```
 pnpm build
 ```
 
-
-
-# Run examples
+## Build just Typeconf
 
 ```
-pnpm typeconf compile $PWD/examples/simple
+pnpm --filter @typeconf/typeconf build
+```
+
+## Run tests
+
+```
+pnpm --filter @typeconf/typeconf test
+```
+
+Test on a single example
+
+```
+pnpm --filter @typeconf/typeconf test:simple
+```
+
+Test SDK
+
+```
+pnpm --filter @typeconf/sdk test
+```
+
+If you want to test Typeconf libraries locally with your project you can use these commands:
+
+```
+npx link@latest path/to/typeconf/packages/typeconf
+npx link@latest path/to/typeconf/packages/sdk
+npx link@latest path/to/typeconf/packages/react-sdk
 ```

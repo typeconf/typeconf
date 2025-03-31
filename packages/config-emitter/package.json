@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/config-emitter",
-  "version": "0.2.5",
+  "version": "0.3.0-prerelease2",
   "description": "Typeconf internal config emitter",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",

@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/typeconf",
-  "version": "0.2.13",
+  "version": "0.3.0-prerelease6",
   "description": "Typeconf CLI for defining configs with types.",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -41,8 +41,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.10.0",
-    "@types/prompts": "^2.4.9",
-    "typescript": "^5.7.2"
+    "@types/prompts": "^2.4.9"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
@@ -53,9 +52,13 @@
     "ajv": "^8.17.1",
     "cli-table": "^0.3.11",
     "commander": "^12.1.0",
+    "esbuild": "^0.25.1",
+    "glob": "^11.0.1",
     "jsonc": "^2.0.0",
     "prompts": "^2.4.2",
-    "uuid": "^11.0.5",
+    "ts-morph": "^25.0.1",
+    "typescript": "^5.7.2",
+    "uuid": "^11.1.0",
     "yaml": "^2.7.0",
     "zod": "^3.24.2"
   },

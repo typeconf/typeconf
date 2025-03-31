@@ -34,24 +34,24 @@ model UserSettings {
 }
 ```
 
-Create values file for your config:
+Create values file for your config (you can create multiple configs or choose a different name):
 
 ```typescript
 // packages/configs/src/values.config.ts
-import { UserSettings } from './types/all.js';
+import { UserSettings } from "./types/all.js";
 
 const config: UserSettings = {
-  theme: 'light',
+  theme: "light",
   notifications: {
-    "promo": {
+    promo: {
       email: true,
       push: false,
     },
-    "alerts": {
+    alerts: {
       email: true,
       push: true,
     },
-  }
+  },
 };
 export default config;
 ```
@@ -67,18 +67,30 @@ npm run build
 
 ## Using the config package in other projects
 
+Install SDK:
+
+```bash
+$ npm install --save @typeconf/sdk
+# Or with React/Next
+$ npm install --save @typeconf/react-sdk
+```
+
 Now you can use your shared configurations in other packages within your monorepo:
 
 ```typescript
 // packages/backend/src/index.ts
-import { UserSettings, readConfigFromFile } from '@your-org/config';
+import { UserSettings } from "@your-org/config";
+import { readConfig } from "@typeconf/sdk";
+// with React: import { readConfig } from "@typeconf/react-sdk/server";
 
-const config: UserSettings = readConfigFromFile('./packages/configs/user-settings.json');
+// Path to your config without extension
+const config: UserSettings = readConfig("packages/configs/user-settings");
 ```
 
 ## CI/CD Considerations
 
 1. **Build Order**:
+
    - Ensure config package is built before dependent packages
    - Use tools like [Turborepo](https://turborepo.org/) or [Nx](https://nx.dev/) for efficient builds
 
@@ -87,6 +99,7 @@ const config: UserSettings = readConfigFromFile('./packages/configs/user-setting
    - Check for breaking changes in config updates
 
 Here's an example Github Actions workflow to update config:
+
 ```yaml
 # .github/workflows/update-config.yml
 name: Update Config

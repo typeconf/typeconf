@@ -4,6 +4,7 @@ import { AuthSuccessResult, signIn, tryPerformAuthWithSessionFile } from "./auth
 import { getConfigValue, getProjectByNameOrId, listConfigs, updateConfigValue } from "./config-value.js";
 import prompts from "prompts";
 import Table from "cli-table";
+import { privateExports, readConfigFromFile } from "@typeconf/sdk";
 
 async function withCommandLogging<T>(
     command: string,
@@ -64,9 +65,10 @@ export async function getCloudConfigValue(configName: string, projectNameOrId: s
         { configName, projectNameOrId },
         async () => {
             await performAuth()
+            const configInfo = privateExports.resolveConfigPath(configName);
 
             const project = await getProjectByNameOrId(projectNameOrId)
-            const res = await getConfigValue(configName, project.id);
+            const res = await getConfigValue(configInfo.configId, project.id);
             
             console.log('Config was fetched from cloud: ');
             console.log(res);
@@ -74,7 +76,7 @@ export async function getCloudConfigValue(configName: string, projectNameOrId: s
     );
 }
   
-export async function setCloudConfigValue(configName: string, projectNameOrId: string, json: string) {
+export async function setCloudConfigValue(configName: string, projectNameOrId: string, jsonData?: any) {
     await withCommandLogging(
         "cloud:set-config-value",
         { configName, projectNameOrId },
@@ -83,7 +85,13 @@ export async function setCloudConfigValue(configName: string, projectNameOrId: s
 
             try {
                 const project = await getProjectByNameOrId(projectNameOrId)
-                const res = await updateConfigValue(configName, project.id, json);
+                const configInfo = privateExports.resolveConfigPath(configName);
+                if (!jsonData) {
+                    jsonData = readConfigFromFile<any>(configInfo.valuesPath);
+                }
+                await privateExports.validateConfig(configInfo, jsonData);
+                jsonData = JSON.stringify(jsonData);
+                const res = await updateConfigValue(configInfo.configId, project.id, jsonData);
                 console.log(`Config value updated successfully. New revision: ${res as number}`);
             } catch (err) {
                 console.log('Failed to update config value:', err);

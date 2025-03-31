@@ -55,8 +55,7 @@ function resolveConfigPath(configId: string): ConfigInfo {
   };
 }
 
-export async function readConfigByName<T>(configId: string): Promise<T> {
-  const configInfo = resolveConfigPath(configId);
+async function validateConfig<T>(configInfo: ConfigInfo, values: any): Promise<T> {
   const jiti = createJiti(configInfo.configDir, { 
     debug: false,
     fsCache: false,
@@ -64,27 +63,30 @@ export async function readConfigByName<T>(configId: string): Promise<T> {
   });
   const schemas = await jiti.import(configInfo.schemasPath) as any;
   const schema = schemas?.default[configInfo.configId];
-  const values = readConfigFromFile<T>(configInfo.valuesPath);
   return schema.parse(values);
 }
 
 export async function readConfig<T>(filepath: string): Promise<T> {
+  if (filepath.endsWith('.json')) {
+    return readConfigFromFile<T>(filepath);
+  }
+  const configInfo = resolveConfigPath(filepath);
+
   if (isCloudEnabled()) {
-    const result = await typeconfCloud().readConfig<T>(filepath);
+    const result = await typeconfCloud().readConfig<T>(configInfo.configId);
     
     if (result.err) throw result.err;
     
     if (!result.config) throw new Error("No config found");
     
-    return result.config;
-  }
-  if (filepath.endsWith('.json')) {
-    return readConfigFromFile<T>(filepath);
+    return validateConfig<T>(configInfo, result.config);
   }
 
-  return readConfigByName<T>(filepath);
+  const values = readConfigFromFile<T>(configInfo.valuesPath);
+  return validateConfig<T>(configInfo, values);
 }
 
-export const testExports = {
+export const privateExports = {
   resolveConfigPath,
+  validateConfig,
 }
