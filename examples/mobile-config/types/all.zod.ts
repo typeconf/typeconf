@@ -18,8 +18,7 @@ export const MobileFeatureConfigSchema = z.object({
 export namespace TypeSpec {}
 
 const TYPECONF_SCHEMAS_MAP = {
-  "/home/ivan/root/data/dev/typeconf/examples/mobile-config/src/values.config.ts":
-    MobileFeatureConfigSchema,
+  "mobile-config/src/values.config.ts": MobileFeatureConfigSchema,
 };
 
 export default TYPECONF_SCHEMAS_MAP;

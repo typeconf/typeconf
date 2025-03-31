@@ -16,8 +16,7 @@ export const CountrySettingsSchema = z.object({
 export namespace TypeSpec {}
 
 const TYPECONF_SCHEMAS_MAP = {
-  "/home/ivan/root/data/dev/typeconf/examples/country-based-conf/src/values.config.ts":
-    CountrySettingsSchema,
+  "country-based-conf/src/values.config.ts": CountrySettingsSchema,
 };
 
 export default TYPECONF_SCHEMAS_MAP;

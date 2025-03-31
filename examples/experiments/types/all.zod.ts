@@ -8,8 +8,7 @@ export const ProjectConfigSchema = z.object({
 export namespace TypeSpec {}
 
 const TYPECONF_SCHEMAS_MAP = {
-  "/home/ivan/root/data/dev/typeconf/examples/experiments/src/values.config.ts":
-    ProjectConfigSchema,
+  "experiments/src/values.config.ts": ProjectConfigSchema,
 };
 
 export default TYPECONF_SCHEMAS_MAP;

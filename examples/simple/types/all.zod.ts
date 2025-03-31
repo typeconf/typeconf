@@ -1,22 +1,24 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProjectConfigSchema = exports.DebuggingConfigSchema = exports.CatsInventorySchema = void 0;
-var zod_1 = require("zod");
-exports.CatsInventorySchema = zod_1.z.object({
-    cats: zod_1.z.array(zod_1.z.string()),
-    cutenessRatio: zod_1.z.number(),
+import { z } from "zod";
+
+export const CatsInventorySchema = z.object({
+  cats: z.array(z.string()),
+  cutenessRatio: z.number(),
 });
-exports.DebuggingConfigSchema = zod_1.z.object({
-    logLevel: zod_1.z.number(),
-    maxRetries: zod_1.z.number(),
-    timeout: zod_1.z.any(),
+
+export const DebuggingConfigSchema = z.object({
+  logLevel: z.number(),
+  maxRetries: z.number(),
+  timeout: z.any(),
 });
-exports.ProjectConfigSchema = zod_1.z.object({
-    projectName: zod_1.z.string(),
-    inventory: exports.CatsInventorySchema,
-    debugging: exports.DebuggingConfigSchema,
+
+export const ProjectConfigSchema = z.object({
+  projectName: z.string(),
+  inventory: CatsInventorySchema,
+  debugging: DebuggingConfigSchema,
 });
-var TYPECONF_SCHEMAS_MAP = {
-    "simple/src/values.config.ts": exports.ProjectConfigSchema,
+
+const TYPECONF_SCHEMAS_MAP = {
+  "simple/src/values.config.ts": ProjectConfigSchema,
 };
-exports.default = TYPECONF_SCHEMAS_MAP;
+
+export default TYPECONF_SCHEMAS_MAP;

@@ -24,8 +24,7 @@ export const DashboardSchema = z.object({
 });
 
 const TYPECONF_SCHEMAS_MAP = {
-  "/home/ivan/root/data/dev/typeconf/examples/dashboards/src/values.config.ts":
-    DashboardSchema,
+  "dashboards/src/values.config.ts": DashboardSchema,
 };
 
 export default TYPECONF_SCHEMAS_MAP;

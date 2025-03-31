@@ -57,9 +57,8 @@ function resolveConfigPath(configId: string): ConfigInfo {
 
 export async function readConfigByName<T>(configId: string): Promise<T> {
   const configInfo = resolveConfigPath(configId);
-  console.log("configInfo", configInfo);
   const jiti = createJiti(configInfo.configDir, { 
-    debug: true,
+    debug: false,
     fsCache: false,
     moduleCache: false,
   });

@@ -2,12 +2,4 @@
 import fs from 'fs';
 
 export * from './all.js' // Your config types
-export { default as values } from '../src/values.config.js' // Your config values
-
-/**
- * @deprecated The method should not be used, instead use @typeconf/sdk
- */
-export function readConfigFromFile<T>(filepath: string): T {
-  const data = fs.readFileSync(filepath, "utf8");
-  return JSON.parse(data) as T;
-}
+export { default as valuesConfig } from '../src/values.config.js'

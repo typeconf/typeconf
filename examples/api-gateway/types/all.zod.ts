@@ -12,8 +12,7 @@ export const APIGatewayConfigSchema = z.object({
 export namespace TypeSpec {}
 
 const TYPECONF_SCHEMAS_MAP = {
-  "/home/ivan/root/data/dev/typeconf/examples/api-gateway/src/values.config.ts":
-    APIGatewayConfigSchema,
+  "api-gateway/src/values.config.ts": APIGatewayConfigSchema,
 };
 
 export default TYPECONF_SCHEMAS_MAP;
