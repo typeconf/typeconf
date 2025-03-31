@@ -428,24 +428,97 @@ export class ZodEmitter extends CodeTypeEmitter<EmitterOptions> {
   async sourceFile(sourceFile: SourceFile<string>): Promise<EmittedSourceFile> {
     const emittedSourceFile: EmittedSourceFile = {
       path: sourceFile.path,
-      contents: `import { z } from "@typeconf/sdk/zod-shim";\n`,
+      contents: `import { z } from "zod";\n`,
     };
 
     for (const [importPath, typeNames] of sourceFile.imports) {
       emittedSourceFile.contents += `import {${typeNames.join(",")}} from "${importPath}";\n`;
     }
 
-    
     for (const decl of sourceFile.globalScope.declarations) {
       emittedSourceFile.contents += decl.value + "\n";
     }
 
     emittedSourceFile.contents += this.emitNamespaces(sourceFile.globalScope);
 
-    // const allTypes = this.collectAllDeclarations(sourceFile.globalScope);
-    // for (const type of allTypes) {
-    //   emittedSourceFile.contents += type.name + this.getSuffix() + "\n";
-    // }
+    // Collect all type declarations
+    const allTypes = this.collectAllDeclarations(sourceFile.globalScope);
+    
+    // Get config types map directly from options
+    const options = this.emitter.getOptions();
+    const configTypesMap = options["config-types-map"] || {};
+    
+    // Build the schemas map with proper paths
+    emittedSourceFile.contents += "\nconst TYPECONF_SCHEMAS_MAP = {";
+
+    // If we have a config types map, use it to create more accurate schema mappings
+    if (Object.keys(configTypesMap).length > 0) {
+      console.log(`Processing ${Object.keys(configTypesMap).length} config types for schema mapping`);
+      
+      for (const [configPath, configInfo] of Object.entries(configTypesMap)) {
+        // Type safety check on configInfo
+        if (typeof configInfo !== 'object' || configInfo === null) {
+          console.warn(`Invalid config info for ${configPath}, skipping`);
+          continue;
+        }
+        
+        // Get the export type from the config info
+        const exportType = configInfo.exportType;
+        if (!exportType || typeof exportType !== 'string') {
+          console.warn(`Missing or invalid export type for ${configPath}, skipping`);
+          continue;
+        }
+        
+        console.log(`Processing config type for ${configPath}: ${exportType}`);
+        
+        // Extract simple type name if it's a complex type
+        // Try different patterns to extract the type name
+        let typeName = null;
+        
+        // Pattern 1: Extract from generic types like Array<Type>
+        const genericTypeMatch = exportType.match(/^(\w+)<.+>$/);
+        if (genericTypeMatch) {
+          typeName = genericTypeMatch[1];
+        } 
+        // Pattern 2: Extract from function types with parameters
+        else if (exportType.includes('(') && exportType.includes(')')) {
+          typeName = exportType.split('(')[0].trim();
+        }
+        // Pattern 3: Simple type name
+        else {
+          typeName = exportType.split('|')[0].trim();
+        }
+        
+        if (!typeName) {
+          console.warn(`Could not extract type name from ${exportType}, skipping`);
+          continue;
+        }
+        
+        console.log(`Extracted type name: ${typeName}`);
+        
+        // Find the schema for this type
+        const matchingType = allTypes.find(type => type.name === typeName);
+        if (matchingType) {
+          console.log(`Found matching schema: ${matchingType.name}`);
+          emittedSourceFile.contents += `"${configPath}": ${matchingType.name}${this.getSuffix()},\n`;
+        } else {
+          console.warn(`No matching schema found for type ${typeName} (from ${configPath})`);
+          
+          // Fallback: Try a case-insensitive match
+          const caseInsensitiveMatch = allTypes.find(type => 
+            type.name.toLowerCase() === typeName.toLowerCase()
+          );
+          
+          if (caseInsensitiveMatch) {
+            console.log(`Found case-insensitive match: ${caseInsensitiveMatch.name}`);
+            emittedSourceFile.contents += `"${configPath}": ${caseInsensitiveMatch.name}${this.getSuffix()},\n`;
+          }
+        }
+      }
+    }
+
+    emittedSourceFile.contents += "};\n";
+    emittedSourceFile.contents += "\nexport default TYPECONF_SCHEMAS_MAP;\n";
 
     emittedSourceFile.contents = await prettier.format(
       emittedSourceFile.contents,

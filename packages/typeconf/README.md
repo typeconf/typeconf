@@ -8,13 +8,13 @@ type validation.
 
 ### In existing project
 
-Create a directory for your future configs and put `main.tsp` and `values.config.ts` files there:
+Create a directory for your future configs and put `main.tsp` and `<your-config-name>.config.ts` files there:
 
 ```
 your-project/
 ├── configs/
 │   ├── main.tsp
-│   └── values.config.ts
+│   └── my-config.config.ts
 ├── src/
 └── next.config.js
 ```
@@ -60,22 +60,31 @@ export default config;
 npx @typeconf/typeconf build configs
 ```
 
-### Use in React project
+### Use in your project
 
-First install the Typeconf SDK:
+First install the Typeconf SDK if you name a Node.JS project:
 
 ```
 npm install @typeconf/sdk
 ```
 
-And then you can read config in your components:
+Or React SDK if you're using React/Next:
 
 ```
-import { getLocalJSONConfig } from "@typeconf/sdk/react-server";
+npm install @typeconf/react-sdk
+```
+
+
+And then you can read config in your code:
+
+```
+import { readConfig } from "@typeconf/sdk"; // for Node
+import { readConfig } from "@typeconf/react-sdk/server"; // for React
 import { ButtonSettings } from "@/configs/types/all";
 
-export default function Component() {
-  const config: ButtonSettings = getLocalJSONConfig("configs/out/configs.json");
+export default async function Component() {
+  // use name of your config without extension
+  const config: ButtonSettings = await readConfig("configs/my-config");
 }
 ```
 

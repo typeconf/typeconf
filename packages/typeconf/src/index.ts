@@ -9,11 +9,6 @@ import path from "path";
 
 import { initPackageNonInteractive as initPackageImpl } from "./init.js";
 
-import { readConfigFromFile, writeConfigToFile } from "@typeconf/sdk";
-
-// @deprecated Use @typeconf/sdk instead
-export { readConfigFromFile, writeConfigToFile };
-
 interface PackageJson {
   version: string;
   [key: string]: any;

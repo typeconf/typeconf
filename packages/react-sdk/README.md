@@ -60,18 +60,18 @@ export default config;
 npx @typeconf/typeconf build configs
 ```
 
-### Use in Node project
+### Use in React project
 
-First install the Typeconf SDK:
-
-```
-npm install @typeconf/sdk
-```
-
-And then you can read config in your code:
+First install the Typeconf React SDK:
 
 ```
-import { readConfig } from "@typeconf/sdk";
+npm install @typeconf/react-sdk
+```
+
+And then you can read config in your components:
+
+```
+import { readConfig } from "@typeconf/react-sdk/server";
 import { ButtonSettings } from "@/configs/types/all";
 
 export default async function Component() {

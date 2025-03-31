@@ -128,7 +128,7 @@ and run configs compilation in background in a separate terminal:
 $ npm run build:watch
 ```
 
-Now you can edit main.tsp, add your types and then use values.config.ts to fill the config.
+Now you can edit main.tsp, add your types and then use <config-name>.config.ts to fill the config.
 
 Example `main.tsp`:
 
@@ -139,7 +139,7 @@ model ProductConfig {
 }
 ```
 
-Example `values.config.ts`:
+Example `my-flags.config.ts`:
 
 ```typescript
 import { ProductConfig } from '~/types/all.js'
@@ -172,9 +172,10 @@ you just created simply as a dependency!
 After that you'll be able to read it from any JSON file you provide:
 
 ```typescript
-import { ProductConfig, readConfigFromFile } from "you-config-package";
+import { ProductConfig } from "you-config-package";
+import { readConfig } from "@typeconf/sdk";
 
-let conf: ProductConfig = readConfigFromFile("path/to/config.json");
+let conf: ProductConfig = readConfig("path/to/config-dir/config-name");
 ```
 
 Pro tip: If you want to use the configs package before pushing it there is a handly tool, run it in your project:

@@ -14,8 +14,9 @@
     }
   },
   "dependencies": {
+    "@typeconf/sdk": "workspace:^",
     "@typeconf/typeconf": "workspace:^",
-    "@typeconf/sdk": "workspace:^"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

@@ -1,11 +1,6 @@
-import { resolvePath } from "@typespec/compiler";
-import {
-  createTestLibrary,
-  TypeSpecTestLibrary,
-} from "@typespec/compiler/testing";
-import { fileURLToPath } from "url";
+import { createTestLibrary, findTestPackageRoot } from "@typespec/compiler/testing";
 
-export const ConfigEmitterTestLibrary: TypeSpecTestLibrary = createTestLibrary({
-  name: "config-emitter",
-  packageRoot: resolvePath(fileURLToPath(import.meta.url), "../../../../"),
+export const TypeconfTestLibrary = createTestLibrary({
+  name: "@typeconf/config-emitter",
+  packageRoot: await findTestPackageRoot(import.meta.url),
 });

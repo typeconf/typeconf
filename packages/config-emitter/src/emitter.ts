@@ -2,19 +2,20 @@ import { EmitContext, emitFile, resolvePath } from "@typespec/compiler";
 import { promises as fsAsync } from 'fs';
 import path from 'path';
 import { typescriptEmit } from "./typescript-emitter.js";
-//import { zodEmit } from "./zod-emitter.js";
+import { zodEmit } from "./zod-emitter.js";
+import { jsonc } from 'jsonc';
 
 async function fileExists(filePath: string): Promise<boolean> {
   return fsAsync.access(filePath).then(() => true).catch(() => false);
 }
 
-async function readJsonFile<T>(filePath: string): Promise<T | null> {
+async function readJsoncFile<T>(filePath: string): Promise<T | null> {
   const exists = await fileExists(filePath);
   if (!exists) return null;
   
   const content = await fsAsync.readFile(filePath, 'utf-8');
   try {
-    return JSON.parse(content) as T;
+    return jsonc.parse(content) as T;
   } catch (e) {
     console.log(`Failed to parse JSON from ${filePath}:`, e);
     return null;
@@ -52,7 +53,7 @@ async function shouldOmitExtensions(projectDir: string): Promise<boolean> {
     return true;
   }
 
-  const tsconfig = await readJsonFile<TsConfig>(tsconfigPath);
+  const tsconfig = await readJsoncFile<TsConfig>(tsconfigPath);
   if (!tsconfig) {
     console.log("Failed to read tsconfig.json, assuming bundler module resolution.");
     return true;
@@ -64,21 +65,50 @@ async function shouldOmitExtensions(projectDir: string): Promise<boolean> {
          moduleResolution === 'nodenext';
 }
 
+async function findConfigFiles(startDir: string): Promise<string[]> {
+  const configFiles: string[] = [];
+  const excludedDirs = ['dist', 'out', 'types'];
+  
+  try {
+    const files = await fsAsync.readdir(startDir, { withFileTypes: true });
+    
+    for (const file of files) {
+      const fullPath = path.join(startDir, file.name);
+      
+      if (file.isDirectory() && !excludedDirs.includes(file.name)) {
+        const nestedFiles = await findConfigFiles(fullPath);
+        configFiles.push(...nestedFiles);
+      } else if (file.isFile() && file.name.endsWith('.config.ts')) {
+        configFiles.push(fullPath);
+      }
+    }
+  } catch (error) {
+    console.warn(`Warning: Could not read directory ${startDir}:`, error);
+  }
+  
+  return configFiles;
+}
+
 export async function $onEmit(context: EmitContext) {
   if (context.program.compilerOptions.noEmit) {
     return;
   }
 
   const parentDir = path.dirname(context.emitterOutputDir);
-  const valuesConfigPath = path.join(parentDir, 'values.config.ts');
-  const hasValuesConfig = await fileExists(valuesConfigPath);
   const omitExtensions = await shouldOmitExtensions(parentDir);
   console.log("Using bundler module resolution:", omitExtensions);
   
   const extension = omitExtensions ? '' : '.js';
-  const valuesPath = hasValuesConfig 
-    ? `../values.config${extension}`
-    : `../src/values.config${extension}`;
+  const configFiles = await findConfigFiles(parentDir);
+  
+  // Generate imports for all found config files
+  const configImports = configFiles.map(filePath => {
+    const relativePath = path.relative(context.emitterOutputDir, filePath);
+    // Remove .ts extension and ensure proper path format
+    const importPath = relativePath.replace(/\.ts$/, extension);
+    const configName = path.basename(filePath, '.config.ts');
+    return `export { default as ${configName}Config } from '${importPath}'`;
+  }).join('\n');
 
   await emitFile(context.program, {
     path: resolvePath(context.emitterOutputDir, "index.ts"),
@@ -86,19 +116,9 @@ export async function $onEmit(context: EmitContext) {
 import fs from 'fs';
 
 export * from './all${extension}' // Your config types
-export { default as values } from '${valuesPath}' // Your config values
-
-/**
- * @deprecated The method should not be used, instead use @typeconf/sdk
- */
-export function readConfigFromFile<T>(filepath: string): T {
-  const data = fs.readFileSync(filepath, "utf8");
-  return JSON.parse(data) as T;
-}
+${configImports}
 `,
-
-
   });
   await typescriptEmit(context);
-  //await zodEmit(context);
+  await zodEmit(context);
 }
