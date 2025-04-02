@@ -1,19 +1,18 @@
-import { EmitContext, emitFile, resolvePath } from "@typespec/compiler";
-import { promises as fsAsync } from 'fs';
-import path from 'path';
+import { CompilerHost, EmitContext, emitFile, resolvePath } from "@typespec/compiler";
+import * as path from "./pathlib.js";
 import { typescriptEmit } from "./typescript-emitter.js";
 import { zodEmit } from "./zod-emitter.js";
-import { jsonc } from 'jsonc';
+import * as jsonc from 'jsonc-parser';
 
-async function fileExists(filePath: string): Promise<boolean> {
-  return fsAsync.access(filePath).then(() => true).catch(() => false);
+async function fileExists(host: CompilerHost, filePath: string): Promise<boolean> {
+  return await host.stat(filePath).then(() => true).catch(() => false);
 }
 
-async function readJsoncFile<T>(filePath: string): Promise<T | null> {
-  const exists = await fileExists(filePath);
+async function readJsoncFile<T>(host: CompilerHost, filePath: string): Promise<T | null> {
+  const exists = await fileExists(host, filePath);
   if (!exists) return null;
   
-  const content = await fsAsync.readFile(filePath, 'utf-8');
+  const content = await host.readFile(filePath).then(file => file.text);
   try {
     return jsonc.parse(content) as T;
   } catch (e) {
@@ -22,13 +21,13 @@ async function readJsoncFile<T>(filePath: string): Promise<T | null> {
   }
 }
 
-async function findClosestTsconfig(startDir: string): Promise<string | null> {
-  let currentDir = path.resolve(startDir);
-  const root = path.parse(currentDir).root;
+async function findClosestTsconfig(host: CompilerHost, startDir: string): Promise<string | null> {
+  let currentDir = await host.realpath(startDir);
+  const root = currentDir.split(/[/\\]/)[0] + '/';
 
   while (currentDir !== root) {
     const tsconfigPath = path.join(currentDir, 'tsconfig.json');
-    const exists = await fileExists(tsconfigPath);
+    const exists = await fileExists(host, tsconfigPath);
     if (exists) {
       return tsconfigPath;
     }
@@ -37,7 +36,7 @@ async function findClosestTsconfig(startDir: string): Promise<string | null> {
 
   // Check root directory as well
   const rootTsconfig = path.join(root, 'tsconfig.json');
-  return await fileExists(rootTsconfig) ? rootTsconfig : null;
+  return await fileExists(host, rootTsconfig) ? rootTsconfig : null;
 }
 
 interface TsConfig {
@@ -46,14 +45,14 @@ interface TsConfig {
   };
 }
 
-async function shouldOmitExtensions(projectDir: string): Promise<boolean> {
-  const tsconfigPath = await findClosestTsconfig(projectDir);
+async function shouldOmitExtensions(host: CompilerHost, projectDir: string): Promise<boolean> {
+  const tsconfigPath = await findClosestTsconfig(host, projectDir);
   if (!tsconfigPath) {
     console.log("No tsconfig.json found in directory tree, assuming bundler module resolution.");
     return true;
   }
 
-  const tsconfig = await readJsoncFile<TsConfig>(tsconfigPath);
+  const tsconfig = await readJsoncFile<TsConfig>(host, tsconfigPath);
   if (!tsconfig) {
     console.log("Failed to read tsconfig.json, assuming bundler module resolution.");
     return true;
@@ -65,20 +64,25 @@ async function shouldOmitExtensions(projectDir: string): Promise<boolean> {
          moduleResolution === 'nodenext';
 }
 
-async function findConfigFiles(startDir: string): Promise<string[]> {
+async function findConfigFiles(host: CompilerHost, startDir: string, visited: Set<string> = new Set()): Promise<string[]> {
   const configFiles: string[] = [];
-  const excludedDirs = ['dist', 'out', 'types'];
+  const excludedDirs = ['dist', 'out', 'types', 'node_modules'];
   
   try {
-    const files = await fsAsync.readdir(startDir, { withFileTypes: true });
+    const files = await host.readDir(startDir);
     
     for (const file of files) {
-      const fullPath = path.join(startDir, file.name);
+      const fullPath = path.join(startDir, file);
+      if (visited.has(fullPath)) {
+        continue;
+      }
+      visited.add(fullPath);
       
-      if (file.isDirectory() && !excludedDirs.includes(file.name)) {
-        const nestedFiles = await findConfigFiles(fullPath);
+      const fileInfo = await host.stat(fullPath);
+      if (fileInfo.isDirectory() && !excludedDirs.includes(file)) {
+        const nestedFiles = await findConfigFiles(host, fullPath, visited);
         configFiles.push(...nestedFiles);
-      } else if (file.isFile() && file.name.endsWith('.config.ts')) {
+      } else if (fileInfo.isFile() && file.endsWith('.config.ts')) {
         configFiles.push(fullPath);
       }
     }
@@ -95,11 +99,11 @@ export async function $onEmit(context: EmitContext) {
   }
 
   const parentDir = path.dirname(context.emitterOutputDir);
-  const omitExtensions = await shouldOmitExtensions(parentDir);
+  const omitExtensions = await shouldOmitExtensions(context.program.host, parentDir);
   console.log("Using bundler module resolution:", omitExtensions);
   
   const extension = omitExtensions ? '' : '.js';
-  const configFiles = await findConfigFiles(parentDir);
+  const configFiles = await findConfigFiles(context.program.host, parentDir);
   
   // Generate imports for all found config files
   const configImports = configFiles.map(filePath => {

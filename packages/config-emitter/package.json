@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/config-emitter",
-  "version": "0.3.0-prerelease2",
+  "version": "0.3.0-prerelease3",
   "description": "Typeconf internal config emitter",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@typespec/compiler": "^0.66.0",
-    "jsonc": "^2.0.0"
+    "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
