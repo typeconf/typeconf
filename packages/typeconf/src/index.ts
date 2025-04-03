@@ -110,7 +110,6 @@ export async function compilePackage(directory: string, watch: boolean) {
         return;
       }
       if (compileTask !== undefined) {
-        console.log("AA");
         return;
       }
       console.log(`Detected changes in ${filename}, recompiling`);

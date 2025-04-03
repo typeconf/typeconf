@@ -1,39 +1,29 @@
-import { readConfigFromFile, readConfig as sdkReadConfig } from "@typeconf/sdk";
-
-interface CacheEntry<T> {
-  value: T;
-  timestamp: number;
-}
+import { readConfig as sdkReadConfig } from "@typeconf/sdk";
+import { AsyncLocalStorage } from 'async_hooks';
 
 interface ReadConfigOptions {
   disableCache?: boolean;
 }
 
-const configCache = new Map<string, CacheEntry<any>>();
-const EXPIRATION_TIME = 60 * 10; 
-
-export function getLocalJSONConfig<T>(path: string): T {
-  const cached = configCache.get(path);
-  const now = Date.now();
-
-  if (!cached || now - cached.timestamp > EXPIRATION_TIME) {
-    const value = readConfigFromFile<T>(path);
-    configCache.set(path, { value, timestamp: now });
-    return value;
-  }
-
-  return cached.value;
-}
+const storage = new AsyncLocalStorage<Map<string, any>>();
 
 export async function readConfig<T>(path: string, options: ReadConfigOptions = {}): Promise<T> {
-  const cached = configCache.get(path);
-  const now = Date.now();
   const disableCache = options.disableCache ?? false;
-  if (!cached || now - cached.timestamp > EXPIRATION_TIME || disableCache) {
-    const value = await sdkReadConfig<T>(path);
-    configCache.set(path, { value, timestamp: now });
-    return value;
+  
+  if (disableCache) {
+    return await sdkReadConfig<T>(path);
   }
 
-  return cached.value;
+  // Get the request-specific cache or create a new one
+  const cache = storage.getStore() || new Map();
+  if (!storage.getStore()) {
+    storage.enterWith(cache);
+  }
+
+  if (!cache.has(path)) {
+    const value = await sdkReadConfig<T>(path);
+    cache.set(path, value);
+  }
+
+  return cache.get(path);
 }

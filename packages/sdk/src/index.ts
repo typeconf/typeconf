@@ -66,7 +66,7 @@ async function validateConfig<T>(configInfo: ConfigInfo, values: any): Promise<T
   return schema.parse(values);
 }
 
-export async function readConfig<T>(filepath: string): Promise<T> {
+export async function readConfig<T>(filepath: string, options: ReadConfigOptions = {}): Promise<T> {
   if (filepath.endsWith('.json')) {
     return readConfigFromFile<T>(filepath);
   }

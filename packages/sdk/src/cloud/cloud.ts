@@ -28,16 +28,26 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
                 autoRefreshToken: false,
                 detectSessionInUrl: false,
             },
+            global: {
+                fetch: (url: any, options = {}) => {
+                return fetch(url, {
+                    ...options,
+                    // https://github.com/orgs/supabase/discussions/20022
+                    /* @ts-ignore */
+                    cache: 'no-store',
+                 });
+                }
+            }
         });
     }
 
     private async getProjectByNameOrId(project: string): Promise<Database['public']['Tables']['projects']['Row']> {
-        let laodByIdOrName = async () => {
+        let loadByIdOrName = async () => {
             return await this.supabase
                 .from('projects')
                 .select()
                 .or(`name.eq."${project}",id.eq."${project}"`)
-                .single()
+                .maybeSingle()
         }
     
         let loadByName = async () => {
@@ -48,10 +58,10 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
                 .maybeSingle()
         }
     
-        const { data: projectData, error } = uuidValidate(project) ? await laodByIdOrName() : await loadByName()
+        const { data: projectData, error } = uuidValidate(project) ? await loadByIdOrName() : await loadByName()
     
         if (error) {
-            throw new Error(`Failed to get project ${project}`, { cause: error })
+            throw new Error(`Failed to get project ${project}: ${error.message}`, { cause: error })
         }
     
         if (!projectData) {
@@ -74,7 +84,7 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
             .eq('project_configs.name', configName)
             .order('version', { ascending: false })
             .limit(1)
-            .single()
+            .maybeSingle()
     
         if (error) {
             throw error
@@ -132,9 +142,10 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
                 err: undefined
             }
         } catch (err) {
+            const error = err as Error;
             return {
                 config: undefined,
-                err: new Error(`Failed to read config ${configName} from Typeconf Cloud: ${err}`)
+                err: new Error(`Failed to read config ${configName} from Typeconf Cloud: ${error.message}`)
             }
         }
     }

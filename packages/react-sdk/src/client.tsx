@@ -7,7 +7,7 @@ const createTypeconfContext = once(<T,>() => React.createContext<T | null>(null)
 
 export function useTypeconf<T>() {
   const config = React.useContext(createTypeconfContext<T>());
-  if (!config) {
+  if (!config || config == undefined) {
     throw new Error('useTypeconf must be used within a TypeconfProvider');
   }
   return config;

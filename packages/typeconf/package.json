@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/typeconf",
-  "version": "0.3.0-prerelease6",
+  "version": "0.3.0-prerelease7",
   "description": "Typeconf CLI for defining configs with types.",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
