@@ -61,7 +61,7 @@ async function validateConfig<T>(configInfo: ConfigInfo, values: any): Promise<T
     fsCache: false,
     moduleCache: false,
   });
-  const schemas = await jiti.import(configInfo.schemasPath) as any;
+  const schemas = await jiti.import(`${configInfo.schemasPath}`) as any;
   const schema = schemas?.default[configInfo.configId];
   return schema.parse(values);
 }
