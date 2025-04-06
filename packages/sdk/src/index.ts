@@ -17,6 +17,17 @@ type ConfigInfo = {
   valuesPath: string;
 };
 
+function resolveConfigPathRemote(configId: string): ConfigInfo {
+  const configIdResolved = path.normalize(configId.endsWith('.config.ts') ? configId : `${configId}.config.ts`);
+  return {
+    configId: configIdResolved,
+    // TODO: we need to find a way to get information about schemas in the runtime where we don't have access to the file system
+    configDir: '',
+    schemasPath: '',
+    valuesPath: ''
+  }
+}
+
 function resolveConfigPath(configId: string): ConfigInfo {
   const configPath = configId.endsWith('.config.ts') ? configId : `${configId}.config.ts`;
   const absConfigPath = path.resolve(process.cwd(), configPath);
@@ -24,6 +35,7 @@ function resolveConfigPath(configId: string): ConfigInfo {
   if (!fs.existsSync(absConfigPath)) {
     throw new Error(`Config file not found: ${absConfigPath}`);
   }
+
 
   // Walk up directories looking for types/all.zod.ts
   let currentDir = path.dirname(absConfigPath);
@@ -70,18 +82,19 @@ export async function readConfig<T>(filepath: string, options: ReadConfigOptions
   if (filepath.endsWith('.json')) {
     return readConfigFromFile<T>(filepath);
   }
-  const configInfo = resolveConfigPath(filepath);
 
   if (isCloudEnabled()) {
+    const configInfo = resolveConfigPathRemote(filepath);
     const result = await typeconfCloud().readConfig<T>(configInfo.configId);
     
     if (result.err) throw result.err;
     
     if (!result.config) throw new Error("No config found");
     
-    return validateConfig<T>(configInfo, result.config);
+    return result.config;
   }
 
+  const configInfo = resolveConfigPath(filepath);
   const values = readConfigFromFile<T>(configInfo.valuesPath);
   return validateConfig<T>(configInfo, values);
 }

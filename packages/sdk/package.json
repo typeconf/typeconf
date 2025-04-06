@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/sdk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Typeconf SDK for reading typed configs in your repository",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
