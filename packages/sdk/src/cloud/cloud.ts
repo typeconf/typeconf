@@ -28,16 +28,6 @@ class TypeconfCloudClientImpl implements TypeconfCloudClient {
                 autoRefreshToken: false,
                 detectSessionInUrl: false,
             },
-            global: {
-                fetch: (url: any, options = {}) => {
-                return fetch(url, {
-                    ...options,
-                    // https://github.com/orgs/supabase/discussions/20022
-                    /* @ts-ignore */
-                    cache: 'no-store',
-                 });
-                }
-            }
         });
     }
 
