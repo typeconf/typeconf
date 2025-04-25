@@ -221,7 +221,7 @@ export class ZodEmitter extends CodeTypeEmitter<EmitterOptions> {
   modelInstantiation(model: Model, name: string): EmitterOutput<string> {
     if (this.emitter.getProgram().checker.isStdType(model, "Record")) {
       const indexerValue = model.indexer!.value;
-      return code`z.map(z.string(), ${this.emitter.emitTypeReference(indexerValue)})`;
+      return code`z.record(z.string(), ${this.emitter.emitTypeReference(indexerValue)})`;
     }
     return this.modelDeclaration(model, name);
   }

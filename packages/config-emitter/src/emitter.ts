@@ -111,9 +111,12 @@ export async function $onEmit(context: EmitContext) {
     // Remove .ts extension and ensure proper path format
     const importPath = relativePath.replace(/\.ts$/, extension);
     const fullPath = path.relative(parentDir, filePath).replace(/\.config\.ts$/, '');
-    const configAlias = fullPath.split('/').map((part, i) => 
-      i === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1)
-    ).join('');
+    const configAlias = fullPath.split('/').map(part => {
+      // Convert kebab-case to camelCase for each part
+      return part.split('-').map((word, i) => 
+        i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+      ).join('');
+    }).join('');
     return `export { default as ${configAlias}Config } from '${importPath}'`;
   }).join('\n');
 
