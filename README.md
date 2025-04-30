@@ -3,14 +3,14 @@
 <div align="center">
     <img src="docs/assets/logo-background.png" alt="logo" width="30%"  style="border-radius: 50%; padding-bottom: 20px"/>
 
-A Typescript tool that adds types to configs.
+Typescript dynamic configs with static types.
 
 [Website](https://typeconf.dev) | [Docs](https://docs.typeconf.dev) | [Discord](https://discord.gg/F5d4TjsS8B)
 
 <table>
 <tr>
-<th align="left">Define schema</th>
-<th align="left">Set values</th>
+<th align="left">Define values</th>
+<th align="left">Read in your code</th>
 </tr>
 <tr>
 <td align="left">
@@ -21,12 +21,7 @@ model ProductConfig {
   coeffs: Record<float32>;
   notify: Record<boolean>;
 }
-```
 
-</td>
-<td align="left">
-
-```typescript
 import {
   ProductConfig,
 } from "~/types/all.js";
@@ -48,12 +43,6 @@ export default config;
 ```
 
 </td>
-</tr>
-<tr>
-<th align="left">Read in your code</th>
-<th align="left">Or use JSON</th>
-</tr>
-<tr>
 <td align="left">
 
 ```typescript
@@ -63,27 +52,9 @@ import {
 } from "you-config-package";
 
 let conf: ProductConfig =
-  readConfigFromFile(
-    "path/to/config.json"
+  readConfig(
+    "path/to/config"
 );
-```
-
-</td>
-<td align="left">
-
-```json
-{
-    "enable_flag": true,
-    "coeffs": {
-        "lon": 0.99,
-        "nyc": 1.25,
-        "sf": 9000.0
-    },
-    "notify": {
-        "ios>=17": true,
-        "android<=15": false
-    }
-}
 ```
 
 </td>
@@ -92,23 +63,15 @@ let conf: ProductConfig =
 
 </div>
 
-Every developer deals with configs every day. We have a lot of different
-formats and storages, and it's quite messy. In a growing product developers
-sometimes have to deal with large configs, usually JSONs or YAMLs, which are
-managed differently for each environment or experiment. Doing this is not fun,
-and it's hard to avoid errors.
+Every developer deals with two problems every day - messy configs and long, scary deployment.
+Typeconf helps with both - it allows you to write configs as code and update them without full app redeployment.
+Imagine making small changes like feature flags, prompt updates, marketing texts with a press of a button? With Typeconf you can!
 
-This is where Typeconf helps - it you to define and share complex configs using
-types. With typeconf you manage a config directory - a package with config
-schemas and values that should become your source of truth for all service
-configuration. Using typeconf SDK you can read the generated JSONs in your code
-with types.
-
-Check out our [examples](examples/README.md) for real world use cases.
+Check out our [examples](examples/README.md) for real world use cases. And [sign up](https://typeconf.dev/storage/login) for our Dynamic Configs Storage, it's a free, open-source database for these configs!
 
 ## Demo
 
-[![YouTube](http://i.ytimg.com/vi/y2V4aaTb4c0/hqdefault.jpg)](https://www.youtube.com/watch?v=y2V4aaTb4c0)
+[![YouTube](https://i3.ytimg.com/vi/qOh70qOGwLM/maxresdefault.jpg)](https://www.youtube.com/watch?v=qOh70qOGwLM)
 
 ## Getting started
 
