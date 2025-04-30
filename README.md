@@ -22,7 +22,9 @@ model ProductConfig {
   notify: Record<boolean>;
 }
 
-import { ProductConfig } from "~/configs/types/all";
+import {
+  ProductConfig,
+} from "~/configs/types/all";
 
 let config: ProductConfig = {
     enable_flag: true,
@@ -44,11 +46,17 @@ export default config;
 <td align="left">
 
 ```typescript
-import { ProductConfig } from "~/configs/types/all";
-import { readConfig } from '@typeconf/sdk';
+import {
+  ProductConfig,
+}
+from "~/configs/types/all";
+import {
+  readConfig,
+} from '@typeconf/sdk';
 
-let conf: ProductConfig = readConfig(
-  "path/to/config"
+let conf: ProductConfig =
+  readConfig(
+    "path/to/config"
 );
 ```
 
