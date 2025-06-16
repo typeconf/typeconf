@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## Project rules
+
+This is a Node.js monorepo project, managed by pnpm.
+When you've asked to create a new feature you must put the design decisions in architecture directory.
+Before implementation scan the project - find things that you can reuse, understand the component and service structure.
+You must make concise changes and avoid updating unrelated files or implementing unrelated features if user didn't ask that explicitly.
+Do not run or kill the development server.
+
+You must always confirm that you're following rules by printing mode:typeconf at the start and at the end of your reply.

@@ -8,6 +8,10 @@ import { log_event } from "./logging.js";
 import path from "path";
 
 import { initPackageNonInteractive as initPackageImpl } from "./init.js";
+import {
+  compileV2 as compileV2Impl,
+  CompileV2Options,
+} from "./compile-v2/compile-v2.js";
 
 interface PackageJson {
   version: string;
@@ -19,7 +23,7 @@ export const VERSION = (() => {
     return "dev";
   }
   const packagePath = fileURLToPath(import.meta.resolve("../package.json"));
-  const packageContent = fs.readFileSync(packagePath, 'utf-8');
+  const packageContent = fs.readFileSync(packagePath, "utf-8");
   return JSON.parse(packageContent).version;
 })();
 
@@ -118,4 +122,18 @@ export async function compilePackage(directory: string, watch: boolean) {
       });
     });
   }
+}
+
+export async function compileV2(
+  directory: string,
+  options: CompileV2Options = {},
+) {
+  const configDir = path.resolve(directory);
+  const params: Record<string, string> = {
+    configDir: path.basename(configDir),
+    version: "v2",
+  };
+  log_event("info", "compile-v2", "start", params);
+  await compileV2Impl(configDir, options);
+  await log_event("info", "compile-v2", "end", params);
 }
