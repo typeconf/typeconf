@@ -1,0 +1,73 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "CatsInventory": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "CatsInventory.json",
+            "type": "object",
+            "properties": {
+                "cats": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "cutenessRatio": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "cats",
+                "cutenessRatio"
+            ]
+        },
+        "DebuggingConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "DebuggingConfig.json",
+            "type": "object",
+            "properties": {
+                "logLevel": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                },
+                "maxRetries": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                },
+                "timeout": {
+                    "type": "string",
+                    "format": "duration"
+                }
+            },
+            "required": [
+                "logLevel",
+                "maxRetries",
+                "timeout"
+            ]
+        },
+        "ProjectConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ProjectConfig.json",
+            "type": "object",
+            "properties": {
+                "projectName": {
+                    "type": "string"
+                },
+                "inventory": {
+                    "$ref": "CatsInventory.json"
+                },
+                "debugging": {
+                    "$ref": "DebuggingConfig.json"
+                }
+            },
+            "required": [
+                "projectName",
+                "inventory",
+                "debugging"
+            ]
+        }
+    }
+}

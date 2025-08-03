@@ -8,6 +8,7 @@ import * as path from "./pathlib.js";
 import { typescriptEmit } from "./typescript-emitter.js";
 import { zodEmit } from "./zod-emitter.js";
 import { jsonschemaEmit } from "./jsonschema-emitter.js";
+import { configMapEmit } from "./config-map-emitter.js";
 import * as jsonc from "jsonc-parser";
 
 async function fileExists(
@@ -176,4 +177,5 @@ ${configImports}
   await typescriptEmit(context);
   await zodEmit(context);
   await jsonschemaEmit(context);
+  await configMapEmit(context);
 }

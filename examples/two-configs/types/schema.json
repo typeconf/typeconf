@@ -1,0 +1,50 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "OldService": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "OldService.json",
+            "type": "object",
+            "properties": {
+                "oldParam": {
+                    "type": "string"
+                },
+                "commonValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647
+                    }
+                }
+            },
+            "required": [
+                "oldParam",
+                "commonValues"
+            ]
+        },
+        "NewService": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "NewService.json",
+            "type": "object",
+            "properties": {
+                "newAndShinyParam": {
+                    "type": "string"
+                },
+                "commonValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647
+                    }
+                }
+            },
+            "required": [
+                "newAndShinyParam",
+                "commonValues"
+            ]
+        }
+    }
+}

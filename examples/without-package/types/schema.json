@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "Conf": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Conf.json",
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                }
+            },
+            "required": [
+                "number"
+            ]
+        }
+    }
+}

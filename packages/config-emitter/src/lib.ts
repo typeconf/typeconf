@@ -4,6 +4,7 @@ export interface EmitterOptions {
   "output-file"?: string;
   "zod-output-file"?: string;
   "jsonschema-output-file"?: string;
+  "config-map-output-file"?: string;
   "schema-prefix"?: string;
   "schema-suffix"?: string;
   "config-types-map"?: Record<string, any>;
@@ -16,6 +17,7 @@ const EmitterOptionsSchema: JSONSchemaType<EmitterOptions> = {
     "output-file": { type: "string", nullable: true },
     "zod-output-file": { type: "string", nullable: true },
     "jsonschema-output-file": { type: "string", nullable: true },
+    "config-map-output-file": { type: "string", nullable: true },
     "schema-prefix": { type: "string", nullable: true },
     "schema-suffix": { type: "string", nullable: true, default: "Schema" },
     "config-types-map": { type: "object", nullable: true },

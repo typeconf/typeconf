@@ -1,17 +1,18 @@
-import { readConfig as sdkReadConfig } from "@typeconf/sdk";
+import { readConfig as sdkReadConfig, ReadConfigOptions as SdkReadConfigOptions } from "@typeconf/sdk";
 import { AsyncLocalStorage } from 'async_hooks';
 
-interface ReadConfigOptions {
+interface ReadConfigOptions extends SdkReadConfigOptions {
   disableCache?: boolean;
 }
 
 const storage = new AsyncLocalStorage<Map<string, any>>();
 
 export async function readConfig<T>(path: string, options: ReadConfigOptions = {}): Promise<T> {
-  const disableCache = options.disableCache ?? false;
+  const { disableCache, ...sdkOptions } = options;
+  const shouldDisableCache = disableCache ?? false;
   
-  if (disableCache) {
-    return await sdkReadConfig<T>(path);
+  if (shouldDisableCache) {
+    return await sdkReadConfig<T>(path, sdkOptions);
   }
 
   // Get the request-specific cache or create a new one
@@ -21,7 +22,7 @@ export async function readConfig<T>(path: string, options: ReadConfigOptions = {
   }
 
   if (!cache.has(path)) {
-    const value = await sdkReadConfig<T>(path);
+    const value = await sdkReadConfig<T>(path, sdkOptions);
     cache.set(path, value);
   }
 

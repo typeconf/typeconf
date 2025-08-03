@@ -1,0 +1,62 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "MobileFeatureConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "MobileFeatureConfig.json",
+            "type": "object",
+            "properties": {
+                "platformConfigs": {
+                    "type": "object",
+                    "properties": {},
+                    "unevaluatedProperties": {
+                        "type": "object",
+                        "properties": {
+                            "versionConfigs": {
+                                "type": "object",
+                                "properties": {},
+                                "unevaluatedProperties": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enablePushNotifications": {
+                                            "type": "boolean"
+                                        },
+                                        "adFrequency": {
+                                            "type": "integer",
+                                            "minimum": -2147483648,
+                                            "maximum": 2147483647
+                                        },
+                                        "featureToggles": {
+                                            "$ref": "RecordBoolean.json"
+                                        }
+                                    },
+                                    "required": [
+                                        "enablePushNotifications",
+                                        "adFrequency",
+                                        "featureToggles"
+                                    ]
+                                }
+                            }
+                        },
+                        "required": [
+                            "versionConfigs"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "platformConfigs"
+            ]
+        },
+        "RecordBoolean": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordBoolean.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "type": "boolean"
+            }
+        }
+    }
+}

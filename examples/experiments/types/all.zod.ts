@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const ProjectConfigSchema = z.object({
   enable_new_way_of_routing: z.boolean(),
-  rollout_this_feature_by_user: z.map(z.string(), z.boolean()),
-  mobile_rollout: z.map(z.string(), z.boolean()),
+  rollout_this_feature_by_user: z.record(z.string(), z.boolean()),
+  mobile_rollout: z.record(z.string(), z.boolean()),
 });
 export namespace TypeSpec {}
 

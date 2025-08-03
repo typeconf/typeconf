@@ -1,0 +1,36 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "ProjectConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ProjectConfig.json",
+            "type": "object",
+            "properties": {
+                "enable_new_way_of_routing": {
+                    "type": "boolean"
+                },
+                "rollout_this_feature_by_user": {
+                    "$ref": "RecordBoolean.json"
+                },
+                "mobile_rollout": {
+                    "$ref": "RecordBoolean.json"
+                }
+            },
+            "required": [
+                "enable_new_way_of_routing",
+                "rollout_this_feature_by_user",
+                "mobile_rollout"
+            ]
+        },
+        "RecordBoolean": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordBoolean.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "type": "boolean"
+            }
+        }
+    }
+}

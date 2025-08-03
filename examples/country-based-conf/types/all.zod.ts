@@ -8,9 +8,9 @@ export const ProductSettingsSchema = z.object({
 });
 
 export const CountrySettingsSchema = z.object({
-  byCountryAndRegion: z.map(
+  byCountryAndRegion: z.record(
     z.string(),
-    z.map(z.string(), ProductSettingsSchema),
+    z.record(z.string(), ProductSettingsSchema),
   ),
 });
 export namespace TypeSpec {}

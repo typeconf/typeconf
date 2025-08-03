@@ -2,5 +2,5 @@
 import fs from 'fs';
 
 export * from './all.js' // Your config types
-export { default as new-serviceConfig } from '../new-service.config.js'
-export { default as old-serviceConfig } from '../old-service.config.js'
+export { default as newServiceConfig } from '../new-service.config.js'
+export { default as oldServiceConfig } from '../old-service.config.js'

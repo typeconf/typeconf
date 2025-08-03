@@ -1,15 +1,15 @@
 import { z } from "zod";
 
 export const MobileFeatureConfigSchema = z.object({
-  platformConfigs: z.map(
+  platformConfigs: z.record(
     z.string(),
     z.object({
-      versionConfigs: z.map(
+      versionConfigs: z.record(
         z.string(),
         z.object({
           enablePushNotifications: z.boolean(),
           adFrequency: z.number(),
-          featureToggles: z.map(z.string(), z.boolean()),
+          featureToggles: z.record(z.string(), z.boolean()),
         }),
       ),
     }),

@@ -15,10 +15,10 @@ export const PackageJsonSchema = z.object({
   type: z.string(),
   main: z.string(),
   keywords: z.array(z.string()),
-  exports: z.map(z.string(), PackageExportsSchema),
-  dependencies: z.map(z.string(), z.string()).optional(),
-  devDependencies: z.map(z.string(), z.string()).optional(),
-  scripts: z.map(z.string(), z.string()).optional(),
+  exports: z.record(z.string(), PackageExportsSchema),
+  dependencies: z.record(z.string(), z.string()).optional(),
+  devDependencies: z.record(z.string(), z.string()).optional(),
+  scripts: z.record(z.string(), z.string()).optional(),
 });
 export namespace TypeSpec {}
 
