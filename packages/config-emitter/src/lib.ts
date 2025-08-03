@@ -3,6 +3,7 @@ import { createTypeSpecLibrary, JSONSchemaType } from "@typespec/compiler";
 export interface EmitterOptions {
   "output-file"?: string;
   "zod-output-file"?: string;
+  "jsonschema-output-file"?: string;
   "schema-prefix"?: string;
   "schema-suffix"?: string;
   "config-types-map"?: Record<string, any>;
@@ -14,13 +15,13 @@ const EmitterOptionsSchema: JSONSchemaType<EmitterOptions> = {
   properties: {
     "output-file": { type: "string", nullable: true },
     "zod-output-file": { type: "string", nullable: true },
+    "jsonschema-output-file": { type: "string", nullable: true },
     "schema-prefix": { type: "string", nullable: true },
     "schema-suffix": { type: "string", nullable: true, default: "Schema" },
     "config-types-map": { type: "object", nullable: true },
   },
   required: [],
 };
-
 
 export const $lib = createTypeSpecLibrary({
   name: "config-emitter",

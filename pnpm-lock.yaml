@@ -36,6 +36,9 @@ importers:
       '@typespec/compiler':
         specifier: ^0.66.0
         version: 0.66.0(@types/node@22.10.0)
+      '@typespec/json-schema':
+        specifier: 0.66.0
+        version: 0.66.0(@typespec/compiler@0.66.0(@types/node@22.10.0))
       jsonc-parser:
         specifier: ^3.3.1
         version: 3.3.1
@@ -807,6 +810,12 @@ packages:
     resolution: {integrity: sha512-JoaHQCc1Va48xuiws7UHFa9ix1bxxJrjTud69mrbu67HerqLN5meLwNkqVGrOlEfUnvMcnaXNQlHbMbixmshQA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  '@typespec/json-schema@0.66.0':
+    resolution: {integrity: sha512-rI2N/zqZSJmn/tCxB06L8IOEm4dzgj6Psk+BLxrO2LqF7S28ewLrXlya91yhw6atbcHQ4dafF5+NxwZTgnVVOw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@typespec/compiler': ~0.66.0
 
   '@vitest/expect@3.0.9':
     resolution: {integrity: sha512-5eCqRItYgIML7NNVgJj6TVCmdzE7ZVgJhruW0ziSQV4V7PvLkDL1bBkBdcTs/VuIz0IxPb5da1IDSqc1TR9eig==}
@@ -2476,6 +2485,11 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
+
+  '@typespec/json-schema@0.66.0(@typespec/compiler@0.66.0(@types/node@22.10.0))':
+    dependencies:
+      '@typespec/compiler': 0.66.0(@types/node@22.10.0)
+      yaml: 2.7.0
 
   '@vitest/expect@3.0.9':
     dependencies:

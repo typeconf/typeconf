@@ -1,18 +1,33 @@
-import { CompilerHost, EmitContext, emitFile, resolvePath } from "@typespec/compiler";
+import {
+  CompilerHost,
+  EmitContext,
+  emitFile,
+  resolvePath,
+} from "@typespec/compiler";
 import * as path from "./pathlib.js";
 import { typescriptEmit } from "./typescript-emitter.js";
 import { zodEmit } from "./zod-emitter.js";
-import * as jsonc from 'jsonc-parser';
+import { jsonschemaEmit } from "./jsonschema-emitter.js";
+import * as jsonc from "jsonc-parser";
 
-async function fileExists(host: CompilerHost, filePath: string): Promise<boolean> {
-  return await host.stat(filePath).then(() => true).catch(() => false);
+async function fileExists(
+  host: CompilerHost,
+  filePath: string,
+): Promise<boolean> {
+  return await host
+    .stat(filePath)
+    .then(() => true)
+    .catch(() => false);
 }
 
-async function readJsoncFile<T>(host: CompilerHost, filePath: string): Promise<T | null> {
+async function readJsoncFile<T>(
+  host: CompilerHost,
+  filePath: string,
+): Promise<T | null> {
   const exists = await fileExists(host, filePath);
   if (!exists) return null;
-  
-  const content = await host.readFile(filePath).then(file => file.text);
+
+  const content = await host.readFile(filePath).then((file) => file.text);
   try {
     return jsonc.parse(content) as T;
   } catch (e) {
@@ -21,12 +36,15 @@ async function readJsoncFile<T>(host: CompilerHost, filePath: string): Promise<T
   }
 }
 
-async function findClosestTsconfig(host: CompilerHost, startDir: string): Promise<string | null> {
+async function findClosestTsconfig(
+  host: CompilerHost,
+  startDir: string,
+): Promise<string | null> {
   let currentDir = await host.realpath(startDir);
-  const root = currentDir.split(/[/\\]/)[0] + '/';
+  const root = currentDir.split(/[/\\]/)[0] + "/";
 
   while (currentDir !== root) {
-    const tsconfigPath = path.join(currentDir, 'tsconfig.json');
+    const tsconfigPath = path.join(currentDir, "tsconfig.json");
     const exists = await fileExists(host, tsconfigPath);
     if (exists) {
       return tsconfigPath;
@@ -35,8 +53,8 @@ async function findClosestTsconfig(host: CompilerHost, startDir: string): Promis
   }
 
   // Check root directory as well
-  const rootTsconfig = path.join(root, 'tsconfig.json');
-  return await fileExists(host, rootTsconfig) ? rootTsconfig : null;
+  const rootTsconfig = path.join(root, "tsconfig.json");
+  return (await fileExists(host, rootTsconfig)) ? rootTsconfig : null;
 }
 
 interface TsConfig {
@@ -45,51 +63,64 @@ interface TsConfig {
   };
 }
 
-async function shouldOmitExtensions(host: CompilerHost, projectDir: string): Promise<boolean> {
+async function shouldOmitExtensions(
+  host: CompilerHost,
+  projectDir: string,
+): Promise<boolean> {
   const tsconfigPath = await findClosestTsconfig(host, projectDir);
   if (!tsconfigPath) {
-    console.log("No tsconfig.json found in directory tree, assuming bundler module resolution.");
+    console.log(
+      "No tsconfig.json found in directory tree, assuming bundler module resolution.",
+    );
     return true;
   }
 
   const tsconfig = await readJsoncFile<TsConfig>(host, tsconfigPath);
   if (!tsconfig) {
-    console.log("Failed to read tsconfig.json, assuming bundler module resolution.");
+    console.log(
+      "Failed to read tsconfig.json, assuming bundler module resolution.",
+    );
     return true;
   }
 
   const moduleResolution = tsconfig.compilerOptions?.moduleResolution;
-  return moduleResolution === 'bundler' || 
-         moduleResolution === 'node16' || 
-         moduleResolution === 'nodenext';
+  return (
+    moduleResolution === "bundler" ||
+    moduleResolution === "node16" ||
+    moduleResolution === "nodenext"
+  );
 }
 
-async function findConfigFiles(host: CompilerHost, startDir: string, visited: Set<string> = new Set()): Promise<string[]> {
+async function findConfigFiles(
+  host: CompilerHost,
+  startDir: string,
+  visited: Set<string> = new Set(),
+): Promise<string[]> {
   const configFiles: string[] = [];
-  const excludedDirs = ['dist', 'out', 'types', 'node_modules'];
-  
+  const excludedDirs = ["dist", "out", "types", "node_modules"];
+
   try {
     const files = await host.readDir(startDir);
-    
+
     for (const file of files) {
       const fullPath = path.join(startDir, file);
       if (visited.has(fullPath)) {
         continue;
       }
       visited.add(fullPath);
-      
+
       const fileInfo = await host.stat(fullPath);
       if (fileInfo.isDirectory() && !excludedDirs.includes(file)) {
         const nestedFiles = await findConfigFiles(host, fullPath, visited);
         configFiles.push(...nestedFiles);
-      } else if (fileInfo.isFile() && file.endsWith('.config.ts')) {
+      } else if (fileInfo.isFile() && file.endsWith(".config.ts")) {
         configFiles.push(fullPath);
       }
     }
   } catch (error) {
     console.warn(`Warning: Could not read directory ${startDir}:`, error);
   }
-  
+
   return configFiles;
 }
 
@@ -99,26 +130,39 @@ export async function $onEmit(context: EmitContext) {
   }
 
   const parentDir = path.dirname(context.emitterOutputDir);
-  const omitExtensions = await shouldOmitExtensions(context.program.host, parentDir);
+  const omitExtensions = await shouldOmitExtensions(
+    context.program.host,
+    parentDir,
+  );
   console.log("Using bundler module resolution:", omitExtensions);
-  
-  const extension = omitExtensions ? '' : '.js';
+
+  const extension = omitExtensions ? "" : ".js";
   const configFiles = await findConfigFiles(context.program.host, parentDir);
-  
+
   // Generate imports for all found config files
-  const configImports = configFiles.map(filePath => {
-    const relativePath = path.relative(context.emitterOutputDir, filePath);
-    // Remove .ts extension and ensure proper path format
-    const importPath = relativePath.replace(/\.ts$/, extension);
-    const fullPath = path.relative(parentDir, filePath).replace(/\.config\.ts$/, '');
-    const configAlias = fullPath.split('/').map(part => {
-      // Convert kebab-case to camelCase for each part
-      return part.split('-').map((word, i) => 
-        i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
-      ).join('');
-    }).join('');
-    return `export { default as ${configAlias}Config } from '${importPath}'`;
-  }).join('\n');
+  const configImports = configFiles
+    .map((filePath) => {
+      const relativePath = path.relative(context.emitterOutputDir, filePath);
+      // Remove .ts extension and ensure proper path format
+      const importPath = relativePath.replace(/\.ts$/, extension);
+      const fullPath = path
+        .relative(parentDir, filePath)
+        .replace(/\.config\.ts$/, "");
+      const configAlias = fullPath
+        .split("/")
+        .map((part) => {
+          // Convert kebab-case to camelCase for each part
+          return part
+            .split("-")
+            .map((word, i) =>
+              i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1),
+            )
+            .join("");
+        })
+        .join("");
+      return `export { default as ${configAlias}Config } from '${importPath}'`;
+    })
+    .join("\n");
 
   await emitFile(context.program, {
     path: resolvePath(context.emitterOutputDir, "index.ts"),
@@ -131,4 +175,5 @@ ${configImports}
   });
   await typescriptEmit(context);
   await zodEmit(context);
+  await jsonschemaEmit(context);
 }
