@@ -1,0 +1,65 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "ProductSettings": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ProductSettings.json",
+            "type": "object",
+            "properties": {
+                "breakEverything": {
+                    "type": "boolean"
+                },
+                "randomnessRatio": {
+                    "type": "number"
+                },
+                "formulaCoeff": {
+                    "type": "number"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "breakEverything",
+                "randomnessRatio",
+                "formulaCoeff",
+                "tags"
+            ]
+        },
+        "CountrySettings": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "CountrySettings.json",
+            "type": "object",
+            "properties": {
+                "byCountryAndRegion": {
+                    "$ref": "RecordRecordProductSettings.json"
+                }
+            },
+            "required": [
+                "byCountryAndRegion"
+            ]
+        },
+        "RecordRecordProductSettings": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordRecordProductSettings.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "$ref": "RecordProductSettings.json"
+            }
+        },
+        "RecordProductSettings": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordProductSettings.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "$ref": "ProductSettings.json"
+            }
+        }
+    }
+}

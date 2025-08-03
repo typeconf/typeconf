@@ -1,0 +1,88 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "Widget": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Widget.json",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "widgetType": {
+                    "$ref": "WidgetType.json"
+                },
+                "width": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                },
+                "height": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                }
+            },
+            "required": [
+                "name",
+                "query",
+                "widgetType",
+                "width",
+                "height"
+            ]
+        },
+        "WidgetType": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "WidgetType.json",
+            "type": "string",
+            "enum": [
+                "Header",
+                "LineChart",
+                "Table",
+                "PieChart"
+            ]
+        },
+        "Header": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Header.json",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "allOf": [
+                {
+                    "$ref": "Widget.json"
+                }
+            ]
+        },
+        "Dashboard": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Dashboard.json",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "widgets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Widget.json"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "widgets"
+            ]
+        }
+    }
+}

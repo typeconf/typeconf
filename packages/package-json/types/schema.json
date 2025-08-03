@@ -1,0 +1,99 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "ProjectConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "ProjectConfig.json",
+            "type": "object",
+            "properties": {
+                "projectName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "projectName"
+            ]
+        },
+        "PackageExports": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PackageExports.json",
+            "type": "object",
+            "properties": {
+                "types": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "types",
+                "default"
+            ]
+        },
+        "PackageJson": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "PackageJson.json",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "main": {
+                    "type": "string"
+                },
+                "keywords": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "exports": {
+                    "$ref": "RecordPackageExports.json"
+                },
+                "dependencies": {
+                    "$ref": "RecordString.json"
+                },
+                "devDependencies": {
+                    "$ref": "RecordString.json"
+                },
+                "scripts": {
+                    "$ref": "RecordString.json"
+                }
+            },
+            "required": [
+                "name",
+                "version",
+                "type",
+                "main",
+                "keywords",
+                "exports"
+            ]
+        },
+        "RecordPackageExports": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordPackageExports.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "$ref": "PackageExports.json"
+            }
+        },
+        "RecordString": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordString.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "type": "string"
+            }
+        }
+    }
+}

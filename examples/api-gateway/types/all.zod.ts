@@ -7,7 +7,7 @@ export const RouteSchema = z.object({
 });
 
 export const APIGatewayConfigSchema = z.object({
-  routes: z.map(z.string(), RouteSchema),
+  routes: z.record(z.string(), RouteSchema),
 });
 export namespace TypeSpec {}
 

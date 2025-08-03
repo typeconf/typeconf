@@ -1,0 +1,4 @@
+{
+  "two-configs/new-service.config.ts": "NewService",
+  "two-configs/old-service.config.ts": "OldService"
+}

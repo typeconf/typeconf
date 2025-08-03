@@ -61,7 +61,7 @@ export async function compile(configDir: string): Promise<void> {
   const projectName = packageFile ? packageFile["projectName"] : path.basename(configDir);
 
   console.log(`Compiling ${configDir}...`);
-  
+
   console.log("Analyzing config files...");
   const configExportMap = await analyzeConfigFiles(configDir);
   console.log(`Config types map: ${JSON.stringify(configExportMap)}`);
@@ -74,6 +74,7 @@ export async function compile(configDir: string): Promise<void> {
     "emitter-output-dir": `${configDir}/types`,
     "output-file": "all.ts",
     "zod-output-file": "all.zod.ts",
+    "config-map-output-file": "config-map.json",
     "config-types-map": configExportMap,
   };
   const program = await typespecCompile(
@@ -133,14 +134,14 @@ function logProgramResult(
 async function writeConfigToFile(values: any, filepath?: string) {
   console.log(`Writing config file to ${filepath}`);
   if (values == null) {
-      return;
+    return;
   }
   const data = JSON.stringify(values, null, 4);
   const target_path = filepath;
   if (target_path != null) {
-      await fsAsync.writeFile(target_path, data, { flag: 'w' });
+    await fsAsync.writeFile(target_path, data, { flag: 'w' });
   } else {
-      console.log(data);
+    console.log(data);
   }
 }
 
@@ -188,7 +189,7 @@ async function typeCheck(configFile: string, configDir: string): Promise<void> {
       const tsconfigContent = await fsAsync.readFile(tsconfigPath, 'utf-8');
       const configJson = jsonc.parse(tsconfigContent);
       const basePath = path.dirname(tsconfigPath);
-      
+
       // Parse the config file
       const configParseResult = ts.parseJsonConfigFileContent(
         configJson,
@@ -243,20 +244,20 @@ async function typeCheck(configFile: string, configDir: string): Promise<void> {
       getCurrentDirectory: ts.sys.getCurrentDirectory,
       getNewLine: () => ts.sys.newLine
     };
-    
+
     const message = ts.formatDiagnosticsWithColorAndContext(diagnostics, formatHost);
     throw new Error(`TypeScript compilation failed:\n${message}`);
   }
 }
 
 async function buildConfigFile(configDir: string): Promise<void> {
-  await fsAsync.mkdir(path.join(configDir, "out"), {recursive: true});
+  await fsAsync.mkdir(path.join(configDir, "out"), { recursive: true });
   const configMode = await getConfigMode(configDir);
   const isStandalone = configMode == ConfigMode.STANDALONE;
-  
+
   console.log("Is standalone package:", isStandalone);
 
-  const configFiles = await glob('**/*.config.ts', { 
+  const configFiles = await glob('**/*.config.ts', {
     cwd: configDir,
     absolute: true
   });
@@ -269,7 +270,7 @@ async function buildConfigFile(configDir: string): Promise<void> {
   // Now handle config files for JSON output
   for (const configFile of configFiles) {
     console.log(`Processing config file ${configFile}...`);
-    
+
     // Type check first
     try {
       await typeCheck(configFile, configDir);
@@ -306,14 +307,14 @@ async function buildConfigFile(configDir: string): Promise<void> {
     try {
       // Get the compiled code from the first output file
       const compiledCode = buildResult.outputFiles[0].text;
-      
+
       // Create a data URL from the compiled code
       const dataUrl = `data:text/javascript;base64,${Buffer.from(compiledCode).toString('base64')}`;
-      
+
       // Import the compiled config from the data URL
       const configModule = await import(dataUrl);
       const config = configModule.default;
-      
+
       // Write JSON to out directory preserving path structure
       const relPath = path.relative(configDir, path.dirname(configFile));
       const configName = path.basename(configFile, '.config.ts');
@@ -339,7 +340,7 @@ async function processStandaloneMode(configDir: string): Promise<void> {
   const packageJsonPath = path.join(configDir, 'package.json');
   const packageJson = await fsAsync.readFile(packageJsonPath, 'utf-8');
   const packageData = JSON.parse(packageJson);
-  
+
   const hasZod = packageData.dependencies?.zod;
   if (!hasZod) {
     await installDependency(configDir, 'zod');
@@ -368,7 +369,7 @@ async function processStandaloneMode(configDir: string): Promise<void> {
     const packageJsonPath = path.join(configDir, 'package.json');
     const packageJson = await fsAsync.readFile(packageJsonPath, 'utf-8');
     const packageData = JSON.parse(packageJson);
-    
+
     // Update main and types fields to point to dist
     if (packageData.main) {
       packageData.main = packageData.main.replace(/^(\.\/)?src\//, './dist/src/');
@@ -376,7 +377,7 @@ async function processStandaloneMode(configDir: string): Promise<void> {
     if (packageData.types) {
       packageData.types = packageData.types.replace(/^(\.\/)?src\//, './dist/src/');
     }
-    
+
     await fsAsync.writeFile(
       path.join(configDir, 'dist', 'package.json'),
       JSON.stringify(packageData, null, 2)

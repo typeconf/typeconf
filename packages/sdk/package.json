@@ -1,6 +1,6 @@
 {
   "name": "@typeconf/sdk",
-  "version": "0.3.2",
+  "version": "0.4.0-prerelease1",
   "description": "Typeconf SDK for reading typed configs in your repository",
   "homepage": "https://typeconf.dev",
   "readme": "https://github.com/typeconf/typeconf/blob/main/README.md",
@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "test": "vitest",
+    "test": "vitest run",
     "start": "npm run build && node dist/src/index.js"
   },
   "devDependencies": {
@@ -51,6 +51,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "cli-table": "^0.3.11",
     "jiti": "^2.4.0",
     "jsonc": "^2.0.0",

@@ -2,8 +2,11 @@ import fs from "fs";
 import { isCloudEnabled, typeconfCloud } from "./cloud/cloud.js";
 import path from "path";
 import { createJiti } from "jiti";
+import { validateConfigWithJsonSchema } from "./json-schema-validator.js";
 
-export type ReadConfigOptions = {};
+export type ReadConfigOptions = {
+  disableValidation?: boolean;
+};
 
 export function readConfigFromFile<T>(filepath: string): T {
   const data = fs.readFileSync(filepath, "utf8");
@@ -68,7 +71,7 @@ function resolveConfigPath(configId: string): ConfigInfo {
 }
 
 async function validateConfig<T>(configInfo: ConfigInfo, values: any): Promise<T> {
-  const jiti = createJiti(configInfo.configDir, { 
+  const jiti = createJiti(configInfo.configDir, {
     debug: false,
     fsCache: false,
     moduleCache: false,
@@ -78,6 +81,7 @@ async function validateConfig<T>(configInfo: ConfigInfo, values: any): Promise<T
   return schema.parse(values);
 }
 
+
 export async function readConfig<T>(filepath: string, options: ReadConfigOptions = {}): Promise<T> {
   if (filepath.endsWith('.json')) {
     return readConfigFromFile<T>(filepath);
@@ -86,20 +90,61 @@ export async function readConfig<T>(filepath: string, options: ReadConfigOptions
   if (isCloudEnabled()) {
     const configInfo = resolveConfigPathRemote(filepath);
     const result = await typeconfCloud().readConfig<T>(configInfo.configId);
-    
+
     if (result.err) throw result.err;
-    
+
     if (!result.config) throw new Error("No config found");
-    
+
+    // Try to validate cloud config with JSON Schema if available locally (unless disabled)
+    if (!options.disableValidation) {
+      try {
+        await validateConfigWithJsonSchema(configInfo.configId, result.config);
+      } catch (error) {
+        // Validation is optional for cloud configs, just log and continue
+        // This might fail in browser environments or when AJV can't be loaded
+        console.warn('Cloud config validation failed:', error);
+      }
+    }
+
     return result.config;
   }
 
   const configInfo = resolveConfigPath(filepath);
   const values = readConfigFromFile<T>(configInfo.valuesPath);
-  return validateConfig<T>(configInfo, values);
+
+  // If validation is disabled, return values without validation
+  if (options.disableValidation) {
+    return values;
+  }
+
+  // Try to use JSON Schema validation first if config-map.json and schema.json exist
+  const configMapPath = path.join(configInfo.configDir, 'types', 'config-map.json');
+  const schemaPath = path.join(configInfo.configDir, 'types', 'schema.json');
+
+  let jsonSchemaSuccess = false;
+  if (fs.existsSync(configMapPath) && fs.existsSync(schemaPath)) {
+    try {
+      const result = await validateConfigWithJsonSchema<T>(configInfo.configId, values);
+      jsonSchemaSuccess = true;
+      return result;
+    } catch (error) {
+      // If JSON Schema validation fails, fall back to Zod validation
+      // This might fail in browser environments or when AJV can't be loaded
+      console.warn('JSON Schema validation failed, falling back to Zod validation:', error);
+    }
+  }
+
+  // Use Zod validation as fallback (this will use JITI) - only if JSON Schema didn't succeed
+  if (!jsonSchemaSuccess) {
+    return validateConfig<T>(configInfo, values);
+  }
+
+  // This should never be reached, but return values as fallback
+  return values;
 }
 
 export const privateExports = {
   resolveConfigPath,
   validateConfig,
+  validateConfigWithJsonSchema,
 }

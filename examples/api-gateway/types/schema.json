@@ -1,0 +1,51 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "schema.json",
+    "$defs": {
+        "Route": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "Route.json",
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "backend": {
+                    "type": "string"
+                },
+                "rateLimit": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                }
+            },
+            "required": [
+                "path",
+                "backend",
+                "rateLimit"
+            ]
+        },
+        "APIGatewayConfig": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "APIGatewayConfig.json",
+            "type": "object",
+            "properties": {
+                "routes": {
+                    "$ref": "RecordRoute.json"
+                }
+            },
+            "required": [
+                "routes"
+            ]
+        },
+        "RecordRoute": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "RecordRoute.json",
+            "type": "object",
+            "properties": {},
+            "unevaluatedProperties": {
+                "$ref": "Route.json"
+            }
+        }
+    }
+}
